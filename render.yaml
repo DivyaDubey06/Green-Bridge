@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: greenbridge-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm install --prefix backend && npx prisma generate --schema=backend/prisma/schema.prisma && npm run build --prefix backend
+    startCommand: npm run start:prod --prefix backend
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: USE_MOCK_DATABASE
+        value: "false"
+      - key: DATABASE_URL
+        value: mongodb+srv://meetdivya2006_db_user:euCZBJI2k1kvo4o@greenbridgecluster.ohwscj9.mongodb.net/greenbridge?appName=GreenBridgeCluster

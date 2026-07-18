@@ -1,0 +1,135 @@
+export type UserRole = 'USER' | 'ORGANIZATION' | 'ADMIN';
+export type VerificationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type OpportunityStatus = 'OPEN' | 'CLOSED';
+export type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
+export type DonationStatus = 'AVAILABLE' | 'REQUESTED' | 'DONATED';
+
+export interface AvatarConfig {
+  hair: string;      // 'style-1' | 'style-2' | 'style-3' | 'style-4'
+  eyes: string;      // 'happy' | 'neutral' | 'sparkle' | 'glasses'
+  skin: string;      // '#F5CBA7' (light) | '#D35400' (brown) | '#FAD7A0' (cream) | '#F5B041' (dark)
+  clothing: string;  // '#2E7D32' (green) | '#1A5276' (blue) | '#E67E22' (orange) | '#7D3C98' (purple)
+  accessory: string; // 'none' | 'cap' | 'backpack' | 'plant-leaf' | 'tshirt-badge'
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  city: string;
+  state: string;
+  avatar: AvatarConfig;
+  level: number;
+  xp: number;
+  badges: string[]; // Badge IDs
+  interests: string[];
+  availability: string; // 'Weekends' | 'Weekdays' | 'Flexible'
+  role: UserRole;
+  createdAt: string;
+}
+
+export interface Organization {
+  id: string;
+  ownerId: string;
+  organizationName: string;
+  description: string;
+  mission: string;
+  category: string;
+  website: string;
+  phone: string;
+  logo: string;
+  verificationStatus: VerificationStatus;
+  registrationCertificate: string;
+  createdAt: string;
+}
+
+export interface Opportunity {
+  id: string;
+  organizationId: string;
+  organizationName: string;
+  organizationLogo?: string;
+  title: string;
+  description: string;
+  category: string;
+  location: string;
+  date: string;
+  time: string;
+  duration: string;
+  skillsRequired: string[];
+  volunteerLimit: number;
+  coverImage: string;
+  status: OpportunityStatus;
+  applicantsCount: number;
+}
+
+export interface Application {
+  id: string;
+  opportunityId: string;
+  opportunityTitle: string;
+  userId: string;
+  userName: string;
+  userAvatar: AvatarConfig;
+  status: ApplicationStatus;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface Event {
+  id: string;
+  organizationId: string;
+  organizationName: string;
+  title: string;
+  description: string;
+  banner: string;
+  date: string;
+  time: string;
+  location: string;
+  capacity: number;
+  registeredUsers: string[]; // Array of User IDs
+  category: string;
+}
+
+export interface Donation {
+  id: string;
+  ownerId: string;
+  ownerName: string;
+  title: string;
+  description: string;
+  images: string[];
+  category: string; // 'Books' | 'Clothes' | 'Furniture' | 'Stationery' | 'Electronics'
+  condition: string; // 'New' | 'Like New' | 'Good' | 'Fair'
+  location: string;
+  status: DonationStatus;
+  requesterId?: string;
+  requesterName?: string;
+  createdAt: string;
+}
+
+export interface Certificate {
+  id: string;
+  userId: string;
+  organizationId: string;
+  organizationName: string;
+  title: string;
+  pdfUrl: string;
+  issueDate: string;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  title: string;
+  message: string;
+  type: 'info' | 'success' | 'alert';
+  read: boolean;
+  createdAt: string;
+}
+
+export interface Badge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string; // SVG path or Lucide component name
+  xpReward: number;
+  unlockDate?: string;
+}
