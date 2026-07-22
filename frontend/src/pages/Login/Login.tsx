@@ -70,10 +70,10 @@ export const Login: React.FC = () => {
           </div>
           
           {/* Text labels (without hyphens) */}
-          <h1 className="font-serif text-4xl font-extrabold text-[#1B4332] tracking-wide">
+          <h1 className="font-serif text-4xl font-extrabold text-[#0B2316] dark:text-[#0C1E16] tracking-wide">
             Green Bridge
           </h1>
-          <p className="font-serif italic text-base text-[#1B4332]/85 mt-2 font-medium">
+          <p className="font-serif italic text-base text-[#0B2316]/90 dark:text-[#0C1E16]/85 mt-2 font-medium">
             Bring the change
           </p>
         </div>

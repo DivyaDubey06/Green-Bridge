@@ -38,64 +38,88 @@ export const Avatar: React.FC<AvatarProps> = ({ config, size = 48, className = '
         {/* V-neck collar */}
         <path d="M42 72L50 82L58 72" fill={skin} />
 
+        {/* --- Background Hair Styles (Drawn behind the face) --- */}
+        {hair === 'style-3' && (
+          // style-3: Top Bun Circle (Brown)
+          <circle cx="50" cy="22" r="10" fill="#8B4513" />
+        )}
+        {hair === 'style-5' && (
+          // style-5: Open Long Wavy Female Hair Background (Orange-Brown)
+          <path 
+            d="M22 45C22 55 20 78 28 85C33 80 33 65 50 65C67 65 67 80 72 85C80 78 78 55 78 45C78 30 65 24 50 24C35 24 22 30 22 45Z" 
+            fill="#D2691E" 
+          />
+        )}
+        {hair === 'style-6' && (
+          // style-6: Long Straight Open Female Hair Background (Dark Brown)
+          <path 
+            d="M23 45V85C23 87 27 88 30 86C32 80 34 62 50 62C66 62 68 80 70 86C73 88 77 87 77 85V45C77 28 65 24 50 24C35 24 23 28 23 45Z" 
+            fill="#4A3B32" 
+          />
+        )}
+        {hair === 'style-7' && (
+          // style-7: Open Flowing Wavy surfer Male Hair Background (Chestnut/Golden)
+          <path 
+            d="M24 45C24 52 22 68 28 72C32 68 33 55 50 55C67 55 68 68 72 72C78 68 76 52 76 45C76 32 65 26 50 26C35 26 24 32 24 45Z" 
+            fill="#CD7F32" 
+          />
+        )}
+
         {/* Face */}
         <circle cx="50" cy="50" r="23" fill={skin} />
 
-        {/* Hair Styles */}
+        {/* --- Foreground Hair Styles (Drawn on top of the face) --- */}
         {hair === 'style-1' && (
-          // Side Swept Long Hair
+          // Side Swept Long Hair (Dark Brown)
           <path 
             d="M27 46C27 30 40 24 53 24C66 24 74 32 74 48C74 58 70 65 67 65C62 65 62 55 58 50C54 45 42 42 36 50C31 56 27 56 27 46Z" 
             fill="#5C4033" 
           />
         )}
         {hair === 'style-2' && (
-          // Wavy Short Curly Hair
+          // Wavy Short Curly Hair (Slate Green/Dark Curly)
           <path 
             d="M24 45C24 32 32 25 50 25C68 25 76 32 76 45C78 50 74 56 70 54C68 45 64 35 50 35C36 35 32 45 30 54C26 56 22 50 24 45Z" 
             fill="#2F4F4F" 
           />
         )}
         {hair === 'style-3' && (
-          // Top Bun / Bun Style
-          <>
-            <circle cx="50" cy="22" r="10" fill="#8B4513" />
-            <path 
-              d="M25 48C25 32 35 27 50 27C65 27 75 32 75 48C75 52 70 54 65 50C60 46 60 37 50 37C40 37 40 46 35 50C30 54 25 52 25 48Z" 
-              fill="#8B4513" 
-            />
-          </>
+          // Top Bun bangs
+          <path 
+            d="M25 48C25 32 35 27 50 27C65 27 75 32 75 48C75 52 70 54 65 50C60 46 60 37 50 37C40 37 40 46 35 50C30 54 25 52 25 48Z" 
+            fill="#8B4513" 
+          />
         )}
         {hair === 'style-4' && (
-          // Spiky Active Cut
+          // Spiky Active Cut (Silver/Gray)
           <path 
             d="M25 48C24 40 28 32 34 29L38 22L46 25L50 20L56 25L64 22L68 29C74 32 76 40 75 48C72 45 65 42 50 42C35 42 28 45 25 48Z" 
             fill="#C0C0C0" 
           />
         )}
         {hair === 'style-5' && (
-          // style-5: Open Long Wavy Female Hair (Orange-Brown)
+          // style-5: Open Long Wavy Female Hair Front bangs
           <path 
-            d="M24 45C24 30 35 24 50 24C65 24 76 30 76 45C76 65 72 75 70 75C68 75 66 60 50 60C34 60 32 75 30 75C28 75 24 65 24 45Z" 
+            d="M25 45C25 30 35 24 50 24C65 24 75 30 75 45C73 42 65 37 50 37C35 37 27 42 25 45Z" 
             fill="#D2691E" 
           />
         )}
         {hair === 'style-6' && (
-          // style-6: Long Straight Open Female Hair (Dark Brown)
+          // style-6: Long Straight Open Female Hair Front bangs
           <path 
-            d="M25 45C25 28 35 24 50 24C65 24 75 28 75 45V75C75 77 71 78 68 76C66 72 65 58 50 58C35 58 34 72 32 76C29 78 25 77 25 75V45Z" 
+            d="M25 45C25 28 35 24 50 24C65 24 75 28 75 45C72 40 64 36 50 36C36 36 28 40 25 45Z" 
             fill="#4A3B32" 
           />
         )}
         {hair === 'style-7' && (
-          // style-7: Open Flowing Wavy surfer Male Hair (Chestnut/Golden)
+          // style-7: Open Flowing Wavy surfer Male Hair Front bangs
           <path 
-            d="M25 45C25 32 34 26 50 26C66 26 75 32 75 45C77 50 72 58 68 56C65 48 62 38 50 38C38 38 35 48 32 56C28 58 23 50 25 45Z" 
+            d="M25 45C25 32 34 26 50 26C66 26 75 32 75 45C72 40 64 36 50 36C36 36 28 40 25 45Z" 
             fill="#CD7F32" 
           />
         )}
         {hair === 'style-8' && (
-          // style-8: Classical Short cropped Male Hair (Black)
+          // style-8: Classical Short cropped Male Hair Front bangs
           <path 
             d="M25 45C25 30 35 25 50 25C65 25 75 30 75 45C75 48 70 48 66 45C62 41 58 35 50 35C42 35 38 41 34 45C30 48 25 48 25 45Z" 
             fill="#1A1A1A" 
@@ -170,4 +194,5 @@ export const Avatar: React.FC<AvatarProps> = ({ config, size = 48, className = '
     </div>
   );
 };
+
 export default Avatar;
