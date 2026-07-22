@@ -105,28 +105,55 @@ export const Register: React.FC = () => {
           {/* Avatar Options panel */}
           <div className="w-full space-y-4 text-xs font-semibold">
             {/* Hair Selector */}
-            <div className="space-y-1.5">
-              <label className="text-slate-text/50">Hair Style</label>
-              <div className="grid grid-cols-4 gap-2">
-                {[
-                  { id: 'style-1', label: 'Swept' },
-                  { id: 'style-2', label: 'Wavy' },
-                  { id: 'style-3', label: 'Bun' },
-                  { id: 'style-4', label: 'Spiky' },
-                ].map(item => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setAvatar({ ...avatar, hair: item.id })}
-                    className={`py-2 rounded-xl border text-center transition-all ${
-                      avatar.hair === item.id 
-                        ? 'bg-soft-mint text-primary-green border-primary-green font-bold' 
-                        : 'bg-white border-[#CD9777]/20 hover:border-primary-green/30'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+            <div className="space-y-2.5">
+              <div>
+                <label className="text-slate-text/50 text-[10px] uppercase font-bold block mb-1">Female Styles</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { id: 'style-1', label: 'Swept' },
+                    { id: 'style-3', label: 'Bun' },
+                    { id: 'style-5', label: 'Open Wave' },
+                    { id: 'style-6', label: 'Open Str' },
+                  ].map(item => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setAvatar({ ...avatar, hair: item.id })}
+                      className={`py-1.5 rounded-xl border text-center transition-all ${
+                        avatar.hair === item.id 
+                          ? 'bg-soft-mint text-primary-green border-primary-green font-bold' 
+                          : 'bg-white border-[#CD9777]/20 hover:border-primary-green/30'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-slate-text/50 text-[10px] uppercase font-bold block mb-1">Male Styles</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { id: 'style-8', label: 'Classic' },
+                    { id: 'style-2', label: 'Curly' },
+                    { id: 'style-4', label: 'Spiky' },
+                    { id: 'style-7', label: 'Flowing' },
+                  ].map(item => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setAvatar({ ...avatar, hair: item.id })}
+                      className={`py-1.5 rounded-xl border text-center transition-all ${
+                        avatar.hair === item.id 
+                          ? 'bg-soft-mint text-primary-green border-primary-green font-bold' 
+                          : 'bg-white border-[#CD9777]/20 hover:border-primary-green/30'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 

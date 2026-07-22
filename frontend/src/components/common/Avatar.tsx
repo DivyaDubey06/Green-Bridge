@@ -73,6 +73,34 @@ export const Avatar: React.FC<AvatarProps> = ({ config, size = 48, className = '
             fill="#C0C0C0" 
           />
         )}
+        {hair === 'style-5' && (
+          // style-5: Open Long Wavy Female Hair (Orange-Brown)
+          <path 
+            d="M24 45C24 30 35 24 50 24C65 24 76 30 76 45C76 65 72 75 70 75C68 75 66 60 50 60C34 60 32 75 30 75C28 75 24 65 24 45Z" 
+            fill="#D2691E" 
+          />
+        )}
+        {hair === 'style-6' && (
+          // style-6: Long Straight Open Female Hair (Dark Brown)
+          <path 
+            d="M25 45C25 28 35 24 50 24C65 24 75 28 75 45V75C75 77 71 78 68 76C66 72 65 58 50 58C35 58 34 72 32 76C29 78 25 77 25 75V45Z" 
+            fill="#4A3B32" 
+          />
+        )}
+        {hair === 'style-7' && (
+          // style-7: Open Flowing Wavy surfer Male Hair (Chestnut/Golden)
+          <path 
+            d="M25 45C25 32 34 26 50 26C66 26 75 32 75 45C77 50 72 58 68 56C65 48 62 38 50 38C38 38 35 48 32 56C28 58 23 50 25 45Z" 
+            fill="#CD7F32" 
+          />
+        )}
+        {hair === 'style-8' && (
+          // style-8: Classical Short cropped Male Hair (Black)
+          <path 
+            d="M25 45C25 30 35 25 50 25C65 25 75 30 75 45C75 48 70 48 66 45C62 41 58 35 50 35C42 35 38 41 34 45C30 48 25 48 25 45Z" 
+            fill="#1A1A1A" 
+          />
+        )}
 
         {/* Eyes Expressions */}
         {eyes === 'happy' && (
