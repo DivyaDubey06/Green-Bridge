@@ -8,16 +8,17 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
   constructor(private readonly config: ConfigService) {
     const isMock = config.get('USE_MOCK_DATABASE') !== 'false';
-    
-    // In Prisma 7, the constructor requires options (e.g. accelerateUrl or adapter).
-    // If we are in mock mode, we pass a dummy string so it doesn't crash on instantiation.
-    // If we are not in mock mode, we pass the real DATABASE_URL.
     const databaseUrl = isMock 
       ? 'mongodb://localhost:27017/dummy' 
       : config.get('DATABASE_URL');
 
+    // In Prisma 6, we dynamically override the connection string using options.datasources
     super({
-      accelerateUrl: databaseUrl,
+      datasources: {
+        db: {
+          url: databaseUrl,
+        },
+      },
     });
     this.isMockMode = isMock;
   }
