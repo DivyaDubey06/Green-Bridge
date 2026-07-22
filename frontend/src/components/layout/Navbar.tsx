@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, ArrowRight, LayoutDashboard, LogOut, User } from 'lucide-react';
+import { Menu, X, ArrowRight, LayoutDashboard, LogOut, User, Sun, Moon } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { Logo } from '../common/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,6 +11,21 @@ export const Navbar: React.FC = () => {
   const { isAuthenticated, currentUser, logout } = useAuthStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [isDark, setIsDark] = useState(() => {
+    return document.documentElement.classList.contains('dark') || 
+      localStorage.getItem('greenbridge_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('greenbridge_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('greenbridge_theme', 'light');
+    }
+  }, [isDark]);
 
   useEffect(() => {
     const handleScroll = () => {

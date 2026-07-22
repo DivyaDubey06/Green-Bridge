@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Logo } from '../../components/common/Logo';
 import toast from 'react-hot-toast';
 
 export const Login: React.FC = () => {
@@ -11,7 +10,22 @@ export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [welcomeUser, setWelcomeUser] = useState<string | null>(null);
+
+  // Dark mode hook
+  const [isDark, setIsDark] = useState(() => {
+    return document.documentElement.classList.contains('dark') || 
+      localStorage.getItem('greenbridge_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('greenbridge_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('greenbridge_theme', 'light');
+    }
+  }, [isDark]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,8 +37,6 @@ export const Login: React.FC = () => {
     setIsSubmitting(true);
     try {
       const user = await login(email, password);
-      // Play welcome transition
-      setWelcomeUser(user.name);
       toast.success(`Welcome back, ${user.name}! 🌱`);
       
       setTimeout(() => {
@@ -35,7 +47,7 @@ export const Login: React.FC = () => {
         } else {
           navigate('/dashboard');
         }
-      }, 1500);
+      }, 1000);
     } catch (err: any) {
       toast.error(err.message || 'Login failed. Try sonaa@gmail.com / sonaa123');
       setIsSubmitting(false);
@@ -43,141 +55,135 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-warm-cream">
-      {/* Welcome Screen Overlay */}
-      {welcomeUser && (
-        <div className="fixed inset-0 bg-dark-forest/90 backdrop-blur-lg z-50 flex flex-col items-center justify-center text-center p-6 text-white">
-          <div className="w-28 h-28 mb-6 animate-float">
-            <Logo size={80} showText={false} className="filter brightness-110" />
-          </div>
-          <h2 className="font-serif text-3xl md:text-5xl font-bold mb-4">
-            Welcome back, {welcomeUser} 🌱
-          </h2>
-          <p className="text-soft-mint text-sm tracking-widest uppercase font-semibold">
-            Connecting People Who Care.
-          </p>
-        </div>
-      )}
-
-      {/* Left Side: Brand Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 bg-dark-forest text-warm-cream p-16 flex-col justify-between relative overflow-hidden">
-        {/* Decorative SVG curves */}
-        <div className="absolute inset-0 select-none pointer-events-none opacity-10">
-          <svg viewBox="0 0 100 100" className="w-full h-full fill-none stroke-warm-cream" strokeWidth="0.5">
-            <path d="M-10 100C40 90 60 40 110 0" />
-            <path d="M-10 80C30 75 50 35 110 -20" />
-          </svg>
-        </div>
-
-        <Logo size={48} showText={true} className="filter brightness-110" />
-
-        <div className="space-y-6 z-10 max-w-md my-auto">
-          <h2 className="font-serif text-4xl md:text-5xl font-bold leading-tight">
-            Bring the Change.
-          </h2>
-          <p className="text-sm text-warm-cream/70 leading-relaxed">
-            Join a warm community of citizens, verified local clubs, and organizations working together to create visible positive changes in their neighborhoods.
-          </p>
-          
-          <div className="pt-6 relative">
+    <div className="min-h-screen flex flex-col lg:flex-row transition-colors duration-300">
+      
+      {/* Left Pane: Branding & Illustration */}
+      <div className="w-full lg:w-5/12 bg-[#FCDAB0] dark:bg-[#C29E75] flex flex-col items-center justify-center p-8 lg:p-16 transition-colors duration-300">
+        <div className="max-w-sm flex flex-col items-center text-center">
+          {/* Main Bridge Illustration */}
+          <div className="w-full max-w-[280px] aspect-square flex items-center justify-center mb-6">
             <img 
-              src="/assets/illustrations/nature_girl.jpg" 
-              alt="Nature Illustration" 
-              className="w-full rounded-[30px] border border-white/10 shadow-2xl shadow-black/40 object-cover aspect-[4/3]"
+              src="/assets/illustrations/bridge_hero.png" 
+              alt="Green Bridge Illustration" 
+              className="w-full h-full object-contain filter drop-shadow-xl"
             />
           </div>
-        </div>
-
-        <div className="text-xs text-warm-cream/50 z-10">
-          Connecting People Who Care.
+          
+          {/* Text labels (without hyphens) */}
+          <h1 className="font-serif text-4xl font-extrabold text-[#1B4332] tracking-wide">
+            Green Bridge
+          </h1>
+          <p className="font-serif italic text-base text-[#1B4332]/85 mt-2 font-medium">
+            Bring the change
+          </p>
         </div>
       </div>
 
-      {/* Right Side: Centered Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <div className="w-full max-w-md watercolor-card p-10 shadow-2xl relative">
+      {/* Right Pane: Soft Mint Green Watercolor Area */}
+      <div className="w-full lg:w-7/12 bg-[#B8D8BE] dark:bg-[#0C1E16] flex flex-col justify-between p-8 relative transition-colors duration-300">
+        
+        {/* Top Header Controls (About, Contact Us, and Theme Toggle) */}
+        <div className="flex justify-between items-center w-full mb-8">
+          {/* Dark Mode toggle button */}
+          <button
+            onClick={() => setIsDark(!isDark)}
+            className="p-2.5 rounded-full bg-white/20 dark:bg-white/5 hover:bg-white/40 dark:hover:bg-white/10 text-[#1C3E24] dark:text-[#A7F3D0] transition-all"
+            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {isDark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
           
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-serif font-bold text-dark-forest mb-2">USER LOGIN</h3>
-            <p className="text-xs text-slate-text/60 leading-relaxed">
-              Join thousands of volunteers creating change in their communities.
-            </p>
+          <div className="flex items-center gap-8 text-xs font-bold tracking-wider text-[#1C3E24] dark:text-[#A7F3D0]">
+            <Link to="/about" className="hover:opacity-80 transition-opacity">ABOUT US</Link>
+            <Link to="/contact" className="hover:opacity-80 transition-opacity">CONTACT US</Link>
           </div>
+        </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-dark-forest/70 block px-1">Email Address</label>
-              <div className="relative">
+        {/* Center Card */}
+        <div className="my-auto flex justify-center w-full px-4">
+          <div className="w-full max-w-sm bg-white dark:bg-[#132A1D] rounded-[32px] p-8 lg:p-10 shadow-2xl flex flex-col items-center border border-white/40 dark:border-white/5 transition-all">
+            
+            {/* Title */}
+            <h2 className="font-serif text-3xl font-bold text-[#1C3E24] dark:text-[#A7F3D0] tracking-wide mb-8">
+              USER LOGIN
+            </h2>
+
+            {/* Credentials Hint Banner */}
+            <div className="w-full p-3 mb-6 bg-[#8F995C]/15 dark:bg-[#8F995C]/5 border border-[#8F995C]/20 rounded-2xl text-[10px] text-[#1C3E24] dark:text-[#A7F3D0]/80 leading-relaxed text-center font-medium">
+              🔑 sonaa@gmail.com / sonaa123 &nbsp;|&nbsp; admin@greenbridge.org / admin123
+            </div>
+            
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="w-full space-y-5 flex flex-col items-center">
+              
+              {/* Username / Email field */}
+              <div className="w-full">
                 <input
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder="Username"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-11 pr-4 py-3.5 bg-warm-cream/40 border border-[#CD9777]/25 focus:border-primary-green focus:bg-white focus:outline-none rounded-2xl text-sm transition-all"
+                  className="w-full text-center py-3.5 px-6 bg-[#8F995C] dark:bg-[#4C532F] placeholder-[#1C3E24]/60 dark:placeholder-[#A7F3D0]/50 text-[#1C3E24] dark:text-[#F8F7F2] font-semibold rounded-full outline-none border-none focus:ring-2 focus:ring-[#449D1E] transition-all text-sm shadow-inner"
                 />
-                <Mail size={16} className="absolute left-4 top-4 text-slate-text/45" />
               </div>
-            </div>
 
-            <div className="space-y-1">
-              <div className="flex justify-between items-center px-1">
-                <label className="text-xs font-bold text-dark-forest/70 block">Password</label>
-                <Link to="/forgot" className="text-xs font-semibold text-primary-green hover:underline">
-                  Forgot Password?
-                </Link>
-              </div>
-              <div className="relative">
+              {/* Password field */}
+              <div className="w-full">
                 <input
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-11 pr-4 py-3.5 bg-warm-cream/40 border border-[#CD9777]/25 focus:border-primary-green focus:bg-white focus:outline-none rounded-2xl text-sm transition-all"
+                  className="w-full text-center py-3.5 px-6 bg-[#8F995C] dark:bg-[#4C532F] placeholder-[#1C3E24]/60 dark:placeholder-[#A7F3D0]/50 text-[#1C3E24] dark:text-[#F8F7F2] font-semibold rounded-full outline-none border-none focus:ring-2 focus:ring-[#449D1E] transition-all text-sm shadow-inner"
                 />
-                <Lock size={16} className="absolute left-4 top-4 text-slate-text/45" />
               </div>
-            </div>
 
-            {/* Quick Demo Credentials Reminder */}
-            <div className="p-3 bg-soft-mint/20 border border-primary-green/10 rounded-xl text-[10px] text-primary-green leading-relaxed">
-              <strong>💡 Demo Logins:</strong><br />
-              • Citizen: <code className="font-mono">sonaa@gmail.com</code> / <code className="font-mono">sonaa123</code><br />
-              • Admin: <code className="font-mono">admin@greenbridge.org</code> / <code className="font-mono">admin123</code>
-            </div>
+              {/* Remember Me */}
+              <div className="flex items-center gap-2 text-xs text-[#1C3E24] dark:text-[#A7F3D0]/80 font-bold">
+                <input 
+                  type="checkbox" 
+                  id="rememberMe" 
+                  className="rounded border-gray-300 dark:border-[#1B4332] text-[#449D1E] focus:ring-[#449D1E]"
+                  defaultChecked 
+                />
+                <label htmlFor="rememberMe" className="cursor-pointer">Remember Me</label>
+              </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-primary-green hover:bg-dark-forest text-white py-4 rounded-2xl font-bold transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" />
-                  Verifying Credentials...
-                </>
-              ) : (
-                <>
-                  Sign In
-                  <ArrowRight size={18} />
-                </>
-              )}
-            </button>
-          </form>
+              {/* Forgot Password */}
+              <Link to="/forgot" className="text-xs font-extrabold text-[#1C3E24] dark:text-[#A7F3D0] hover:underline uppercase tracking-widest mt-1">
+                FORGOT PASSWORD ?
+              </Link>
 
-          {/* Footer Navigation */}
-          <div className="text-center mt-8 pt-6 border-t border-[#CD9777]/10 text-xs">
-            <span className="text-slate-text/50">New here?</span>{' '}
-            <Link to="/register" className="font-bold text-primary-green hover:underline">
-              Create your GreenBridge account &rarr;
-            </Link>
+              {/* Login Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-4/5 bg-[#449D1E] hover:bg-[#387F18] text-[#1C3E24] hover:text-white dark:text-[#0C1E16] dark:hover:text-white py-3.5 rounded-full font-bold text-base tracking-wider transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer shadow-md mt-2"
+              >
+                {isSubmitting ? 'VERIFYING...' : 'LOGIN'}
+              </button>
+
+              {/* Create Account */}
+              <Link 
+                to="/register" 
+                className="text-xs font-extrabold text-[#1C3E24] dark:text-[#A7F3D0] hover:underline mt-4 uppercase tracking-widest"
+              >
+                Create Account
+              </Link>
+
+            </form>
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-xs font-semibold text-white/95 dark:text-[#A7F3D0]/70 mt-8 tracking-wide">
+          Connecting People Who Care.
         </div>
       </div>
     </div>
   );
 };
+
 export default Login;
