@@ -63,7 +63,7 @@ export const Login: React.FC = () => {
           {/* Main Bridge Illustration */}
           <div className="w-full max-w-[280px] aspect-square flex items-center justify-center mb-6">
             <img 
-              src="/assets/illustrations/bridge_hero.png" 
+              src={isDark ? "/assets/illustrations/logo_dark.png" : "/assets/illustrations/logo_light.png"} 
               alt="Green Bridge Illustration" 
               className="w-full h-full object-contain filter drop-shadow-xl"
             />

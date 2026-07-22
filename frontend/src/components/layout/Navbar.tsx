@@ -99,6 +99,15 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center gap-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className="p-2.5 rounded-full hover:bg-[#CD9777]/15 text-slate-text dark:text-[#A7F3D0] transition-colors cursor-pointer mr-2"
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
             {isAuthenticated && currentUser ? (
               <div className="flex items-center gap-3">
                 <Link
@@ -172,6 +181,17 @@ export const Navbar: React.FC = () => {
             </div>
 
             <div className="mt-auto mb-10 flex flex-col gap-4">
+              {/* Mobile Theme Toggle */}
+              <div className="flex justify-between items-center py-3 border-b border-[#CD9777]/10 mb-2">
+                <span className="text-sm font-semibold text-slate-text">Dark Mode theme</span>
+                <button
+                  onClick={() => setIsDark(!isDark)}
+                  className="p-2.5 rounded-full bg-[#CD9777]/10 text-primary-green transition-colors"
+                >
+                  {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                </button>
+              </div>
+
               {isAuthenticated && currentUser ? (
                 <>
                   <Link
