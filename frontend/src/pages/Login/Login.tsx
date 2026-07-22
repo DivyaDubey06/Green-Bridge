@@ -108,11 +108,6 @@ export const Login: React.FC = () => {
               USER LOGIN
             </h2>
 
-            {/* Credentials Hint Banner */}
-            <div className="w-full p-3 mb-6 bg-[#8F995C]/15 dark:bg-[#8F995C]/5 border border-[#8F995C]/20 rounded-2xl text-[10px] text-[#1C3E24] dark:text-[#A7F3D0]/80 leading-relaxed text-center font-medium">
-              🔑 sonaa@gmail.com / sonaa123 &nbsp;|&nbsp; admin@greenbridge.org / admin123
-            </div>
-            
             {/* Form */}
             <form onSubmit={handleSubmit} className="w-full space-y-5 flex flex-col items-center">
               
