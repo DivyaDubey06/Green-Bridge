@@ -13,7 +13,7 @@ export const Avatar: React.FC<AvatarProps> = ({ config, size = 48, className = '
 
   return (
     <div 
-      className={`relative inline-block rounded-full bg-soft-sky/40 border border-[#CD9777]/20 flex-shrink-0 overflow-hidden ${onClick ? 'cursor-pointer hover:scale-105 transition-transform duration-200' : ''} ${className}`}
+      className={`relative inline-flex items-center justify-center rounded-full aspect-square overflow-hidden bg-soft-sky/40 border border-[#CD9777]/20 flex-shrink-0 ${onClick ? 'cursor-pointer hover:scale-105 transition-transform duration-200' : ''} ${className}`}
       style={{ width: size, height: size }}
       onClick={onClick}
     >

@@ -60,6 +60,19 @@ export interface Opportunity {
   coverImage: string;
   status: OpportunityStatus;
   applicantsCount: number;
+  contactInfo?: string;
+  deadline?: string;
+}
+
+export interface ApplicationFormData {
+  fullName: string;
+  age: string;
+  phone: string;
+  whatsapp: string;
+  location: string;
+  skills: string;
+  whyVolunteer: string;
+  availability: string;
 }
 
 export interface Application {
@@ -71,8 +84,10 @@ export interface Application {
   userAvatar: AvatarConfig;
   status: ApplicationStatus;
   notes?: string;
+  formData?: ApplicationFormData;
   createdAt: string;
 }
+
 
 export interface Event {
   id: string;
@@ -87,7 +102,20 @@ export interface Event {
   capacity: number;
   registeredUsers: string[]; // Array of User IDs
   category: string;
+  registrationLink?: string;
+  contactInfo?: string;
 }
+
+export interface EventRegistration {
+  id: string;
+  eventId: string;
+  userId: string;
+  userName: string;
+  userAvatar: AvatarConfig;
+  formData?: ApplicationFormData;
+  createdAt: string;
+}
+
 
 export interface Donation {
   id: string;
@@ -103,6 +131,8 @@ export interface Donation {
   requesterId?: string;
   requesterName?: string;
   createdAt: string;
+  contactInfo?: string;
+  notes?: string;
 }
 
 export interface Certificate {
@@ -133,3 +163,61 @@ export interface Badge {
   xpReward: number;
   unlockDate?: string;
 }
+
+export interface Vendor {
+  id: string;
+  ownerId: string;
+  businessName: string;
+  description: string;
+  category: string;
+  ecoPracticeStatement: string;
+  whatsapp: string;
+  verificationStatus: VerificationStatus;
+  createdAt: string;
+}
+
+export interface Product {
+  id: string;
+  vendorId: string;
+  vendorName: string;
+  businessName: string;
+  title: string;
+  description: string;
+  price: number;
+  images: string[];
+  category: string;
+  inStock: boolean;
+  whatsapp: string;
+  createdAt: string;
+  verificationStatus?: VerificationStatus;
+}
+
+export interface EventExperience {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar?: AvatarConfig;
+  eventId: string;
+  eventTitle: string;
+  reflection: string;
+  images: string[];
+  status: VerificationStatus;
+  createdAt: string;
+}
+
+export interface FeedbackLetter {
+  id: string;
+  userId?: string;
+  userName: string;
+  userEmail?: string;
+  text: string;
+  image?: string;
+  status: VerificationStatus;
+  createdAt: string;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+

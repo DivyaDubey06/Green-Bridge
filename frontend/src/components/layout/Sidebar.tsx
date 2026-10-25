@@ -7,7 +7,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { Logo } from '../common/Logo';
 
 export const Sidebar: React.FC = () => {
-  const { currentUser, logout } = useAuthStore();
+  const { currentUser, currentOrg, logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -80,7 +80,7 @@ export const Sidebar: React.FC = () => {
           </NavLink>
         )}
 
-        {currentUser.role === 'ORGANIZATION' && (
+        {(currentUser.role === 'ORGANIZATION' || currentOrg?.verificationStatus === 'APPROVED') && (
           <NavLink
             to="/org-dashboard"
             className={({ isActive }) =>

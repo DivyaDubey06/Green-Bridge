@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, MapPin, Heart, Plus, Gift, Check, Sparkles, Upload } from 'lucide-react';
+import { Search, MapPin, Heart, Plus, Gift, Check, Sparkles, Upload, Camera, Trash2, Phone, FileText } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
+import { Background3DScene } from '../../components/common/Background3DScene';
+import { Surface } from '../../components/common/Surface';
 import toast from 'react-hot-toast';
 
 export const Donations: React.FC = () => {
@@ -18,6 +20,9 @@ export const Donations: React.FC = () => {
   const [itemCategory, setItemCategory] = useState('Books');
   const [condition, setCondition] = useState('Good');
   const [location, setLocation] = useState('');
+  const [contactInfo, setContactInfo] = useState('');
+  const [notes, setNotes] = useState('');
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=400&auto=format&fit=crop&q=60');
 
   const handleClaim = async (donationId: string) => {
@@ -34,12 +39,33 @@ export const Donations: React.FC = () => {
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setUploadedImages((prev) => [...prev, reader.result as string]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeUploadedImage = (indexToRemove: number) => {
+    setUploadedImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
   const handleUploadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !description || !location) {
-      toast.error('Please fill in all listing details.');
+    if (!title || !description || !location || !contactInfo) {
+      toast.error('Please fill in listing name, description, location and contact details.');
       return;
     }
+
+    const finalImages = uploadedImages.length > 0 ? uploadedImages : [imageUrl];
 
     uploadDonation({
       title,
@@ -47,16 +73,21 @@ export const Donations: React.FC = () => {
       category: itemCategory,
       condition,
       location,
-      images: [imageUrl]
-    });
+      images: finalImages,
+      contactInfo,
+      notes
+    } as any);
 
-    toast.success('Donation uploaded! Thank you for sharing! ❤️');
+    toast.success('Donation listing published! Thank you for sharing! ❤️');
     setShowUploadModal(false);
     
     // Reset Form
     setTitle('');
     setDescription('');
     setLocation('');
+    setContactInfo('');
+    setNotes('');
+    setUploadedImages([]);
   };
 
   // Filter listings
@@ -69,26 +100,33 @@ export const Donations: React.FC = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-24 space-y-12">
+    <div className="max-w-7xl mx-auto px-6 py-20 space-y-12">
       
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6">
-        <div className="space-y-3">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-primary-green bg-soft-mint px-3.5 py-1.5 rounded-full">Share Support</span>
-          <h2 className="font-serif text-3xl md:text-5xl font-bold text-dark-forest">Community Donations</h2>
-          <p className="text-sm text-slate-text/60 max-w-lg">Claim books, stationery, or clothes uploaded by neighbors, or share what you no longer need.</p>
-        </div>
+      {/* Header with 3D Donate Scene - Pair D */}
+      <Surface tone="pairD" className="p-10 md:p-14 rounded-[40px] shadow-xl border border-white/10 relative overflow-hidden">
+        <Background3DScene tab="donate" className="w-full">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+            <div className="space-y-3">
+              <span className="text-xs font-extrabold uppercase tracking-widest text-[#F28482] bg-[#0A3323]/10 dark:text-[#84A59D] dark:bg-white/10 px-3.5 py-1.5 rounded-full inline-block">
+                🎁 Community Share & Donate Loop
+              </span>
+              <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#F28482] dark:text-[#84A59D]">Community Donations</h2>
+              <p className="text-sm text-[#0A3323]/85 dark:text-[#84A59D]/90 max-w-lg">Claim books, stationery, or clothes uploaded by neighbors, or share what you no longer need.</p>
+            </div>
 
-        {isAuthenticated && (
-          <button
-            onClick={() => setShowUploadModal(true)}
-            className="bg-primary-green hover:bg-dark-forest text-white py-3.5 px-6 rounded-full font-bold text-sm transition-all flex items-center gap-1.5 shadow-md shadow-primary-green/10 cursor-pointer"
-          >
-            <Plus size={16} />
-            Donate an Item
-          </button>
-        )}
-      </div>
+            {isAuthenticated && (
+              <button
+                onClick={() => setShowUploadModal(true)}
+                className="bg-[#0A3323] hover:bg-[#105666] text-[#F7F4D5] py-3.5 px-6 rounded-full font-bold text-sm transition-all flex items-center gap-1.5 shadow-lg cursor-pointer"
+              >
+                <Plus size={16} />
+                Donate an Item
+              </button>
+            )}
+          </div>
+        </Background3DScene>
+      </Surface>
+
 
       {/* Filter panel */}
       <div className="bg-white border border-[#CD9777]/20 p-6 rounded-[36px] shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
@@ -282,27 +320,92 @@ export const Donations: React.FC = () => {
                 />
               </div>
 
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-text/70 block">Contact Information</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Phone number or email address"
+                  value={contactInfo}
+                  onChange={(e) => setContactInfo(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-warm-cream/35 border border-[#CD9777]/20 rounded-xl text-sm focus:border-primary-green focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-text/70 block">Optional Notes</label>
+                <textarea
+                  rows={2}
+                  placeholder="e.g. Please pick up during weekends."
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-warm-cream/35 border border-[#CD9777]/20 rounded-xl text-sm focus:border-primary-green focus:outline-none resize-none"
+                />
+              </div>
+
               {/* Cover image selector */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-text/70 block">Upload Item Image</label>
-                <div className="border-2 border-dashed border-[#CD9777]/20 p-5 rounded-2xl flex flex-col items-center justify-center text-center bg-warm-cream/10 cursor-pointer">
-                  <Upload size={18} className="text-[#CD9777] mb-1" />
-                  <span className="text-xs font-bold text-slate-text">Drag photo or click to choose file</span>
-                  <span className="text-[9px] text-slate-text/45 mt-0.5">JPG, PNG (Max 5MB)</span>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-text/70 block">Upload Item Images</label>
+                
+                {/* Hidden Inputs */}
+                <input
+                  type="file"
+                  id="donation-gallery-picker"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <input
+                  type="file"
+                  id="donation-camera-picker"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+
+                <div className="grid grid-cols-2 gap-3">
+                  <label htmlFor="donation-gallery-picker" className="border border-dashed border-[#CD9777]/40 p-4 rounded-2xl flex flex-col items-center justify-center text-center bg-warm-cream/15 hover:bg-warm-cream/30 transition-all cursor-pointer">
+                    <Upload size={16} className="text-primary-green mb-1" />
+                    <span className="text-[10px] font-bold text-slate-text">Choose from Gallery</span>
+                  </label>
+                  <label htmlFor="donation-camera-picker" className="border border-dashed border-[#CD9777]/40 p-4 rounded-2xl flex flex-col items-center justify-center text-center bg-warm-cream/15 hover:bg-warm-cream/30 transition-all cursor-pointer">
+                    <Camera size={16} className="text-primary-green mb-1" />
+                    <span className="text-[10px] font-bold text-slate-text">Take a Photo</span>
+                  </label>
                 </div>
+
+                {/* Previews Grid */}
+                {uploadedImages.length > 0 && (
+                  <div className="grid grid-cols-4 gap-2 pt-2">
+                    {uploadedImages.map((img, idx) => (
+                      <div key={idx} className="relative aspect-square border border-[#CD9777]/20 rounded-xl overflow-hidden bg-slate-100">
+                        <img src={img} alt="preview" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeUploadedImage(idx)}
+                          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center text-[10px] font-bold hover:bg-red-600 transition-colors cursor-pointer"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-4 pt-4 border-t border-[#CD9777]/10">
                 <button
                   type="button"
                   onClick={() => setShowUploadModal(false)}
-                  className="flex-1 py-3 border border-[#CD9777]/30 text-xs font-bold rounded-2xl text-slate-text hover:bg-red-50 transition-all"
+                  className="flex-1 py-3 border border-[#CD9777]/30 text-xs font-bold rounded-2xl text-slate-text hover:bg-red-50 transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-3 bg-primary-green hover:bg-dark-forest text-white text-xs font-bold rounded-2xl transition-all flex items-center justify-center gap-1 shadow-sm"
+                  className="flex-1 py-3 bg-primary-green hover:bg-dark-forest text-white text-xs font-bold rounded-2xl transition-all flex items-center justify-center gap-1 shadow-sm cursor-pointer"
                 >
                   List Item
                   <Sparkles size={12} />
@@ -312,6 +415,24 @@ export const Donations: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Floating Create Button */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40">
+        <button
+          onClick={() => {
+            if (!isAuthenticated) {
+              toast('Please sign in to list items for donation!', { icon: '🔑' });
+              navigate('/login');
+              return;
+            }
+            setShowUploadModal(true);
+          }}
+          className="w-14 h-14 bg-black hover:bg-dark-forest text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
+          title="Donate an Item"
+        >
+          <Camera size={24} />
+        </button>
+      </div>
     </div>
   );
 };

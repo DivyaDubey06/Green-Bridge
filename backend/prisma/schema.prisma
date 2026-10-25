@@ -63,6 +63,7 @@ model User {
   // Relations
   organizations Organization[]     @relation("UserOrganizations")
   applications  Application[]      @relation("UserApplications")
+  eventRegs     EventRegistration[] @relation("UserEventRegistrations")
   donations     Donation[]         @relation("UserDonations")
   certificates  Certificate[]      @relation("UserCertificates")
   notifications Notification[]     @relation("UserNotifications")
@@ -103,6 +104,8 @@ model Opportunity {
   volunteerLimit     Int               @default(10)
   coverImage         String
   status             OpportunityStatus @default(OPEN)
+  contactInfo        String?
+  deadline           String?
   createdAt          DateTime          @default(now())
   
   // Relations
@@ -116,6 +119,7 @@ model Application {
   userId        String            @db.ObjectId
   status        ApplicationStatus @default(PENDING)
   notes         String?
+  formData      String?           // JSON string
   createdAt     DateTime          @default(now())
   
   // Relations
@@ -135,10 +139,25 @@ model Event {
   capacity        Int               @default(50)
   registeredUsers String[]          @default([]) // Array of User IDs
   category        String
+  registrationLink String?
+  contactInfo      String?
   createdAt       DateTime          @default(now())
   
   // Relations
   organization    Organization      @relation("OrgEvents", fields: [organizationId], references: [id])
+  registrations   EventRegistration[] @relation("EventRegistrations")
+}
+
+model EventRegistration {
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  eventId       String            @db.ObjectId
+  userId        String            @db.ObjectId
+  formData      String?           // JSON string
+  createdAt     DateTime          @default(now())
+  
+  // Relations
+  event         Event             @relation("EventRegistrations", fields: [eventId], references: [id], onDelete: Cascade)
+  user          User              @relation("UserEventRegistrations", fields: [userId], references: [id])
 }
 
 model Donation {
@@ -152,6 +171,8 @@ model Donation {
   location    String
   status      DonationStatus @default(AVAILABLE)
   requesterId String?        @db.ObjectId
+  contactInfo String?
+  notes       String?
   createdAt   DateTime       @default(now())
   
   // Relations

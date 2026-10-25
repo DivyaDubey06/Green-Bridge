@@ -1,11 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@font-face {
+  font-family: 'Scapholene';
+  src: url('/assets/fonts/Scapholene.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @import "tailwindcss";
 
 @theme {
+  /* Font families */
   --font-serif: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-handwritten: "Scapholene", "Caveat", cursive;
 
+  /* Existing brand colors */
   --color-primary-green: #2E7D32;
   --color-dark-forest: #1B4332;
   --color-leaf-green: #4CAF50;
@@ -16,75 +27,172 @@
   --color-soft-sky: #D8F3FF;
   --color-slate-text: #2C2C2C;
   --color-gold: #FBBF24;
+
+  /* Approved Contrast Palette System Tokens (Raw Brand Colors for Accents) */
+  --gb-bg-deep-green: #0A3323;   /* Deep Green Base */
+  --gb-text-beige: #F7F4D5;      /* Beige Text */
+  --gb-bg-midnight: #105666;     /* Midnight Base */
+  --gb-bg-moss: #839958;         /* Moss Base */
+  --gb-text-dark-green: #062015; /* Very Dark Green Text on Moss */
+  --gb-bg-beige: #F7F4D5;        /* Beige Base */
+  --gb-bg-rose: #D3968C;         /* Rose Base */
+  --gb-bg-soft-rose: #F6E4E0;    /* Soft Rose Tint */
+
+  /* Second-Tier Tinted Surface Tokens (Revision Pass 3) */
+  --gb-surface-deep: #DEE2DD;
+  --gb-surface-deep-text: #0A3323;
+
+  --gb-surface-moss: #E5E9DA;
+  --gb-surface-moss-text: #105666;
+
+  --gb-surface-beige: #FAF9F0;
+  --gb-surface-beige-text: #0A3323;
+
+  --gb-surface-rose: #F4E8E3;
+  --gb-surface-rose-text: #0A3323;
+
+  --gb-surface-midnight: #D1DCDC;
+  --gb-surface-midnight-text: #105666;
+}
+
+:root {
+  /* Light Mode Surface Tints */
+  --gb-surface-deep: #DEE2DD;
+  --gb-surface-deep-text: #0A3323;
+
+  --gb-surface-moss: #E5E9DA;
+  --gb-surface-moss-text: #105666;
+
+  --gb-surface-beige: #FAF9F0;
+  --gb-surface-beige-text: #0A3323;
+
+  --gb-surface-rose: #F4E8E3;
+  --gb-surface-rose-text: #0A3323;
+
+  --gb-surface-midnight: #D1DCDC;
+  --gb-surface-midnight-text: #105666;
+}
+
+html.dark {
+  /* Dark Mode Surface Tints */
+  --gb-surface-deep: #101B17;
+  --gb-surface-deep-text: #F3F1E7;
+
+  --gb-surface-moss: #323826;
+  --gb-surface-moss-text: #F3F1E7;
+
+  --gb-surface-beige: #525149;
+  --gb-surface-beige-text: #F3F1E7;
+
+  --gb-surface-rose: #483734;
+  --gb-surface-rose-text: #F3F1E7;
+
+  --gb-surface-midnight: #11252A;
+  --gb-surface-midnight-text: #F3F1E7;
 }
 
 @layer base {
   body {
     @apply bg-soft-mint-bg text-slate-text font-sans antialiased overflow-x-hidden transition-colors duration-300;
-    background-image: 
-      radial-gradient(circle at 10% 20%, rgba(245, 223, 192, 0.25) 0%, transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(167, 243, 208, 0.2) 0%, transparent 50%),
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
-    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-dark-forest font-bold transition-colors duration-300;
+    @apply font-serif transition-colors duration-300;
   }
 }
 
-/* Dark Mode Theme Overrides */
-html.dark body {
-  background-color: #0C1E16;
-  color: #F8F7F2;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(12, 30, 22, 0.95) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(27, 67, 50, 0.3) 0%, transparent 50%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+.font-handwritten {
+  font-family: var(--font-handwritten), 'Caveat', cursive !important;
 }
 
-html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6 {
-  color: #A7F3D0;
+/* Surface Component CSS Custom Property System - Tinted Palette */
+.surface-block[data-surface-tone="deep"],
+.surface-block[data-surface-tone="pairA"] {
+  --surface-bg: var(--gb-surface-deep);
+  --surface-fg: var(--gb-surface-deep-text);
+  --surface-accent: #0A3323;
+  --surface-border: rgba(10, 51, 35, 0.12);
+  background-color: var(--gb-surface-deep);
+  color: var(--gb-surface-deep-text);
 }
 
-html.dark .watercolor-card {
-  background-color: rgba(27, 67, 50, 0.45);
-  border-color: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+.surface-block[data-surface-tone="moss"],
+.surface-block[data-surface-tone="pairB"] {
+  --surface-bg: var(--gb-surface-moss);
+  --surface-fg: var(--gb-surface-moss-text);
+  --surface-accent: #839958;
+  --surface-border: rgba(16, 86, 102, 0.12);
+  background-color: var(--gb-surface-moss);
+  color: var(--gb-surface-moss-text);
 }
 
-html.dark .bg-white {
-  background-color: #132A1D !important;
-  color: #F8F7F2 !important;
+.surface-block[data-surface-tone="beige"],
+.surface-block[data-surface-tone="pairC"] {
+  --surface-bg: var(--gb-surface-beige);
+  --surface-fg: var(--gb-surface-beige-text);
+  --surface-accent: #839958;
+  --surface-border: rgba(10, 51, 35, 0.12);
+  background-color: var(--gb-surface-beige);
+  color: var(--gb-surface-beige-text);
 }
 
-html.dark .text-slate-text {
-  color: #E2E8F0 !important;
+.surface-block[data-surface-tone="rose"],
+.surface-block[data-surface-tone="softRose"],
+.surface-block[data-surface-tone="pairD"] {
+  --surface-bg: var(--gb-surface-rose);
+  --surface-fg: var(--gb-surface-rose-text);
+  --surface-accent: #D3968C;
+  --surface-border: rgba(10, 51, 35, 0.12);
+  background-color: var(--gb-surface-rose);
+  color: var(--gb-surface-rose-text);
 }
 
-html.dark .text-dark-forest {
-  color: #A7F3D0 !important;
+.surface-block[data-surface-tone="midnight"],
+.surface-block[data-surface-tone="pairE"] {
+  --surface-bg: var(--gb-surface-midnight);
+  --surface-fg: var(--gb-surface-midnight-text);
+  --surface-accent: #105666;
+  --surface-border: rgba(16, 86, 102, 0.12);
+  background-color: var(--gb-surface-midnight);
+  color: var(--gb-surface-midnight-text);
 }
 
-html.dark .text-gray-600, html.dark .text-gray-500, html.dark .text-gray-700 {
-  color: #CBD5E1 !important;
+/* Dark Mode Tone Mappings */
+html.dark .surface-block[data-surface-tone="deep"],
+html.dark .surface-block[data-surface-tone="pairA"] {
+  background-color: var(--gb-surface-deep) !important;
+  color: var(--gb-surface-deep-text) !important;
 }
 
-html.dark .border-gray-100, html.dark .border-gray-200, html.dark .border-gray-300 {
-  border-color: rgba(255, 255, 255, 0.1) !important;
+html.dark .surface-block[data-surface-tone="moss"],
+html.dark .surface-block[data-surface-tone="pairB"] {
+  background-color: var(--gb-surface-moss) !important;
+  color: var(--gb-surface-moss-text) !important;
 }
 
-html.dark input, html.dark textarea, html.dark select {
-  background-color: #0C1E16 !important;
-  color: #F8F7F2 !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
+html.dark .surface-block[data-surface-tone="beige"],
+html.dark .surface-block[data-surface-tone="pairC"] {
+  background-color: var(--gb-surface-beige) !important;
+  color: var(--gb-surface-beige-text) !important;
 }
 
-html.dark button.bg-white {
-  background-color: #1B4332 !important;
-  color: #F8F7F2 !important;
+html.dark .surface-block[data-surface-tone="rose"],
+html.dark .surface-block[data-surface-tone="softRose"],
+html.dark .surface-block[data-surface-tone="pairD"] {
+  background-color: var(--gb-surface-rose) !important;
+  color: var(--gb-surface-rose-text) !important;
 }
 
+html.dark .surface-block[data-surface-tone="midnight"],
+html.dark .surface-block[data-surface-tone="pairE"] {
+  background-color: var(--gb-surface-midnight) !important;
+  color: var(--gb-surface-midnight-text) !important;
+}
+
+/* Pencil cursor for Journal reflection field */
+.pencil-cursor, .pencil-cursor:hover, .pencil-cursor:focus-within {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%232E7D32' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z'/%3E%3C/svg%3E") 2 22, text !important;
+}
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -107,16 +215,7 @@ html.dark button.bg-white {
 
 /* Premium Watercolor Overlay / Card Styles */
 .watercolor-card {
-  @apply bg-white/70 backdrop-blur-md border border-white/50 rounded-3xl shadow-xl shadow-dark-forest/5;
-  background-image: radial-gradient(circle at top left, rgba(255, 255, 255, 0.4), rgba(245, 223, 192, 0.1));
-}
-
-.organic-border {
-  border-radius: 60% 40% 60% 40% / 40% 60% 40% 60%;
-}
-
-.organic-border-alt {
-  border-radius: 40% 60% 40% 60% / 60% 40% 60% 40%;
+  @apply bg-white/80 backdrop-blur-md border border-[#0A3323]/15 rounded-3xl shadow-xl;
 }
 
 /* Keyframe Animations */
@@ -126,52 +225,6 @@ html.dark button.bg-white {
   100% { transform: translateY(0px); }
 }
 
-@keyframes slow-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes sway {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(3deg); }
-}
-
-@keyframes drift-right {
-  0% { transform: translateX(-10%); }
-  100% { transform: translateX(110%); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.4)); }
-  50% { filter: drop-shadow(0 0 15px rgba(76, 175, 80, 0.8)); }
-}
-
-/* Animation Utilities */
 .animate-float {
   animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-delayed {
-  animation: float 6s ease-in-out infinite;
-  animation-delay: 3s;
-}
-
-.animate-sway {
-  animation: sway 8s ease-in-out infinite;
-  transform-origin: bottom center;
-}
-
-.animate-slow-spin {
-  animation: slow-spin 20s linear infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* Utility classes for lists and grids */
-.grid-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
 }

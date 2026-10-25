@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Bell, Search, LogOut, User, Award, CheckCircle } from 'lucide-react';
+import { Bell, Search, LogOut, User, Award, CheckCircle, ShoppingBag } from 'lucide-react';
 import { useAuthStore, LEVEL_NAMES } from '../../store/useAuthStore';
 import { Avatar } from '../common/Avatar';
+import { CartModal } from '../store/CartModal';
 
 interface TopbarProps {
   title: string;
@@ -17,12 +18,17 @@ export const Topbar: React.FC<TopbarProps> = ({ title }) => {
     logout,
     opportunities,
     events,
-    donations
+    donations,
+    cart
   } = useAuthStore();
   
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   const [searchResults, setSearchResults] = useState<{
     opportunities: typeof opportunities;
     events: typeof events;
@@ -179,7 +185,22 @@ export const Topbar: React.FC<TopbarProps> = ({ title }) => {
       </div>
 
       {/* Right Side Options */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
+        {/* Shopping Cart Button */}
+        <button
+          id="topbar-cart-icon-target"
+          onClick={() => setIsCartOpen(true)}
+          className="relative w-10 h-10 rounded-full border border-[#CD9777]/20 flex items-center justify-center text-slate-text/75 hover:bg-warm-cream hover:text-primary-green transition-all"
+          title="View Cart"
+        >
+          <ShoppingBag size={18} />
+          {totalCartCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-primary-green text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce">
+              {totalCartCount}
+            </span>
+          )}
+        </button>
+
         {/* Notifications Bell */}
         <div ref={notifRef} className="relative">
           <button 
@@ -308,7 +329,9 @@ export const Topbar: React.FC<TopbarProps> = ({ title }) => {
           )}
         </div>
       </div>
+      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 };
+
 export default Topbar;

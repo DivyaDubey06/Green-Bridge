@@ -75,46 +75,44 @@ export const Footer: React.FC = () => {
           <p className="text-sm text-warm-cream/70 mb-4">Stay updated with volunteer drives near you.</p>
           <div className="flex items-center gap-3">
             <a 
-              href="https://instagram.com" 
+              href="https://instagram.com/___littlesunshine__" 
               target="_blank" 
               rel="noreferrer"
               className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary-green hover:text-white transition-all hover:-translate-y-1"
+              title="Instagram"
             >
               <Instagram size={18} />
             </a>
             <a 
-              href="https://linkedin.com" 
+              href="https://www.linkedin.com/in/divya-dubey-454930376/" 
               target="_blank" 
               rel="noreferrer"
               className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary-green hover:text-white transition-all hover:-translate-y-1"
+              title="LinkedIn"
             >
               <Linkedin size={18} />
             </a>
             <a 
-              href="https://github.com" 
-              target="_blank" 
-              rel="noreferrer"
+              href="mailto:meetdivya2006@gmail.com" 
               className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary-green hover:text-white transition-all hover:-translate-y-1"
-            >
-              <Github size={18} />
-            </a>
-            <a 
-              href="mailto:contact@greenbridge.org" 
-              className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary-green hover:text-white transition-all hover:-translate-y-1"
+              title="Email Us"
             >
               <Mail size={18} />
             </a>
           </div>
+
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center pt-8 text-xs text-warm-cream/50 gap-4">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-3">
           <span className="font-serif font-semibold text-soft-mint">GreenBridge</span>
           <span>•</span>
           <span className="italic">Bring the Change.</span>
           <span>•</span>
           <span>Connecting People Who Care.</span>
+          <span>•</span>
+          <span className="text-soft-mint/80">Handwritten font: Scapholène</span>
         </div>
         <div>
           &copy; {new Date().getFullYear()} GreenBridge. All rights reserved.

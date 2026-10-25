@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, ArrowRight, LayoutDashboard, LogOut, User, Sun, Moon } from 'lucide-react';
+import { Menu, X, ArrowRight, LayoutDashboard, LogOut, User, Sun, Moon, ShoppingBag } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { Logo } from '../common/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CartModal } from '../store/CartModal';
 
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, currentUser, logout } = useAuthStore();
+  const { isAuthenticated, currentUser, currentOrg, logout, cart } = useAuthStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const [isDark, setIsDark] = useState(() => {
     return document.documentElement.classList.contains('dark') || 
@@ -44,6 +48,7 @@ export const Navbar: React.FC = () => {
     { name: 'Opportunities', path: '/opportunities' },
     { name: 'Events', path: '/events' },
     { name: 'Donate', path: '/donate' },
+    { name: 'GreenCart', path: '/store' },
     { name: 'About', path: '/about' },
   ];
 
@@ -97,21 +102,37 @@ export const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop Auth & Cart Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* Shopping Cart Button */}
+            <button
+              id="cart-icon-target"
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2.5 rounded-full hover:bg-moss/15 text-slate-text dark:text-beige transition-colors cursor-pointer"
+              title="View Cart"
+            >
+              <ShoppingBag size={18} />
+              {totalCartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary-green text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce">
+                  {totalCartCount}
+                </span>
+              )}
+            </button>
+
             {/* Theme Toggle */}
             <button
               onClick={() => setIsDark(!isDark)}
-              className="p-2.5 rounded-full hover:bg-[#CD9777]/15 text-slate-text dark:text-[#A7F3D0] transition-colors cursor-pointer mr-2"
+              className="p-2.5 rounded-full hover:bg-moss/15 text-slate-text dark:text-beige transition-colors cursor-pointer mr-1"
               title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
+
             {isAuthenticated && currentUser ? (
               <div className="flex items-center gap-3">
                 <Link
-                  to={currentUser.role === 'ADMIN' ? '/admin' : currentUser.role === 'ORGANIZATION' ? '/org-dashboard' : '/dashboard'}
+                  to={currentUser.role === 'ADMIN' ? '/admin' : (currentUser.role === 'ORGANIZATION' || currentOrg?.verificationStatus === 'APPROVED') ? '/org-dashboard' : '/dashboard'}
                   className="flex items-center gap-2 bg-primary-green hover:bg-dark-forest text-white px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary-green/20 hover:-translate-y-0.5"
                 >
                   <LayoutDashboard size={16} />
@@ -195,7 +216,7 @@ export const Navbar: React.FC = () => {
               {isAuthenticated && currentUser ? (
                 <>
                   <Link
-                    to={currentUser.role === 'ADMIN' ? '/admin' : currentUser.role === 'ORGANIZATION' ? '/org-dashboard' : '/dashboard'}
+                    to={currentUser.role === 'ADMIN' ? '/admin' : (currentUser.role === 'ORGANIZATION' || currentOrg?.verificationStatus === 'APPROVED') ? '/org-dashboard' : '/dashboard'}
                     onClick={() => setIsOpen(false)}
                     className="flex justify-center items-center gap-2 bg-primary-green hover:bg-dark-forest text-white w-full py-4 rounded-2xl font-bold transition-all"
                   >
@@ -233,6 +254,9 @@ export const Navbar: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
 };
+

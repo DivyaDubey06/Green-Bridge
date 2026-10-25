@@ -1,29 +1,33 @@
 import React from 'react';
 import { Logo } from '../../components/common/Logo';
 import { Heart, Users, Sparkles, ShieldCheck } from 'lucide-react';
+import { Background3DScene } from '../../components/common/Background3DScene';
+import { Surface } from '../../components/common/Surface';
 
 export const About: React.FC = () => {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-24 space-y-16">
+    <div className="max-w-4xl mx-auto px-6 py-16 space-y-16">
       
-      {/* 1. HERO STORY */}
-      <section className="text-center space-y-6">
-        <div className="w-24 h-24 mx-auto animate-float">
-          <Logo size={80} showText={false} />
-        </div>
-        <h2 className="font-serif text-4xl md:text-6xl font-black text-dark-forest">Our Mission</h2>
-        <h4 className="font-serif text-xl md:text-2xl text-primary-green italic">"Connecting People Who Care."</h4>
-        <p className="text-base md:text-lg text-slate-text/75 max-w-2xl mx-auto leading-relaxed pt-2">
-          GreenBridge exists because in today's fast-paced world, many people genuinely want to contribute to society but don't know where to begin. We don't ask you to permanently dedicate your life to an NGO. Instead, GreenBridge allows anyone to volunteer whenever they are free, discover nearby opportunities, participate in local events, donate useful items, and watch their visual social impact grow.
-        </p>
-      </section>
+      {/* 1. HERO STORY WITH 3D ABOUT SCENE */}
+      <Surface tone="deep" className="p-10 md:p-14 rounded-[36px] shadow-xl text-center space-y-6 relative overflow-hidden">
+        <Background3DScene tab="about" className="w-full">
+          <div className="w-24 h-24 mx-auto animate-float bg-white/10 p-3 rounded-full backdrop-blur-md border border-white/20 shadow-inner flex items-center justify-center mb-4">
+            <Logo size={70} showText={false} />
+          </div>
+          <h2 className="font-serif text-4xl md:text-6xl font-black text-[#F7F4D5]">Our Mission</h2>
+          <h4 className="font-serif text-xl md:text-2xl text-[#D3968C] italic mt-2">"Connecting People Who Care."</h4>
+          <p className="text-base md:text-lg text-[#F7F4D5]/85 max-w-2xl mx-auto leading-relaxed pt-3">
+            GreenBridge exists because in today's fast paced world, many people genuinely want to contribute to society but don't know where to begin. We don't ask you to permanently dedicate your life to an NGO. Instead, GreenBridge allows anyone to volunteer whenever they are free, discover nearby opportunities, participate in local events, donate useful items, and watch their visual social impact grow.
+          </p>
+        </Background3DScene>
+      </Surface>
 
       {/* 2. VALUES */}
       <section className="space-y-8">
         <h3 className="font-serif text-3xl font-bold text-center text-dark-forest">Our Core Values</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {[
-            { title: '🌱 Hope & Growth', desc: 'We believe that tiny deeds grow into major changes. That is why our visual impact tree sprouts leaf-by-leaf as you do good.', icon: Sparkles },
+            { title: '🌱 Hope & Growth', desc: 'We believe that tiny deeds grow into major changes. That is why our visual impact tree sprouts leaf by leaf as you do good.', icon: Sparkles },
             { title: '❤️ Belonging & Safety', desc: 'This is a warm community space. We manually verify all organization registrations to ensure high security and trust.', icon: ShieldCheck },
             { title: '🤝 Community Cohesion', desc: 'Connecting neighbours, verified charity groups, and local clubs directly to coordinate help close to home.', icon: Users },
             { title: '🌍 Purpose & Action', desc: 'volunteering should feel easy, rewarding, and enjoyable. Get active in plantation drives, tutoring, and cleans.', icon: Heart },
@@ -71,6 +75,11 @@ export const About: React.FC = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Font & Design Credits */}
+        <div className="text-center text-xs text-slate-text/50 pt-8 border-t border-[#0A3323]/10">
+
         </div>
       </section>
     </div>

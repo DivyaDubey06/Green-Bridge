@@ -8,9 +8,11 @@ import toast from 'react-hot-toast';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { register } = useAuthStore();
+  const { register, registerOrganization, registerVendor, createProduct, currentUser } = useAuthStore();
 
-  // Form Fields State
+  const [accountType, setAccountType] = useState<'USER' | 'ORG' | 'VENDOR'>('USER');
+
+  // Form Fields State (User)
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,6 +23,26 @@ export const Register: React.FC = () => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
+  // Form Fields State (Vendor Small Business)
+  const [businessName, setBusinessName] = useState('');
+  const [vendorDescription, setVendorDescription] = useState('');
+  const [vendorCategory, setVendorCategory] = useState('Eco Fashion & Living');
+  const [ecoPractice, setEcoPractice] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
+  const [prodTitle, setProdTitle] = useState('');
+  const [prodPrice, setProdPrice] = useState('');
+  const [prodDesc, setProdDesc] = useState('');
+  const [prodImage, setProdImage] = useState('');
+
+  // Form Fields State (Organization NGO)
+  const [orgName, setOrgName] = useState('');
+  const [orgDesc, setOrgDesc] = useState('');
+  const [orgMission, setOrgMission] = useState('');
+  const [orgCert, setOrgCert] = useState('');
+  const [orgCategory, setOrgCategory] = useState('Environment');
+  const [orgWebsite, setOrgWebsite] = useState('');
+  const [orgPhone, setOrgPhone] = useState('');
+
   // Avatar Customizer State
   const [avatar, setAvatar] = useState<AvatarConfig>({
     hair: 'style-1',
@@ -29,6 +51,69 @@ export const Register: React.FC = () => {
     clothing: '#2E7D32',
     accessory: 'none',
   });
+
+  const handleVendorSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!businessName || !ecoPractice || !whatsapp) {
+      toast.error('Please fill in required business details and eco-statement.');
+      return;
+    }
+
+    try {
+      const vendor = await registerVendor({
+        businessName,
+        description: vendorDescription,
+        category: vendorCategory,
+        ecoPracticeStatement: ecoPractice,
+        whatsapp
+      });
+
+      if (prodTitle && prodPrice) {
+        await createProduct({
+          vendorId: vendor.id,
+          vendorName: businessName,
+          businessName,
+          title: prodTitle,
+          description: prodDesc || vendorDescription,
+          price: Number(prodPrice),
+          images: prodImage ? [prodImage] : ['https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60'],
+          category: vendorCategory,
+          inStock: true,
+          whatsapp
+        });
+      }
+
+      toast.success('Small Business application submitted for admin review! 🏢');
+      navigate('/store');
+    } catch (err: any) {
+      toast.error(err.message || 'Vendor onboarding failed.');
+    }
+  };
+
+  const handleOrgSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!orgName || !orgMission || !orgCert) {
+      toast.error('Please fill in required organization details.');
+      return;
+    }
+    try {
+      await registerOrganization({
+        organizationName: orgName,
+        description: orgDesc,
+        mission: orgMission,
+        category: orgCategory,
+        website: orgWebsite,
+        phone: orgPhone,
+        logo: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb0?w=300&auto=format&fit=crop&q=60',
+        registrationCertificate: orgCert
+      });
+      toast.success('NGO verification request submitted! 🏢');
+      navigate('/dashboard');
+    } catch (err: any) {
+      toast.error(err.message || 'Organization registration failed.');
+    }
+  };
+
 
   const interestOptions = [
     { label: '🌲 Environment', value: 'Environment' },
@@ -271,11 +356,226 @@ export const Register: React.FC = () => {
         {/* Right 7 Columns: Registration Details Form */}
         <div className="lg:col-span-7 space-y-6">
           <div>
-            <h3 className="font-serif text-2xl md:text-3xl font-bold text-dark-forest">Create Account</h3>
-            <p className="text-xs text-slate-text/60 mt-1">Register once and join active volunteering campaigns, local events, or donation loops.</p>
+            <h3 className="font-serif text-2xl md:text-3xl font-bold text-dark-forest">Registration Portal</h3>
+            <p className="text-xs text-slate-text/60 mt-1">Choose your account type below to get started.</p>
           </div>
 
+          {/* Account Type Selection Tabs */}
+          <div className="grid grid-cols-3 gap-2 bg-warm-cream/60 p-1.5 rounded-2xl border border-[#CD9777]/20">
+            <button
+              type="button"
+              onClick={() => setAccountType('USER')}
+              className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                accountType === 'USER'
+                  ? 'bg-primary-green text-white shadow-sm'
+                  : 'text-slate-text/70 hover:text-dark-forest'
+              }`}
+            >
+              🙋‍♂️ Volunteer
+            </button>
+            <button
+              type="button"
+              onClick={() => setAccountType('ORG')}
+              className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                accountType === 'ORG'
+                  ? 'bg-primary-green text-white shadow-sm'
+                  : 'text-slate-text/70 hover:text-dark-forest'
+              }`}
+            >
+              🏢 Organization
+            </button>
+            <button
+              type="button"
+              onClick={() => setAccountType('VENDOR')}
+              className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                accountType === 'VENDOR'
+                  ? 'bg-primary-green text-white shadow-sm'
+                  : 'text-slate-text/70 hover:text-dark-forest'
+              }`}
+            >
+              🛍️ Small Business
+            </button>
+          </div>
+
+          {/* VENDOR SMALL BUSINESS ONBOARDING FORM */}
+          {accountType === 'VENDOR' && (
+            <form onSubmit={handleVendorSubmit} className="space-y-4 animate-in fade-in duration-200">
+              <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200/50 text-xs text-emerald-900 space-y-1">
+                <span className="font-bold block">🌿 GreenCart Small Business Partner Onboarding</span>
+                <p>Register your eco-friendly shop. Submissions are reviewed by administrators before going live.</p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-text/75 block">Business Name *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. EcoCraft Uttarakhand"
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
+                    className="w-full px-4 py-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-sm"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-text/75 block">Category *</label>
+                  <select
+                    value={vendorCategory}
+                    onChange={(e) => setVendorCategory(e.target.value)}
+                    className="w-full px-4 py-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-sm"
+                  >
+                    <option value="Personal Care">Personal Care & Hygiene</option>
+                    <option value="Fashion & Bags">Upcycled Fashion & Bags</option>
+                    <option value="Eco Gadgets">Solar & Eco Gadgets</option>
+                    <option value="Home & Living">Sustainable Home & Kitchen</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-text/75 block">Mandatory Eco-Practice Statement *</label>
+                <textarea
+                  required
+                  rows={2}
+                  placeholder="Explain your sustainable materials, plastic-free packaging, or ethical sourcing practices..."
+                  value={ecoPractice}
+                  onChange={(e) => setEcoPractice(e.target.value)}
+                  className="w-full p-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-xs resize-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-text/75 block">WhatsApp Business Contact *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. 919876543210"
+                    value={whatsapp}
+                    onChange={(e) => setWhatsapp(e.target.value)}
+                    className="w-full px-4 py-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-sm"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-text/75 block">Business Description</label>
+                  <input
+                    type="text"
+                    placeholder="Short summary of what you craft/sell"
+                    value={vendorDescription}
+                    onChange={(e) => setVendorDescription(e.target.value)}
+                    className="w-full px-4 py-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Initial Product Listing */}
+              <div className="p-4 bg-warm-cream/40 rounded-2xl border border-[#CD9777]/15 space-y-3">
+                <span className="text-xs font-bold text-dark-forest block">Featured Initial Product (Optional)</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input
+                    type="text"
+                    placeholder="Product Title (e.g. Bamboo Toothbrush)"
+                    value={prodTitle}
+                    onChange={(e) => setProdTitle(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-[#CD9777]/20 rounded-xl text-xs"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Price in ₹ (e.g. 299)"
+                    value={prodPrice}
+                    onChange={(e) => setProdPrice(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-[#CD9777]/20 rounded-xl text-xs"
+                  />
+                </div>
+                <input
+                  type="url"
+                  placeholder="Photo URL (https://...)"
+                  value={prodImage}
+                  onChange={(e) => setProdImage(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-[#CD9777]/20 rounded-xl text-xs"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-primary-green hover:bg-dark-forest text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-primary-green/10 flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                Register Your Small Business
+                <Sparkles size={16} />
+              </button>
+            </form>
+          )}
+
+          {/* ORGANIZATION NGO FORM */}
+          {accountType === 'ORG' && (
+            <form onSubmit={handleOrgSubmit} className="space-y-4 animate-in fade-in duration-200">
+              <div className="p-4 bg-blue-50/60 rounded-2xl border border-blue-200/50 text-xs text-blue-900 space-y-1">
+                <span className="font-bold block">🏢 Organization & NGO Verification Request</span>
+                <p>Register your organization to host volunteer opportunities and community drives.</p>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-text/75 block">Organization Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Hope Foundation Dehradun"
+                  value={orgName}
+                  onChange={(e) => setOrgName(e.target.value)}
+                  className="w-full px-4 py-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-sm"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-text/75 block">Mission Statement *</label>
+                <textarea
+                  required
+                  rows={2}
+                  placeholder="What is your core cause and mission?"
+                  value={orgMission}
+                  onChange={(e) => setOrgMission(e.target.value)}
+                  className="w-full p-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-xs resize-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-text/75 block">Gov Registration / Certificate ID *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. UK-88392-NGO"
+                    value={orgCert}
+                    onChange={(e) => setOrgCert(e.target.value)}
+                    className="w-full px-4 py-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-sm"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-text/75 block">Website / Social</label>
+                  <input
+                    type="text"
+                    placeholder="https://..."
+                    value={orgWebsite}
+                    onChange={(e) => setOrgWebsite(e.target.value)}
+                    className="w-full px-4 py-3 bg-white border border-[#CD9777]/20 focus:border-primary-green focus:outline-none rounded-xl text-sm"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-primary-green hover:bg-dark-forest text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-primary-green/10 flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                Submit Organization for Verification
+                <Sparkles size={16} />
+              </button>
+            </form>
+          )}
+
+          {/* VOLUNTEER CITIZEN FORM */}
+          {accountType === 'USER' && (
           <form onSubmit={handleRegister} className="space-y-5">
+
             {/* Name and Email */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
@@ -444,6 +744,8 @@ export const Register: React.FC = () => {
               <Sparkles size={16} />
             </button>
           </form>
+          )}
+
 
           <div className="text-center pt-4 border-t border-[#CD9777]/10 text-xs">
             <span className="text-slate-text/50">Already have an account?</span>{' '}

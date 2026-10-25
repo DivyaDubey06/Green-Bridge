@@ -37,19 +37,47 @@ export class JwtAuthGuard implements CanActivate {
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly db: DatabaseService,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
     if (!requiredRoles) {
       return true;
     }
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-    if (!user || !requiredRoles.includes(user.role)) {
+    if (!user) {
       throw new ForbiddenException('Access denied. Insufficient role permissions.');
     }
-    return true;
+
+    // Admins bypass role checks
+    if (user.role === 'ADMIN') {
+      return true;
+    }
+
+    // Fetch latest user details and organization from database to get live status
+    const dbUser = await this.db.findUserById(user.sub);
+    if (!dbUser) {
+      throw new ForbiddenException('User not found.');
+    }
+
+    // Check if user is the owner of a verified organization
+    if (requiredRoles.includes('ORGANIZATION')) {
+      const org = await this.db.findOrgByOwnerId(dbUser.id);
+      if (org && org.verificationStatus === 'APPROVED') {
+        return true;
+      }
+    }
+
+    // Fallback check to database role
+    if (requiredRoles.includes(dbUser.role)) {
+      return true;
+    }
+
+    throw new ForbiddenException('Access denied. Insufficient role permissions.');
   }
 }
 
@@ -113,10 +141,7 @@ export class AppController {
       role: user.role,
     });
 
-    let organization = null;
-    if (user.role === 'ORGANIZATION') {
-      organization = await this.db.findOrgByOwnerId(user.id);
-    }
+    const organization = await this.db.findOrgByOwnerId(user.id);
 
     const { password, ...userProfile } = user;
 
@@ -135,7 +160,11 @@ export class AppController {
       throw new UnauthorizedException('User not found.');
     }
     const { password, ...result } = user;
-    return result;
+    const organization = await this.db.findOrgByOwnerId(user.id);
+    return {
+      ...result,
+      organization: organization || null,
+    };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -194,10 +223,32 @@ export class AppController {
     return this.db.createOpp(org.id, body);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ORGANIZATION', 'ADMIN')
+  @Patch('opportunities/:id')
+  async updateOpp(@Req() req: any, @Param('id') id: string, @Body() body: any) {
+    const org = await this.db.findOrgByOwnerId(req.user.sub);
+    if (!org || org.verificationStatus !== 'APPROVED') {
+      throw new ForbiddenException('Organization must be verified.');
+    }
+    return this.db.updateOpp(id, org.id, body);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ORGANIZATION', 'ADMIN')
+  @Delete('opportunities/:id')
+  async deleteOpp(@Req() req: any, @Param('id') id: string) {
+    const org = await this.db.findOrgByOwnerId(req.user.sub);
+    if (!org || org.verificationStatus !== 'APPROVED') {
+      throw new ForbiddenException('Organization must be verified.');
+    }
+    return this.db.deleteOpp(id, org.id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('opportunities/apply/:id')
   async applyOpp(@Req() req: any, @Param('id') id: string, @Body() body: any) {
-    return this.db.createApp(req.user.sub, id, body.notes);
+    return this.db.createApp(req.user.sub, id, body.notes, body.formData ? JSON.stringify(body.formData) : undefined);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -236,10 +287,38 @@ export class AppController {
     return this.db.createEvent(org.id, body);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ORGANIZATION', 'ADMIN')
+  @Patch('events/:id')
+  async updateEvent(@Req() req: any, @Param('id') id: string, @Body() body: any) {
+    const org = await this.db.findOrgByOwnerId(req.user.sub);
+    if (!org || org.verificationStatus !== 'APPROVED') {
+      throw new ForbiddenException('Organization must be verified.');
+    }
+    return this.db.updateEvent(id, org.id, body);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ORGANIZATION', 'ADMIN')
+  @Delete('events/:id')
+  async deleteEvent(@Req() req: any, @Param('id') id: string) {
+    const org = await this.db.findOrgByOwnerId(req.user.sub);
+    if (!org || org.verificationStatus !== 'APPROVED') {
+      throw new ForbiddenException('Organization must be verified.');
+    }
+    return this.db.deleteEvent(id, org.id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('events/register/:id')
-  async registerEvent(@Req() req: any, @Param('id') id: string) {
-    return this.db.registerUserForEvent(req.user.sub, id);
+  async registerEvent(@Req() req: any, @Param('id') id: string, @Body() body: any) {
+    return this.db.registerUserForEvent(req.user.sub, id, body.formData ? JSON.stringify(body.formData) : undefined);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('events/unregister/:id')
+  async unregisterEvent(@Req() req: any, @Param('id') id: string) {
+    return this.db.unregisterUserFromEvent(req.user.sub, id);
   }
 
   // --- DONATIONS ---

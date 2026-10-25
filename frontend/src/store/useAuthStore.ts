@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import axios from 'axios';
 import { 
-  User, Organization, Opportunity, Application, Event, Donation, Certificate, Notification, Badge, AvatarConfig 
+  User, Organization, Opportunity, Application, Event, Donation, Certificate, Notification, Badge, AvatarConfig,
+  Vendor, Product, EventExperience, FeedbackLetter, CartItem
 } from '../types';
 
 // Axios client configuration
@@ -13,7 +14,7 @@ const api = axios.create({
 
 // Request interceptor to automatically attach JWT authorization headers
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('greenbridge_token');
+  const token = sessionStorage.getItem('greenbridge_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -60,6 +61,11 @@ interface AuthState {
   certificates: Certificate[];
   notifications: Notification[];
   badges: Badge[];
+  vendors: Vendor[];
+  products: Product[];
+  experiences: EventExperience[];
+  letters: FeedbackLetter[];
+  cart: CartItem[];
   
   // Actions
   initialize: () => Promise<void>;
@@ -67,17 +73,23 @@ interface AuthState {
   register: (userData: Partial<User> & { password?: string }) => Promise<User>;
   logout: () => void;
   updateProfile: (updates: Partial<User>) => Promise<void>;
+  refreshProfile: () => Promise<void>;
   
   // Organization Actions
   registerOrganization: (orgData: Omit<Organization, 'id' | 'ownerId' | 'verificationStatus' | 'createdAt'>) => Promise<Organization>;
   adminApproveOrg: (orgId: string) => Promise<void>;
   adminRejectOrg: (orgId: string) => Promise<void>;
   createOpportunity: (oppData: Omit<Opportunity, 'id' | 'organizationId' | 'organizationName' | 'status' | 'applicantsCount'>) => Promise<void>;
+  updateOpportunity: (oppId: string, oppData: Partial<Opportunity>) => Promise<void>;
+  deleteOpportunity: (oppId: string) => Promise<void>;
   createEvent: (eventData: Omit<Event, 'id' | 'organizationId' | 'organizationName' | 'registeredUsers'>) => Promise<void>;
+  updateEvent: (eventId: string, eventData: Partial<Event>) => Promise<void>;
+  deleteEvent: (eventId: string) => Promise<void>;
   
   // Volunteer & Event Actions
-  applyForOpportunity: (oppId: string, notes?: string) => Promise<void>;
-  registerForEvent: (eventId: string) => Promise<void>;
+  applyForOpportunity: (oppId: string, notes?: string, formData?: any) => Promise<void>;
+  registerForEvent: (eventId: string, formData?: any) => Promise<void>;
+  unregisterFromEvent: (eventId: string) => Promise<void>;
   updateApplicationStatus: (appId: string, status: 'ACCEPTED' | 'REJECTED') => Promise<void>;
   
   // Donation Actions
@@ -85,20 +97,47 @@ interface AuthState {
   requestDonation: (donationId: string) => Promise<void>;
   adminDeleteDonation: (donationId: string) => Promise<void>;
   
+  // Vendor Actions
+  registerVendor: (vendorData: Omit<Vendor, 'id' | 'ownerId' | 'verificationStatus' | 'createdAt'>) => Promise<Vendor>;
+  adminApproveVendor: (vendorId: string) => Promise<void>;
+  adminRejectVendor: (vendorId: string) => Promise<void>;
+
+  // Product Actions
+  createProduct: (productData: Omit<Product, 'id' | 'createdAt'>) => Promise<void>;
+  updateProduct: (productId: string, updates: Partial<Product>) => Promise<void>;
+  deleteProduct: (productId: string) => Promise<void>;
+
+  // Event Experience Actions
+  createEventExperience: (expData: Omit<EventExperience, 'id' | 'userId' | 'userName' | 'status' | 'createdAt'>) => Promise<void>;
+  adminApproveExperience: (expId: string) => Promise<void>;
+  adminRejectExperience: (expId: string) => Promise<void>;
+
+  // Feedback Letter Actions
+  createFeedbackLetter: (letterData: Omit<FeedbackLetter, 'id' | 'status' | 'createdAt'>) => Promise<void>;
+  adminApproveLetter: (letterId: string) => Promise<void>;
+  adminRejectLetter: (letterId: string) => Promise<void>;
+
+  // Cart Actions
+  addToCart: (product: Product) => void;
+  removeFromCart: (productId: string) => void;
+  updateCartQuantity: (productId: string, quantity: number) => void;
+  clearCart: () => void;
+
   // System Actions
   addXP: (amount: number, reason: string) => Promise<void>;
   addNotification: (title: string, message: string, type: 'info' | 'success' | 'alert') => void;
   markNotificationsAsRead: () => Promise<void>;
 }
 
+
 // Read initial state from localStorage or load defaults
 const getLocalStorage = <T>(key: string, defaultValue: T): T => {
-  const data = localStorage.getItem(`greenbridge_${key}`);
-  return data ? JSON.parse(data) : defaultValue;
+  const data = sessionStorage.getItem(`greenbridge_${key}`);
+  return data ? JSON.parse(data) as T : defaultValue;
 };
 
 const setLocalStorage = (key: string, data: any) => {
-  localStorage.setItem(`greenbridge_${key}`, JSON.stringify(data));
+  sessionStorage.setItem(`greenbridge_${key}`, JSON.stringify(data));
 };
 
 const INITIAL_USERS: User[] = [
@@ -237,6 +276,51 @@ const INITIAL_DONATIONS: Donation[] = [
   }
 ];
 
+const INITIAL_PRODUCTS: Product[] = [
+  {
+    id: 'prod-1',
+    vendorId: 'v-1',
+    vendorName: 'EcoCraft India',
+    businessName: 'EcoCraft India',
+    title: 'Handcrafted Bamboo Toothbrush Set (4-pack)',
+    description: '100% biodegradable organic bamboo toothbrushes with charcoal-infused bristles. Plastic-free packaging.',
+    price: 299,
+    images: ['https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60'],
+    category: 'Personal Care',
+    inStock: true,
+    whatsapp: '919876543210',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'prod-2',
+    vendorId: 'v-1',
+    vendorName: 'EcoCraft India',
+    businessName: 'EcoCraft India',
+    title: 'Upcycled Cotton Canvas Tote Bag',
+    description: 'Sturdy shopper tote bag made from 100% recycled cotton textile cut-offs. Natural vegetable dyes.',
+    price: 450,
+    images: ['https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&auto=format&fit=crop&q=60'],
+    category: 'Fashion & Bags',
+    inStock: true,
+    whatsapp: '919876543210',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'prod-3',
+    vendorId: 'v-2',
+    vendorName: 'GreenEarth Co.',
+    businessName: 'GreenEarth Co.',
+    title: 'Solar-Powered Mini Power Bank (10,000mAh)',
+    description: 'Compact high-efficiency solar charger for smartphones and outdoors. Rugged water-resistant design.',
+    price: 1299,
+    images: ['https://images.unsplash.com/photo-1509391365360-2e959784a276?w=500&auto=format&fit=crop&q=60'],
+    category: 'Eco Gadgets',
+    inStock: true,
+    whatsapp: '919876543210',
+    createdAt: new Date().toISOString()
+  }
+];
+
 export const useAuthStore = create<AuthState>((set, get) => ({
   currentUser: getLocalStorage<User | null>('currentUser', null),
   currentOrg: getLocalStorage<Organization | null>('currentOrg', null),
@@ -252,6 +336,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   certificates: getLocalStorage<Certificate[]>('certificates', []),
   notifications: getLocalStorage<Notification[]>('notifications', []),
   badges: DEFAULT_BADGES,
+  vendors: getLocalStorage<Vendor[]>('vendors', []),
+  products: getLocalStorage<Product[]>('products', INITIAL_PRODUCTS),
+  experiences: getLocalStorage<EventExperience[]>('experiences', []),
+  letters: getLocalStorage<FeedbackLetter[]>('letters', []),
+  cart: getLocalStorage<CartItem[]>('cart', []),
+
 
   initialize: async () => {
     try {
@@ -263,11 +353,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         const profileRes = await api.get('/auth/profile');
         const user = profileRes.data;
         
-        let org = null;
-        if (user.role === 'ORGANIZATION') {
-          const orgsRes = await api.get('/organizations');
-          org = orgsRes.data.find((o: any) => o.ownerId === user.id) || null;
-        }
+        const org = user.organization || null;
 
         // Fetch collections from server
         const [oppsRes, evtsRes, donsRes, certsRes, notifsRes] = await Promise.all([
@@ -528,8 +614,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // Fetch updated organizations list
       const orgsRes = await api.get('/organizations');
       
+      // Set the newly created organization as the current pending organization
+      setLocalStorage('currentOrg', newOrg);
+      
       set({ 
         organizations: orgsRes.data,
+        currentOrg: newOrg,
         isLoading: false 
       });
 
@@ -584,10 +674,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       ]);
 
       const user = profileRes.data;
-      let org = null;
-      if (user.role === 'ORGANIZATION') {
-        org = orgsRes.data.find((o: any) => o.ownerId === user.id) || null;
-      }
+      const org = user.organization || null;
 
       setLocalStorage('currentUser', user);
       setLocalStorage('currentOrg', org);
@@ -680,7 +767,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // 2. Local Fallback
       const org = get().currentOrg;
       if (!org) return;
-
+ 
       const newOpp: Opportunity = {
         ...oppData,
         id: `opp-${Math.random().toString(36).substr(2, 9)}`,
@@ -690,11 +777,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         status: 'OPEN',
         applicantsCount: 0
       };
-
+ 
       const updatedOpps = [newOpp, ...get().opportunities];
       setLocalStorage('opportunities', updatedOpps);
       set({ opportunities: updatedOpps });
-
+ 
       get().addNotification(
         'Opportunity Published (Offline)! 📣',
         `"${oppData.title}" is saved locally.`,
@@ -703,6 +790,54 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  updateOpportunity: async (oppId, oppData) => {
+    try {
+      await api.patch(`/opportunities/${oppId}`, oppData);
+      const res = await api.get('/opportunities');
+      set({ opportunities: res.data });
+      get().addNotification(
+        'Opportunity Updated 🌱',
+        'Changes have been saved successfully.',
+        'success'
+      );
+    } catch (err) {
+      console.warn('Backend update opportunity failed, using local fallback.', err);
+      const updatedOpps = get().opportunities.map(o => 
+        o.id === oppId ? { ...o, ...oppData } : o
+      );
+      setLocalStorage('opportunities', updatedOpps);
+      set({ opportunities: updatedOpps });
+      get().addNotification(
+        'Opportunity Updated (Offline) 🌱',
+        'Changes have been saved locally.',
+        'success'
+      );
+    }
+  },
+
+  deleteOpportunity: async (oppId) => {
+    try {
+      await api.delete(`/opportunities/${oppId}`);
+      const res = await api.get('/opportunities');
+      set({ opportunities: res.data });
+      get().addNotification(
+        'Opportunity Deleted 🗑️',
+        'Campaign has been removed from database.',
+        'success'
+      );
+    } catch (err) {
+      console.warn('Backend delete opportunity failed, using local fallback.', err);
+      const updatedOpps = get().opportunities.filter(o => o.id !== oppId);
+      setLocalStorage('opportunities', updatedOpps);
+      set({ opportunities: updatedOpps });
+      get().addNotification(
+        'Opportunity Deleted (Offline) 🗑️',
+        'Campaign has been removed locally.',
+        'success'
+      );
+    }
+  },
+ 
   createEvent: async (eventData) => {
     try {
       // 1. Try Backend Publish
@@ -722,7 +857,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // 2. Local Fallback
       const org = get().currentOrg;
       if (!org) return;
-
+ 
       const newEvent: Event = {
         ...eventData,
         id: `evt-${Math.random().toString(36).substr(2, 9)}`,
@@ -730,11 +865,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         organizationName: org.organizationName,
         registeredUsers: []
       };
-
+ 
       const updatedEvts = [newEvent, ...get().events];
       setLocalStorage('events', updatedEvts);
       set({ events: updatedEvts });
-
+ 
       get().addNotification(
         'Community Event Scheduled (Offline)! 📅',
         `"${eventData.title}" has been scheduled locally.`,
@@ -743,10 +878,58 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  applyForOpportunity: async (oppId, notes) => {
+  updateEvent: async (eventId, eventData) => {
+    try {
+      await api.patch(`/events/${eventId}`, eventData);
+      const res = await api.get('/events');
+      set({ events: res.data });
+      get().addNotification(
+        'Event Updated 📅',
+        'Changes have been saved successfully.',
+        'success'
+      );
+    } catch (err) {
+      console.warn('Backend update event failed, using local fallback.', err);
+      const updatedEvts = get().events.map(e => 
+        e.id === eventId ? { ...e, ...eventData } : e
+      );
+      setLocalStorage('events', updatedEvts);
+      set({ events: updatedEvts });
+      get().addNotification(
+        'Event Updated (Offline) 📅',
+        'Changes have been saved locally.',
+        'success'
+      );
+    }
+  },
+
+  deleteEvent: async (eventId) => {
+    try {
+      await api.delete(`/events/${eventId}`);
+      const res = await api.get('/events');
+      set({ events: res.data });
+      get().addNotification(
+        'Event Deleted 🗑️',
+        'Event has been removed from database.',
+        'success'
+      );
+    } catch (err) {
+      console.warn('Backend delete event failed, using local fallback.', err);
+      const updatedEvts = get().events.filter(e => e.id !== eventId);
+      setLocalStorage('events', updatedEvts);
+      set({ events: updatedEvts });
+      get().addNotification(
+        'Event Deleted (Offline) 🗑️',
+        'Event has been removed locally.',
+        'success'
+      );
+    }
+  },
+
+  applyForOpportunity: async (oppId, notes, formData) => {
     try {
       // 1. Try Backend Application
-      await api.post(`/opportunities/apply/${oppId}`, { notes });
+      await api.post(`/opportunities/apply/${oppId}`, { notes, formData });
       
       // Reload applications and user stats (XP updates)
       const [profileRes, oppsRes, appsRes] = await Promise.all([
@@ -824,10 +1007,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  registerForEvent: async (eventId) => {
+  registerForEvent: async (eventId, formData) => {
+    if (!get().isAuthenticated) throw new Error('Please sign in first.');
     try {
-      // 1. Try Backend Registration
-      await api.post(`/events/register/${eventId}`);
+      await api.post(`/events/register/${eventId}`, { formData });
       
       const [profileRes, evtsRes] = await Promise.all([
         api.get('/auth/profile'),
@@ -863,7 +1046,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ events: updatedEvents });
 
       await get().addXP(100, `Registered for event "${event.title}"`);
-
+ 
       // Give First Step badge if not already unlocked
       if (!user.badges.includes('1')) {
         const updatedUser = { ...user, badges: [...user.badges, '1'] };
@@ -878,6 +1061,37 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           'success'
         );
       }
+    }
+  },
+
+  unregisterFromEvent: async (eventId) => {
+    try {
+      await api.post(`/events/unregister/${eventId}`);
+      const [profileRes, evtsRes] = await Promise.all([
+        api.get('/auth/profile'),
+        api.get('/events')
+      ]);
+      setLocalStorage('currentUser', profileRes.data);
+      set({
+        currentUser: profileRes.data,
+        events: evtsRes.data
+      });
+      get().addNotification('Registration Cancelled 📅', 'You have unregistered from this event.', 'success');
+    } catch (err) {
+      console.warn('Backend unregister event failed, using local fallback.', err);
+      const user = get().currentUser;
+      if (!user) throw new Error('You must be signed in.');
+      const event = get().events.find(e => e.id === eventId);
+      if (!event) return;
+      if (!event.registeredUsers.includes(user.id)) {
+        throw new Error('You are not registered for this event.');
+      }
+      const updatedEvents = get().events.map(e => 
+        e.id === eventId ? { ...e, registeredUsers: e.registeredUsers.filter(uid => uid !== user.id) } : e
+      );
+      setLocalStorage('events', updatedEvents);
+      set({ events: updatedEvents });
+      get().addNotification('Registration Cancelled (Offline) 📅', 'Your registration was removed locally.', 'success');
     }
   },
 
@@ -1182,8 +1396,259 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       setLocalStorage('notifications', updatedNotifs);
       set({ notifications: updatedNotifs });
     }
+  },
+
+  refreshProfile: async () => {
+    try {
+      const token = localStorage.getItem('greenbridge_token');
+      if (token) {
+        const profileRes = await api.get('/auth/profile');
+        const user = profileRes.data;
+        const org = user.organization || null;
+
+        const prevOrg = get().currentOrg;
+        if (prevOrg && prevOrg.verificationStatus === 'PENDING' && org && org.verificationStatus === 'APPROVED') {
+          get().addNotification(
+            'Organization Approved! 🎉',
+            `Your organization "${org.organizationName}" has been verified. Welcome to the portal!`,
+            'success'
+          );
+        }
+
+        // Ensure role reflects approved organization
+        const finalUser = { ...user };
+        if (org && org.verificationStatus === 'APPROVED') {
+          finalUser.role = 'ORGANIZATION';
+        }
+        setLocalStorage('currentUser', finalUser);
+        setLocalStorage('currentOrg', org);
+        set({
+          currentUser: finalUser,
+          currentOrg: org
+        });
+        return;
+      }
+    } catch (err) {
+      console.warn('Failed to refresh profile from backend, checking local storage.', err);
+    }
+
+    // Local simulation fallback
+    try {
+      const localUsers = JSON.parse(localStorage.getItem('greenbridge_users') || '[]');
+      const localOrgs = JSON.parse(localStorage.getItem('greenbridge_organizations') || '[]');
+      const currentUser = get().currentUser;
+      if (currentUser) {
+        const updatedUser = localUsers.find((u: any) => u.id === currentUser.id);
+        const updatedOrg = localOrgs.find((o: any) => o.ownerId === currentUser.id);
+        
+        const prevOrg = get().currentOrg;
+        if (prevOrg && prevOrg.verificationStatus === 'PENDING' && updatedOrg && updatedOrg.verificationStatus === 'APPROVED') {
+          get().addNotification(
+            'Organization Approved! 🎉',
+            `Your organization "${updatedOrg.organizationName}" has been verified. Welcome to the portal!`,
+            'success'
+          );
+        }
+        
+        // Merge and ensure role reflects approved organization
+        if (updatedUser) {
+          if (updatedOrg && updatedOrg.verificationStatus === 'APPROVED') {
+            updatedUser.role = 'ORGANIZATION';
+          }
+        }
+        const mergedUser = updatedUser ? { ...currentUser, ...updatedUser } : currentUser;
+        setLocalStorage('currentUser', mergedUser);
+        if (updatedOrg) setLocalStorage('currentOrg', updatedOrg);
+        set({
+          currentUser: mergedUser,
+          currentOrg: updatedOrg || get().currentOrg
+        });
+      }
+    } catch (e) {
+      console.warn('Local storage fallback parse error.', e);
+    }
+  },
+
+  // Vendor Actions
+  registerVendor: async (vendorData) => {
+    const currentUser = get().currentUser;
+    if (!currentUser) throw new Error('Must be logged in to register a vendor.');
+
+    const newVendor: Vendor = {
+      id: `v-${Date.now()}`,
+      ownerId: currentUser.id,
+      ...vendorData,
+      verificationStatus: 'PENDING',
+      createdAt: new Date().toISOString()
+    };
+
+    const updatedVendors = [newVendor, ...get().vendors];
+    setLocalStorage('vendors', updatedVendors);
+    set({ vendors: updatedVendors });
+
+    get().addNotification(
+      'Application Submitted 🏢',
+      `Your small business application for "${newVendor.businessName}" has been submitted for admin approval.`,
+      'info'
+    );
+
+    return newVendor;
+  },
+
+  adminApproveVendor: async (vendorId) => {
+    const updatedVendors = get().vendors.map(v => 
+      v.id === vendorId ? { ...v, verificationStatus: 'APPROVED' as const } : v
+    );
+    setLocalStorage('vendors', updatedVendors);
+    set({ vendors: updatedVendors });
+  },
+
+  adminRejectVendor: async (vendorId) => {
+    const updatedVendors = get().vendors.map(v => 
+      v.id === vendorId ? { ...v, verificationStatus: 'REJECTED' as const } : v
+    );
+    setLocalStorage('vendors', updatedVendors);
+    set({ vendors: updatedVendors });
+  },
+
+  // Product Actions
+  createProduct: async (productData) => {
+    const newProduct: Product = {
+      id: `prod-${Date.now()}`,
+      ...productData,
+      createdAt: new Date().toISOString()
+    };
+    const updatedProducts = [newProduct, ...get().products];
+    setLocalStorage('products', updatedProducts);
+    set({ products: updatedProducts });
+  },
+
+  updateProduct: async (productId, updates) => {
+    const updatedProducts = get().products.map(p => p.id === productId ? { ...p, ...updates } : p);
+    setLocalStorage('products', updatedProducts);
+    set({ products: updatedProducts });
+  },
+
+  deleteProduct: async (productId) => {
+    const updatedProducts = get().products.filter(p => p.id !== productId);
+    setLocalStorage('products', updatedProducts);
+    set({ products: updatedProducts });
+  },
+
+  // Event Experience Actions
+  createEventExperience: async (expData) => {
+    const currentUser = get().currentUser;
+    if (!currentUser) throw new Error('Must be logged in to share an experience.');
+
+    const newExp: EventExperience = {
+      id: `exp-${Date.now()}`,
+      userId: currentUser.id,
+      userName: currentUser.name,
+      userAvatar: currentUser.avatar,
+      ...expData,
+      status: 'PENDING',
+      createdAt: new Date().toISOString()
+    };
+
+    const updatedExp = [newExp, ...get().experiences];
+    setLocalStorage('experiences', updatedExp);
+    set({ experiences: updatedExp });
+
+    get().addNotification(
+      'Experience Shared 📝',
+      'Your event journal note has been submitted for admin review.',
+      'info'
+    );
+  },
+
+  adminApproveExperience: async (expId) => {
+    const updatedExp = get().experiences.map(e => 
+      e.id === expId ? { ...e, status: 'APPROVED' as const } : e
+    );
+    setLocalStorage('experiences', updatedExp);
+    set({ experiences: updatedExp });
+  },
+
+  adminRejectExperience: async (expId) => {
+    const updatedExp = get().experiences.map(e => 
+      e.id === expId ? { ...e, status: 'REJECTED' as const } : e
+    );
+    setLocalStorage('experiences', updatedExp);
+    set({ experiences: updatedExp });
+  },
+
+  // Feedback Letter Actions
+  createFeedbackLetter: async (letterData) => {
+    const newLetter: FeedbackLetter = {
+      id: `ltr-${Date.now()}`,
+      ...letterData,
+      status: 'APPROVED', // Community feedback visible right away or auto-approved
+      createdAt: new Date().toISOString()
+    };
+
+    const updatedLetters = [newLetter, ...get().letters];
+    setLocalStorage('letters', updatedLetters);
+    set({ letters: updatedLetters });
+  },
+
+  adminApproveLetter: async (letterId) => {
+    const updatedLetters = get().letters.map(l => 
+      l.id === letterId ? { ...l, status: 'APPROVED' as const } : l
+    );
+    setLocalStorage('letters', updatedLetters);
+    set({ letters: updatedLetters });
+  },
+
+  adminRejectLetter: async (letterId) => {
+    const updatedLetters = get().letters.map(l => 
+      l.id === letterId ? { ...l, status: 'REJECTED' as const } : l
+    );
+    setLocalStorage('letters', updatedLetters);
+    set({ letters: updatedLetters });
+  },
+
+  // Cart Actions
+  addToCart: (product) => {
+    const currentCart = get().cart;
+    const existingIndex = currentCart.findIndex(item => item.product.id === product.id);
+    let updatedCart: CartItem[];
+
+    if (existingIndex > -1) {
+      updatedCart = currentCart.map((item, idx) => 
+        idx === existingIndex ? { ...item, quantity: item.quantity + 1 } : item
+      );
+    } else {
+      updatedCart = [...currentCart, { product, quantity: 1 }];
+    }
+
+    setLocalStorage('cart', updatedCart);
+    set({ cart: updatedCart });
+  },
+
+  removeFromCart: (productId) => {
+    const updatedCart = get().cart.filter(item => item.product.id !== productId);
+    setLocalStorage('cart', updatedCart);
+    set({ cart: updatedCart });
+  },
+
+  updateCartQuantity: (productId, quantity) => {
+    if (quantity <= 0) {
+      get().removeFromCart(productId);
+      return;
+    }
+    const updatedCart = get().cart.map(item => 
+      item.product.id === productId ? { ...item, quantity } : item
+    );
+    setLocalStorage('cart', updatedCart);
+    set({ cart: updatedCart });
+  },
+
+  clearCart: () => {
+    setLocalStorage('cart', []);
+    set({ cart: [] });
   }
 }));
+
 
 export { LEVEL_NAMES };
 export default useAuthStore;

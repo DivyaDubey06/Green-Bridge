@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as fs from 'fs';
@@ -14,6 +14,7 @@ export class DatabaseService implements OnModuleInit {
     organizations: [],
     opportunities: [],
     applications: [],
+    eventRegistrations: [],
     events: [],
     donations: [],
     certificates: [],
@@ -150,6 +151,7 @@ export class DatabaseService implements OnModuleInit {
             }
           ],
           applications: [],
+          eventRegistrations: [],
           events: [
             {
               id: 'evt-1',
@@ -383,6 +385,41 @@ export class DatabaseService implements OnModuleInit {
     });
   }
 
+  async updateOpp(id: string, orgId: string, data: any) {
+    if (this.useMock) {
+      const oppIdx = this.mockDb.opportunities.findIndex((o) => o.id === id);
+      if (oppIdx === -1) throw new NotFoundException('Opportunity not found.');
+      const opp = this.mockDb.opportunities[oppIdx];
+      if (opp.organizationId !== orgId) throw new ForbiddenException('You do not own this opportunity.');
+      this.mockDb.opportunities[oppIdx] = { ...opp, ...data };
+      this.saveMockDb();
+      return this.mockDb.opportunities[oppIdx];
+    }
+    const opp = await this.prisma.opportunity.findUnique({ where: { id } });
+    if (!opp) throw new NotFoundException('Opportunity not found.');
+    if (opp.organizationId !== orgId) throw new ForbiddenException('You do not own this opportunity.');
+    return this.prisma.opportunity.update({ where: { id }, data });
+  }
+
+  async deleteOpp(id: string, orgId: string) {
+    if (this.useMock) {
+      const oppIdx = this.mockDb.opportunities.findIndex((o) => o.id === id);
+      if (oppIdx === -1) throw new NotFoundException('Opportunity not found.');
+      const opp = this.mockDb.opportunities[oppIdx];
+      if (opp.organizationId !== orgId) throw new ForbiddenException('You do not own this opportunity.');
+      this.mockDb.opportunities = this.mockDb.opportunities.filter((o) => o.id !== id);
+      this.mockDb.applications = this.mockDb.applications.filter((a) => a.opportunityId !== id);
+      this.saveMockDb();
+      return true;
+    }
+    const opp = await this.prisma.opportunity.findUnique({ where: { id } });
+    if (!opp) throw new NotFoundException('Opportunity not found.');
+    if (opp.organizationId !== orgId) throw new ForbiddenException('You do not own this opportunity.');
+    await this.prisma.application.deleteMany({ where: { opportunityId: id } });
+    await this.prisma.opportunity.delete({ where: { id } });
+    return true;
+  }
+
   // --- APPLICATIONS ---
   async findAppsForUser(userId: string) {
     if (this.useMock) {
@@ -402,23 +439,33 @@ export class DatabaseService implements OnModuleInit {
     });
   }
 
-  async createApp(userId: string, oppId: string, notes: string) {
+  async createApp(userId: string, oppId: string, notes: string, formData?: string) {
     if (this.useMock) {
+      const exists = this.mockDb.applications.some((a) => a.opportunityId === oppId && a.userId === userId);
+      if (exists) throw new BadRequestException('You have already applied for this opportunity.');
+
       const newApp = {
         id: `app-${Math.random().toString(36).substr(2, 9)}`,
         opportunityId: oppId,
         userId,
         status: 'PENDING',
         notes,
+        formData,
         createdAt: new Date().toISOString(),
       };
       this.mockDb.applications.push(newApp);
       this.saveMockDb();
       return newApp;
     }
+    const exists = await this.prisma.application.findFirst({
+      where: { opportunityId: oppId, userId },
+    });
+    if (exists) throw new BadRequestException('You have already applied for this opportunity.');
+
     return this.prisma.application.create({
       data: {
         notes,
+        formData,
         user: { connect: { id: userId } },
         opportunity: { connect: { id: oppId } },
       },
@@ -535,59 +582,134 @@ export class DatabaseService implements OnModuleInit {
     });
   }
 
-  async registerUserForEvent(userId: string, eventId: string) {
+  async updateEvent(id: string, orgId: string, data: any) {
+    if (this.useMock) {
+      const evtIdx = this.mockDb.events.findIndex((e) => e.id === id);
+      if (evtIdx === -1) throw new NotFoundException('Event not found.');
+      const evt = this.mockDb.events[evtIdx];
+      if (evt.organizationId !== orgId) throw new ForbiddenException('You do not own this event.');
+      this.mockDb.events[evtIdx] = { ...evt, ...data };
+      this.saveMockDb();
+      return this.mockDb.events[evtIdx];
+    }
+    const event = await this.prisma.event.findUnique({ where: { id } });
+    if (!event) throw new NotFoundException('Event not found.');
+    if (event.organizationId !== orgId) throw new ForbiddenException('You do not own this event.');
+    return this.prisma.event.update({ where: { id }, data });
+  }
+
+  async deleteEvent(id: string, orgId: string) {
+    if (this.useMock) {
+      const evtIdx = this.mockDb.events.findIndex((e) => e.id === id);
+      if (evtIdx === -1) throw new NotFoundException('Event not found.');
+      const evt = this.mockDb.events[evtIdx];
+      if (evt.organizationId !== orgId) throw new ForbiddenException('You do not own this event.');
+      this.mockDb.events = this.mockDb.events.filter((e) => e.id !== id);
+      this.saveMockDb();
+      return true;
+    }
+    const event = await this.prisma.event.findUnique({ where: { id } });
+    if (!event) throw new NotFoundException('Event not found.');
+    if (event.organizationId !== orgId) throw new ForbiddenException('You do not own this event.');
+    await this.prisma.event.delete({ where: { id } });
+    return true;
+  }
+
+  async registerUserForEvent(userId: string, eventId: string, formData?: string) {
     if (this.useMock) {
       const evtIdx = this.mockDb.events.findIndex((e) => e.id === eventId);
-      if (evtIdx !== -1) {
-        const evt = this.mockDb.events[evtIdx];
-        if (!evt.registeredUsers.includes(userId)) {
-          evt.registeredUsers.push(userId);
-          
-          // Award +100 XP to user
-          const userIdx = this.mockDb.users.findIndex((u) => u.id === userId);
-          if (userIdx !== -1) {
-            const user = this.mockDb.users[userIdx];
-            user.xp += 100;
-            const xpNeeded = user.level * 500;
-            if (user.xp >= xpNeeded) {
-              user.level += 1;
-              user.xp -= xpNeeded;
-            }
-          }
-          this.saveMockDb();
-        }
-        return evt;
+      if (evtIdx === -1) throw new NotFoundException('Event not found.');
+      const evt = this.mockDb.events[evtIdx];
+      if (evt.registeredUsers.includes(userId)) {
+        throw new BadRequestException('You are already registered for this event.');
       }
-      return null;
+      
+      evt.registeredUsers.push(userId);
+      this.mockDb.eventRegistrations = this.mockDb.eventRegistrations || [];
+      this.mockDb.eventRegistrations.push({
+        id: `evtr-${Math.random().toString(36).substr(2, 9)}`,
+        eventId,
+        userId,
+        formData,
+        createdAt: new Date().toISOString()
+      });
+      
+      // Award +100 XP to user
+      const userIdx = this.mockDb.users.findIndex((u) => u.id === userId);
+      if (userIdx !== -1) {
+        const user = this.mockDb.users[userIdx];
+        user.xp += 100;
+        const xpNeeded = user.level * 500;
+        if (user.xp >= xpNeeded) {
+          user.level += 1;
+          user.xp -= xpNeeded;
+        }
+      }
+      this.saveMockDb();
+      return evt;
     }
     
     // Live update
     const event = await this.prisma.event.findUnique({ where: { id: eventId } });
-    if (!event) return null;
+    if (!event) throw new NotFoundException('Event not found.');
 
-    if (!event.registeredUsers.includes(userId)) {
-      const updatedRegs = [...event.registeredUsers, userId];
-      await this.prisma.event.update({
-        where: { id: eventId },
-        data: { registeredUsers: updatedRegs },
-      });
+    if (event.registeredUsers.includes(userId)) {
+      throw new BadRequestException('You are already registered for this event.');
+    }
 
-      // Award XP
-      const user = await this.prisma.user.findUnique({ where: { id: userId } });
-      if (user) {
-        let newXp = user.xp + 100;
-        let newLvl = user.level;
-        if (newXp >= user.level * 500) {
-          newLvl += 1;
-          newXp -= user.level * 500;
-        }
-        await this.prisma.user.update({
-          where: { id: userId },
-          data: { xp: newXp, level: newLvl },
-        });
+    const updatedRegs = [...event.registeredUsers, userId];
+    await this.prisma.event.update({
+      where: { id: eventId },
+      data: { registeredUsers: updatedRegs },
+    });
+
+    await this.prisma.eventRegistration.create({
+      data: {
+        event: { connect: { id: eventId } },
+        user: { connect: { id: userId } },
+        formData
       }
+    });
+
+    // Award XP
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (user) {
+      let newXp = user.xp + 100;
+      let newLvl = user.level;
+      if (newXp >= user.level * 500) {
+        newLvl += 1;
+        newXp -= user.level * 500;
+      }
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: { xp: newXp, level: newLvl },
+      });
     }
     return event;
+  }
+
+  async unregisterUserFromEvent(userId: string, eventId: string) {
+    if (this.useMock) {
+      const evtIdx = this.mockDb.events.findIndex((e) => e.id === eventId);
+      if (evtIdx === -1) throw new NotFoundException('Event not found.');
+      const evt = this.mockDb.events[evtIdx];
+      if (!evt.registeredUsers.includes(userId)) {
+        throw new BadRequestException('You are not registered for this event.');
+      }
+      evt.registeredUsers = evt.registeredUsers.filter((uid) => uid !== userId);
+      this.saveMockDb();
+      return evt;
+    }
+    const event = await this.prisma.event.findUnique({ where: { id: eventId } });
+    if (!event) throw new NotFoundException('Event not found.');
+    if (!event.registeredUsers.includes(userId)) {
+      throw new BadRequestException('You are not registered for this event.');
+    }
+    const updatedRegs = event.registeredUsers.filter((uid) => uid !== userId);
+    return this.prisma.event.update({
+      where: { id: eventId },
+      data: { registeredUsers: updatedRegs },
+    });
   }
 
   // --- DONATIONS ---

@@ -17,7 +17,8 @@ export const Dashboard: React.FC = () => {
     donations, 
     applications,
     applyForOpportunity,
-    registerForEvent
+    registerForEvent,
+    unregisterFromEvent
   } = useAuthStore();
 
   const [quote, setQuote] = useState('');
@@ -328,6 +329,80 @@ export const Dashboard: React.FC = () => {
                 🌱 Welcome to GreenBridge! Let's begin your journey by joining your first campaign, event, or uploading a donation item.
               </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* 5. VOLUNTEER WORKSPACE & EVENT REGISTRATIONS */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Volunteering Applications */}
+        <div className="lg:col-span-6 bg-white border border-[#CD9777]/20 p-6 rounded-[36px] shadow-sm flex flex-col justify-between">
+          <div>
+            <h3 className="font-serif text-xl font-bold text-dark-forest mb-4">My Volunteering Applications</h3>
+            <div className="space-y-3">
+              {userApps.length > 0 ? (
+                userApps.map((app) => (
+                  <div key={app.id} className="p-4 bg-warm-cream/20 border border-[#CD9777]/10 rounded-2xl flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-dark-forest text-sm">{app.opportunityTitle}</h4>
+                      <span className="text-[10px] text-slate-text/50 block mt-0.5">Applied: {new Date(app.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div>
+                      <span className={`text-[10px] font-extrabold px-3 py-1 rounded-full border uppercase tracking-wider ${
+                        app.status === 'ACCEPTED'
+                          ? 'bg-green-50 text-green-700 border-green-200'
+                          : app.status === 'REJECTED'
+                          ? 'bg-red-50 text-red-700 border-red-200'
+                          : 'bg-amber-50 text-amber-700 border-amber-200'
+                      }`}>
+                        {app.status}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-xs text-slate-text/45 bg-warm-cream/5 border border-dashed border-[#CD9777]/10 rounded-2xl">
+                  No active volunteering applications.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Registered Events */}
+        <div className="lg:col-span-6 bg-white border border-[#CD9777]/20 p-6 rounded-[36px] shadow-sm flex flex-col justify-between">
+          <div>
+            <h3 className="font-serif text-xl font-bold text-dark-forest mb-4">My Registered Events</h3>
+            <div className="space-y-3">
+              {userEventsJoined.length > 0 ? (
+                userEventsJoined.map((evt) => (
+                  <div key={evt.id} className="p-4 bg-warm-cream/20 border border-[#CD9777]/10 rounded-2xl flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-dark-forest text-sm">{evt.title}</h4>
+                      <span className="text-[10px] text-blue-800 font-bold block mt-0.5">{evt.date} • {evt.time}</span>
+                      <span className="text-[10px] text-slate-text/55 block mt-0.5">{evt.location}</span>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await unregisterFromEvent(evt.id);
+                          toast.success('Unregistered successfully!');
+                        } catch (err: any) {
+                          toast.error(err.message || 'Failed to unregister.');
+                        }
+                      }}
+                      className="text-[10px] font-bold text-red-600 hover:text-red-800 hover:underline bg-red-50 hover:bg-red-100/50 px-2.5 py-1.5 rounded-xl border border-red-100 transition-all cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-xs text-slate-text/45 bg-warm-cream/5 border border-dashed border-[#CD9777]/10 rounded-2xl">
+                  No upcoming event registrations.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

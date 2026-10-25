@@ -22,6 +22,7 @@ import { Profile } from './pages/Profile/Profile';
 import { OrgDashboard } from './pages/Organization/OrgDashboard';
 import { Admin } from './pages/Admin/Admin';
 import { About } from './pages/About/About';
+import { GreenCart } from './pages/Store/GreenCart';
 
 // Common Animations
 import { SplashScreen } from './components/common/SplashScreen';
@@ -62,6 +63,7 @@ const DashboardLayout: React.FC = () => {
     <div className="flex h-screen overflow-hidden bg-warm-cream/30">
       {/* Sidebar navigation */}
       <Sidebar />
+
       
       {/* Main panel */}
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -76,10 +78,23 @@ const DashboardLayout: React.FC = () => {
 
 export const App: React.FC = () => {
   const initialize = useAuthStore(state => state.initialize);
+  const refreshProfile = useAuthStore(state => state.refreshProfile);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const currentOrg = useAuthStore(state => state.currentOrg);
 
   React.useEffect(() => {
     initialize();
   }, [initialize]);
+
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+    const interval = setInterval(() => {
+      refreshProfile();
+    }, 15000); // Poll every 15 seconds
+    return () => clearInterval(interval);
+  }, [isAuthenticated, refreshProfile]);
 
   const [showSplash, setShowSplash] = useState(() => {
     // Check if session splash already played
@@ -118,6 +133,7 @@ export const App: React.FC = () => {
             <Route path="/opportunities" element={<Opportunities />} />
             <Route path="/events" element={<Events />} />
             <Route path="/donate" element={<Donations />} />
+            <Route path="/store" element={<GreenCart />} />
             <Route path="/about" element={<About />} />
             {/* Fallbacks */}
             <Route path="/contact" element={<About />} />
