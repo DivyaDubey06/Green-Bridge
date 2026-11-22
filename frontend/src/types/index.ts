@@ -1,4 +1,4 @@
-export type UserRole = 'USER' | 'ORGANIZATION' | 'ADMIN';
+export type UserRole = 'USER' | 'VOLUNTEER' | 'ORGANIZATION' | 'ADMIN';
 export type VerificationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 export type OpportunityStatus = 'OPEN' | 'CLOSED';
 export type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
@@ -221,3 +221,57 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface RecommendationScoreBreakdown {
+  skillsScore: number;
+  interestsScore: number;
+  availabilityScore: number;
+  locationScore: number;
+}
+
+export interface RecommendedOpportunity {
+  opportunity: Opportunity;
+  matchScore: number; // 0 - 100 percentage
+  scoreBreakdown: RecommendationScoreBreakdown;
+  reasons: string[];
+}
+
+export interface VolunteerAnalytics {
+  totalApplications: number;
+  acceptedApplications: number;
+  pendingApplications: number;
+  rejectedApplications: number;
+  totalVolunteerHours: number;
+  upcomingActivitiesCount: number;
+  categoryDistribution: { category: string; count: number; hours: number }[];
+  monthlyActivity: { month: string; hours: number; drives: number }[];
+  xpProgression: { currentXp: number; level: number; nextLevelXp: number };
+}
+
+export interface OrgAnalytics {
+  activeOpportunities: number;
+  totalEvents: number;
+  totalApplicationsReceived: number;
+  acceptedVolunteersCount: number;
+  pendingApplicationsCount: number;
+  acceptanceRate: number;
+  opportunityApplicantBreakdown: { title: string; applicants: number; accepted: number }[];
+  monthlyApplicantTrends: { month: string; applicants: number }[];
+}
+
+export interface AdminAnalytics {
+  totalUsers: number;
+  usersByRole: { role: string; count: number }[];
+  totalOrganizations: number;
+  orgsByStatus: { status: string; count: number }[];
+  totalOpportunities: number;
+  totalApplications: number;
+  totalDonations: number;
+  totalVendors: number;
+  impactMetrics: {
+    estimatedVolunteerHours: number;
+    treesPlanted: number;
+    itemsDonated: number;
+    activeCities: number;
+  };
+  monthlyPlatformGrowth: { month: string; users: number; opportunities: number }[];
+}

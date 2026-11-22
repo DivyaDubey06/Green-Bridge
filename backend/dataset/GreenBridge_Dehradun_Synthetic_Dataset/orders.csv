@@ -1,0 +1,181 @@
+﻿order_id,user_id,order_date,order_status,subtotal_inr,delivery_fee_inr,payment_status,delivery_city,delivery_locality,is_synthetic
+ORD00001,USR00362,2026-06-06,Delivered,357,0,Failed,Dehradun,Patel Nagar,True
+ORD00002,USR00170,2026-08-07,Packed,636,0,Paid,Dehradun,Nehru Colony,True
+ORD00003,USR00238,2026-03-09,Cancelled,1403,50,Paid,Dehradun,Malsi,True
+ORD00004,USR00013,2026-10-12,Returned,558,50,Refunded,Dehradun,Karanpur,True
+ORD00005,USR00301,2026-02-25,Placed,1434,40,Paid,Dehradun,Subhash Nagar,True
+ORD00006,USR00171,2026-02-22,Returned,1203,50,Paid,Dehradun,Race Course,True
+ORD00007,USR00031,2026-05-28,Shipped,1025,0,Failed,Dehradun,Survey Chowk,True
+ORD00008,USR00178,2026-07-20,Shipped,358,0,Pending,Dehradun,Ballupur,True
+ORD00009,USR00261,2026-10-02,Shipped,899,40,Paid,Dehradun,Patel Nagar,True
+ORD00010,USR00007,2026-09-27,Placed,803,50,Paid,Dehradun,Dalanwala,True
+ORD00011,USR00222,2026-06-15,Cancelled,899,40,Paid,Dehradun,Nehru Colony,True
+ORD00012,USR00067,2026-07-31,Placed,798,40,Paid,Dehradun,Malsi,True
+ORD00013,USR00398,2026-03-09,Shipped,1276,50,Pending,Dehradun,Malsi,True
+ORD00014,USR00312,2026-06-05,Packed,1683,0,Refunded,Dehradun,Subhash Nagar,True
+ORD00015,USR00355,2026-05-07,Placed,338,50,Failed,Dehradun,Nehru Colony,True
+ORD00016,USR00302,2026-10-16,Placed,347,50,Pending,Dehradun,GMS Road,True
+ORD00017,USR00254,2026-08-04,Delivered,1038,40,Paid,Dehradun,Chakrata Road,True
+ORD00018,USR00036,2026-10-10,Cancelled,2042,0,Paid,Dehradun,Clement Town,True
+ORD00019,USR00349,2026-09-16,Delivered,349,30,Paid,Dehradun,Race Course,True
+ORD00020,USR00341,2026-02-10,Cancelled,905,50,Failed,Dehradun,Karanpur,True
+ORD00021,USR00364,2026-04-28,Returned,916,30,Refunded,Dehradun,Race Course,True
+ORD00022,USR00285,2026-09-16,Delivered,882,40,Paid,Dehradun,Sahastradhara Road,True
+ORD00023,USR00356,2026-09-28,Returned,1197,40,Failed,Dehradun,Karanpur,True
+ORD00024,USR00242,2026-07-26,Packed,3982,30,Failed,Dehradun,Chakrata Road,True
+ORD00025,USR00073,2026-11-10,Returned,587,50,Paid,Dehradun,Majra,True
+ORD00026,USR00395,2026-06-14,Shipped,1075,50,Pending,Dehradun,GMS Road,True
+ORD00027,USR00017,2026-03-09,Delivered,298,0,Pending,Dehradun,Sahastradhara Road,True
+ORD00028,USR00061,2026-11-12,Returned,1842,50,Paid,Dehradun,Raipur,True
+ORD00029,USR00248,2026-10-08,Returned,178,50,Refunded,Dehradun,Race Course,True
+ORD00030,USR00298,2026-11-07,Packed,546,40,Paid,Dehradun,Patel Nagar,True
+ORD00031,USR00049,2026-03-31,Packed,837,30,Failed,Dehradun,Karanpur,True
+ORD00032,USR00096,2026-01-22,Packed,655,30,Refunded,Dehradun,Race Course,True
+ORD00033,USR00340,2026-02-23,Placed,99,50,Failed,Dehradun,Ladpur,True
+ORD00034,USR00300,2026-05-23,Shipped,598,30,Pending,Dehradun,Ladpur,True
+ORD00035,USR00012,2026-04-18,Cancelled,1305,0,Refunded,Dehradun,Clock Tower,True
+ORD00036,USR00133,2026-09-23,Shipped,1256,50,Refunded,Dehradun,Dalanwala,True
+ORD00037,USR00178,2026-02-14,Cancelled,369,30,Failed,Dehradun,Clock Tower,True
+ORD00038,USR00245,2026-02-16,Packed,79,30,Paid,Dehradun,Majra,True
+ORD00039,USR00232,2026-01-15,Placed,278,0,Paid,Dehradun,Karanpur,True
+ORD00040,USR00336,2026-04-16,Returned,1197,30,Pending,Dehradun,Bindal,True
+ORD00041,USR00129,2026-01-27,Returned,1674,40,Paid,Dehradun,Clement Town,True
+ORD00042,USR00339,2026-11-07,Shipped,2751,0,Paid,Dehradun,Clock Tower,True
+ORD00043,USR00148,2026-05-10,Packed,399,40,Paid,Dehradun,Jakhan,True
+ORD00044,USR00330,2026-09-22,Shipped,237,50,Refunded,Dehradun,Clement Town,True
+ORD00045,USR00193,2026-07-11,Shipped,507,50,Failed,Dehradun,Paltan Bazaar,True
+ORD00046,USR00242,2026-08-27,Placed,139,40,Failed,Dehradun,Doiwala,True
+ORD00047,USR00140,2026-07-19,Packed,565,40,Failed,Dehradun,Bindal,True
+ORD00048,USR00165,2026-03-05,Shipped,3235,40,Paid,Dehradun,Raipur,True
+ORD00049,USR00246,2026-10-30,Cancelled,537,0,Pending,Dehradun,Clock Tower,True
+ORD00050,USR00175,2026-02-14,Placed,875,50,Pending,Dehradun,Dalanwala,True
+ORD00051,USR00014,2026-01-20,Shipped,527,0,Failed,Dehradun,Ballupur,True
+ORD00052,USR00322,2026-01-06,Packed,925,50,Paid,Dehradun,Ballupur,True
+ORD00053,USR00054,2026-06-23,Cancelled,327,40,Pending,Dehradun,Race Course,True
+ORD00054,USR00105,2026-03-27,Shipped,1335,30,Paid,Dehradun,Vasant Vihar,True
+ORD00055,USR00206,2026-10-01,Packed,836,30,Paid,Dehradun,Patel Nagar,True
+ORD00056,USR00150,2026-05-07,Shipped,1704,40,Pending,Dehradun,Clement Town,True
+ORD00057,USR00351,2026-02-10,Placed,2874,30,Refunded,Dehradun,Karanpur,True
+ORD00058,USR00185,2026-07-03,Returned,3324,50,Refunded,Dehradun,Survey Chowk,True
+ORD00059,USR00256,2026-06-24,Placed,1986,50,Failed,Dehradun,Sahastradhara Road,True
+ORD00060,USR00209,2026-03-31,Returned,2697,50,Paid,Dehradun,Ladpur,True
+ORD00061,USR00043,2026-02-20,Packed,1363,50,Refunded,Dehradun,Survey Chowk,True
+ORD00062,USR00318,2026-08-31,Returned,1614,50,Paid,Dehradun,Ballupur,True
+ORD00063,USR00179,2026-03-04,Returned,2883,40,Paid,Dehradun,Clock Tower,True
+ORD00064,USR00053,2026-04-06,Placed,1535,40,Paid,Dehradun,Malsi,True
+ORD00065,USR00030,2026-09-26,Returned,1117,50,Paid,Dehradun,Paltan Bazaar,True
+ORD00066,USR00239,2026-10-24,Delivered,1445,0,Paid,Dehradun,Karanpur,True
+ORD00067,USR00335,2026-03-18,Delivered,267,30,Paid,Dehradun,Clement Town,True
+ORD00068,USR00070,2026-05-21,Placed,2155,0,Paid,Dehradun,Chakrata Road,True
+ORD00069,USR00101,2026-01-10,Shipped,1325,30,Refunded,Dehradun,Clement Town,True
+ORD00070,USR00191,2026-06-14,Returned,1116,40,Refunded,Dehradun,Clock Tower,True
+ORD00071,USR00177,2026-06-13,Shipped,1115,50,Failed,Dehradun,Malsi,True
+ORD00072,USR00179,2026-01-26,Delivered,477,0,Paid,Dehradun,Majra,True
+ORD00073,USR00089,2026-10-07,Cancelled,449,30,Refunded,Dehradun,Clement Town,True
+ORD00074,USR00233,2026-06-24,Packed,658,30,Paid,Dehradun,Majra,True
+ORD00075,USR00122,2026-05-19,Placed,507,30,Paid,Dehradun,Sahastradhara Road,True
+ORD00076,USR00366,2026-06-12,Delivered,1364,40,Refunded,Dehradun,Bindal,True
+ORD00077,USR00058,2026-08-22,Packed,417,50,Pending,Dehradun,Sahastradhara Road,True
+ORD00078,USR00173,2026-07-06,Shipped,297,50,Failed,Dehradun,Paltan Bazaar,True
+ORD00079,USR00214,2026-10-31,Packed,586,50,Failed,Dehradun,GMS Road,True
+ORD00080,USR00280,2026-04-27,Packed,158,50,Failed,Dehradun,Malsi,True
+ORD00081,USR00325,2026-05-17,Cancelled,804,50,Failed,Dehradun,Bindal,True
+ORD00082,USR00289,2026-06-22,Cancelled,1665,40,Failed,Dehradun,Sahastradhara Road,True
+ORD00083,USR00297,2026-07-17,Shipped,1116,0,Paid,Dehradun,Chakrata Road,True
+ORD00084,USR00185,2026-06-03,Cancelled,997,40,Pending,Dehradun,Chakrata Road,True
+ORD00085,USR00075,2026-09-11,Cancelled,1977,30,Failed,Dehradun,Majra,True
+ORD00086,USR00167,2026-03-08,Packed,2755,30,Pending,Dehradun,Jakhan,True
+ORD00087,USR00378,2026-01-19,Cancelled,158,40,Failed,Dehradun,Malsi,True
+ORD00088,USR00122,2026-06-15,Delivered,1422,40,Refunded,Dehradun,Malsi,True
+ORD00089,USR00249,2026-06-02,Delivered,1796,50,Paid,Dehradun,Karanpur,True
+ORD00090,USR00038,2026-05-22,Packed,369,50,Pending,Dehradun,Paltan Bazaar,True
+ORD00091,USR00029,2026-04-15,Placed,258,0,Pending,Dehradun,Clock Tower,True
+ORD00092,USR00295,2026-05-17,Delivered,547,30,Paid,Dehradun,Patel Nagar,True
+ORD00093,USR00064,2026-03-24,Packed,1785,50,Refunded,Dehradun,Patel Nagar,True
+ORD00094,USR00358,2026-06-22,Packed,976,0,Failed,Dehradun,Dalanwala,True
+ORD00095,USR00220,2026-03-28,Packed,927,30,Paid,Dehradun,Vasant Vihar,True
+ORD00096,USR00231,2026-02-03,Packed,736,0,Paid,Dehradun,Subhash Nagar,True
+ORD00097,USR00176,2026-10-08,Shipped,807,50,Failed,Dehradun,Clement Town,True
+ORD00098,USR00073,2026-09-19,Placed,249,30,Pending,Dehradun,Majra,True
+ORD00099,USR00350,2026-09-17,Delivered,417,0,Pending,Dehradun,Bindal,True
+ORD00100,USR00140,2026-06-03,Shipped,1404,30,Paid,Dehradun,Survey Chowk,True
+ORD00101,USR00146,2026-03-07,Shipped,169,0,Refunded,Dehradun,Raipur,True
+ORD00102,USR00347,2026-02-10,Delivered,597,0,Pending,Dehradun,Majra,True
+ORD00103,USR00381,2026-01-25,Placed,1257,30,Paid,Dehradun,Doiwala,True
+ORD00104,USR00065,2026-03-14,Returned,329,50,Pending,Dehradun,Nehru Colony,True
+ORD00105,USR00011,2026-11-13,Placed,278,40,Paid,Dehradun,Ballupur,True
+ORD00106,USR00077,2026-07-07,Packed,2283,40,Paid,Dehradun,Karanpur,True
+ORD00107,USR00371,2026-10-10,Packed,3383,50,Paid,Dehradun,Ladpur,True
+ORD00108,USR00099,2026-05-13,Returned,987,0,Failed,Dehradun,Doiwala,True
+ORD00109,USR00287,2026-02-18,Placed,3204,0,Failed,Dehradun,Sahastradhara Road,True
+ORD00110,USR00202,2026-10-29,Returned,4682,50,Failed,Dehradun,Malsi,True
+ORD00111,USR00272,2026-05-02,Returned,1844,40,Refunded,Dehradun,Patel Nagar,True
+ORD00112,USR00242,2026-10-31,Packed,1503,50,Pending,Dehradun,Vasant Vihar,True
+ORD00113,USR00283,2026-10-06,Delivered,565,0,Paid,Dehradun,Clock Tower,True
+ORD00114,USR00230,2026-05-24,Placed,694,0,Failed,Dehradun,Ladpur,True
+ORD00115,USR00256,2026-08-27,Delivered,498,50,Failed,Dehradun,Subhash Nagar,True
+ORD00116,USR00302,2026-06-15,Returned,1405,30,Paid,Dehradun,Patel Nagar,True
+ORD00117,USR00254,2026-02-15,Cancelled,1626,0,Refunded,Dehradun,Sahastradhara Road,True
+ORD00118,USR00034,2026-10-19,Packed,4294,50,Paid,Dehradun,Prem Nagar,True
+ORD00119,USR00054,2026-07-04,Packed,1604,50,Paid,Dehradun,Patel Nagar,True
+ORD00120,USR00201,2026-08-02,Packed,1944,30,Pending,Dehradun,Survey Chowk,True
+ORD00121,USR00287,2026-10-27,Shipped,717,30,Failed,Dehradun,Chakrata Road,True
+ORD00122,USR00068,2026-03-18,Cancelled,477,0,Pending,Dehradun,Bindal,True
+ORD00123,USR00236,2026-09-12,Packed,1995,50,Pending,Dehradun,Vasant Vihar,True
+ORD00124,USR00123,2026-08-23,Delivered,953,0,Failed,Dehradun,Ladpur,True
+ORD00125,USR00080,2026-01-09,Cancelled,198,50,Pending,Dehradun,Vasant Vihar,True
+ORD00126,USR00093,2026-03-05,Delivered,606,30,Paid,Dehradun,Dalanwala,True
+ORD00127,USR00152,2026-02-10,Placed,1856,0,Paid,Dehradun,Dalanwala,True
+ORD00128,USR00032,2026-08-08,Cancelled,1273,30,Refunded,Dehradun,Majra,True
+ORD00129,USR00358,2026-11-02,Delivered,427,40,Pending,Dehradun,Nehru Colony,True
+ORD00130,USR00204,2026-09-30,Returned,3645,30,Pending,Dehradun,Prem Nagar,True
+ORD00131,USR00246,2026-03-02,Packed,675,40,Paid,Dehradun,Malsi,True
+ORD00132,USR00322,2026-01-21,Placed,247,50,Failed,Dehradun,Jakhan,True
+ORD00133,USR00278,2026-10-11,Packed,1047,50,Paid,Dehradun,Doiwala,True
+ORD00134,USR00169,2026-07-07,Cancelled,477,40,Pending,Dehradun,Patel Nagar,True
+ORD00135,USR00337,2026-01-30,Shipped,4532,30,Paid,Dehradun,Prem Nagar,True
+ORD00136,USR00003,2026-01-01,Returned,458,40,Paid,Dehradun,Vasant Vihar,True
+ORD00137,USR00335,2026-05-19,Placed,297,50,Paid,Dehradun,Bindal,True
+ORD00138,USR00181,2026-01-21,Returned,597,30,Refunded,Dehradun,Sahastradhara Road,True
+ORD00139,USR00283,2026-04-29,Cancelled,1745,30,Failed,Dehradun,Race Course,True
+ORD00140,USR00209,2026-07-22,Returned,237,50,Pending,Dehradun,Clock Tower,True
+ORD00141,USR00054,2026-07-15,Delivered,1494,40,Failed,Dehradun,Survey Chowk,True
+ORD00142,USR00261,2026-03-21,Shipped,526,50,Paid,Dehradun,Rajpur Road,True
+ORD00143,USR00022,2026-01-19,Cancelled,1215,50,Paid,Dehradun,Subhash Nagar,True
+ORD00144,USR00224,2026-06-01,Cancelled,2885,40,Paid,Dehradun,Ladpur,True
+ORD00145,USR00037,2026-04-22,Returned,3453,50,Failed,Dehradun,Ladpur,True
+ORD00146,USR00131,2026-10-27,Cancelled,2362,30,Paid,Dehradun,Clement Town,True
+ORD00147,USR00179,2026-02-25,Returned,1105,0,Refunded,Dehradun,Rajpur Road,True
+ORD00148,USR00394,2026-01-15,Placed,2105,30,Refunded,Dehradun,Nehru Colony,True
+ORD00149,USR00196,2026-02-23,Packed,1835,30,Pending,Dehradun,Bindal,True
+ORD00150,USR00397,2026-06-01,Packed,597,50,Paid,Dehradun,Jakhan,True
+ORD00151,USR00379,2026-04-12,Placed,916,50,Paid,Dehradun,Raipur,True
+ORD00152,USR00137,2026-08-12,Shipped,1684,0,Failed,Dehradun,Paltan Bazaar,True
+ORD00153,USR00388,2026-03-31,Placed,1584,40,Failed,Dehradun,Karanpur,True
+ORD00154,USR00385,2026-05-17,Returned,975,0,Paid,Dehradun,Vasant Vihar,True
+ORD00155,USR00021,2026-04-03,Packed,738,40,Refunded,Dehradun,Vasant Vihar,True
+ORD00156,USR00275,2026-04-29,Placed,318,30,Failed,Dehradun,Karanpur,True
+ORD00157,USR00155,2026-10-09,Cancelled,1994,30,Pending,Dehradun,Vasant Vihar,True
+ORD00158,USR00155,2026-05-15,Placed,1758,30,Paid,Dehradun,Majra,True
+ORD00159,USR00295,2026-06-27,Returned,1683,0,Failed,Dehradun,Ladpur,True
+ORD00160,USR00351,2026-09-04,Cancelled,696,50,Refunded,Dehradun,Malsi,True
+ORD00161,USR00169,2026-04-10,Returned,516,30,Paid,Dehradun,Nehru Colony,True
+ORD00162,USR00091,2026-06-01,Packed,428,30,Paid,Dehradun,Subhash Nagar,True
+ORD00163,USR00048,2026-07-19,Returned,2184,50,Refunded,Dehradun,Survey Chowk,True
+ORD00164,USR00080,2026-02-13,Shipped,159,0,Paid,Dehradun,Bindal,True
+ORD00165,USR00123,2026-05-23,Delivered,2634,40,Pending,Dehradun,Paltan Bazaar,True
+ORD00166,USR00061,2026-01-15,Shipped,2434,40,Refunded,Dehradun,Vasant Vihar,True
+ORD00167,USR00304,2026-11-14,Placed,898,30,Paid,Dehradun,Raipur,True
+ORD00168,USR00295,2026-01-28,Delivered,1273,0,Paid,Dehradun,Ladpur,True
+ORD00169,USR00346,2026-05-26,Placed,3973,0,Paid,Dehradun,Survey Chowk,True
+ORD00170,USR00299,2026-08-05,Shipped,1562,40,Paid,Dehradun,Ballupur,True
+ORD00171,USR00146,2026-06-28,Packed,1605,50,Failed,Dehradun,Vasant Vihar,True
+ORD00172,USR00297,2026-05-19,Placed,698,0,Refunded,Dehradun,Malsi,True
+ORD00173,USR00001,2026-04-13,Shipped,937,0,Paid,Dehradun,Clement Town,True
+ORD00174,USR00002,2026-06-23,Placed,2105,30,Failed,Dehradun,GMS Road,True
+ORD00175,USR00206,2026-10-27,Shipped,1556,30,Paid,Dehradun,Chakrata Road,True
+ORD00176,USR00388,2026-05-11,Shipped,1337,40,Pending,Dehradun,Chakrata Road,True
+ORD00177,USR00280,2026-09-11,Delivered,986,0,Pending,Dehradun,Raipur,True
+ORD00178,USR00029,2026-07-10,Packed,2811,40,Pending,Dehradun,Karanpur,True
+ORD00179,USR00161,2026-09-09,Shipped,387,0,Failed,Dehradun,Paltan Bazaar,True
+ORD00180,USR00218,2026-06-13,Delivered,3492,40,Paid,Dehradun,Ballupur,True

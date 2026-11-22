@@ -46,41 +46,52 @@ enum DonationStatus {
 
 model User {
   id            String             @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId   String?            @unique
   name          String
   email         String             @unique
   password      String
   city          String
   state         String
-  avatar        AvatarConfig
+  locality      String?
+  avatar        AvatarConfig?
   level         Int                @default(1)
   xp            Int                @default(0)
   badges        String[]           @default([])
   interests     String[]           @default([])
   availability  String             @default("Flexible")
   role          Role               @default(USER)
+  isSynthetic   Boolean            @default(false)
   createdAt     DateTime           @default(now())
   
   // Relations
-  organizations Organization[]     @relation("UserOrganizations")
-  applications  Application[]      @relation("UserApplications")
-  eventRegs     EventRegistration[] @relation("UserEventRegistrations")
-  donations     Donation[]         @relation("UserDonations")
-  certificates  Certificate[]      @relation("UserCertificates")
-  notifications Notification[]     @relation("UserNotifications")
+  organizations     Organization[]     @relation("UserOrganizations")
+  applications      Application[]      @relation("UserApplications")
+  eventRegs         EventRegistration[] @relation("UserEventRegistrations")
+  donations         Donation[]         @relation("UserDonations")
+  certificates      Certificate[]      @relation("UserCertificates")
+  notifications     Notification[]     @relation("UserNotifications")
+  orders            Order[]            @relation("UserOrders")
+  monetaryDonations MonetaryDonation[] @relation("UserMonetaryDonations")
 }
 
 model Organization {
   id                      String             @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId             String?            @unique
   ownerId                 String             @db.ObjectId
   organizationName        String
   description             String
   mission                 String
   category                String
+  focusArea               String?
+  registrationType        String?
+  city                    String?
+  locality                String?
   website                 String
   phone                   String
   logo                    String
   verificationStatus      VerificationStatus @default(PENDING)
   registrationCertificate String
+  isSynthetic             Boolean            @default(false)
   createdAt               DateTime           @default(now())
   
   // Relations
@@ -88,24 +99,32 @@ model Organization {
   opportunities          Opportunity[]      @relation("OrgOpportunities")
   events                 Event[]            @relation("OrgEvents")
   certificates           Certificate[]      @relation("OrgCertificates")
+  monetaryDonations      MonetaryDonation[] @relation("OrgMonetaryDonations")
 }
 
 model Opportunity {
   id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId        String?           @unique
   organizationId     String            @db.ObjectId
   title              String
   description        String
   category           String
   location           String
+  city               String?
+  locality           String?
   date               String
+  endDate            String?
   time               String
+  timeSlot           String?
   duration           String
   skillsRequired     String[]          @default([])
   volunteerLimit     Int               @default(10)
+  slotsFilled        Int               @default(0)
   coverImage         String
   status             OpportunityStatus @default(OPEN)
   contactInfo        String?
   deadline           String?
+  isSynthetic        Boolean           @default(false)
   createdAt          DateTime          @default(now())
   
   // Relations
@@ -114,50 +133,65 @@ model Opportunity {
 }
 
 model Application {
-  id            String            @id @default(auto()) @map("_id") @db.ObjectId
-  opportunityId String            @db.ObjectId
-  userId        String            @db.ObjectId
-  status        ApplicationStatus @default(PENDING)
-  notes         String?
-  formData      String?           // JSON string
-  createdAt     DateTime          @default(now())
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId       String?           @unique
+  opportunityId     String            @db.ObjectId
+  userId            String            @db.ObjectId
+  status            ApplicationStatus @default(PENDING)
+  notes             String?
+  hoursContributed  Int?              @default(0)
+  volunteerNote     String?
+  formData          String?           // JSON string
+  isSynthetic       Boolean           @default(false)
+  createdAt         DateTime          @default(now())
   
   // Relations
-  opportunity   Opportunity       @relation("OpportunityApplications", fields: [opportunityId], references: [id])
-  user          User              @relation("UserApplications", fields: [userId], references: [id])
+  opportunity       Opportunity       @relation("OpportunityApplications", fields: [opportunityId], references: [id])
+  user              User              @relation("UserApplications", fields: [userId], references: [id])
 }
 
 model Event {
-  id              String            @id @default(auto()) @map("_id") @db.ObjectId
-  organizationId  String            @db.ObjectId
-  title           String
-  description     String
-  banner          String
-  date            String
-  time            String
-  location        String
-  capacity        Int               @default(50)
-  registeredUsers String[]          @default([]) // Array of User IDs
-  category        String
+  id               String              @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId      String?             @unique
+  organizationId   String              @db.ObjectId
+  title            String
+  theme            String?
+  description      String
+  banner           String
+  date             String
+  time             String
+  startTime        String?
+  endTime          String?
+  location         String
+  venueLocality    String?
+  city             String?
+  capacity         Int                 @default(50)
+  registeredUsers  String[]            @default([]) // Array of User IDs
+  category         String
   registrationLink String?
   contactInfo      String?
-  createdAt       DateTime          @default(now())
+  status           String?             @default("Scheduled")
+  isSynthetic      Boolean             @default(false)
+  createdAt        DateTime            @default(now())
   
   // Relations
-  organization    Organization      @relation("OrgEvents", fields: [organizationId], references: [id])
-  registrations   EventRegistration[] @relation("EventRegistrations")
+  organization     Organization        @relation("OrgEvents", fields: [organizationId], references: [id])
+  registrations    EventRegistration[] @relation("EventRegistrations")
 }
 
 model EventRegistration {
-  id            String            @id @default(auto()) @map("_id") @db.ObjectId
-  eventId       String            @db.ObjectId
-  userId        String            @db.ObjectId
-  formData      String?           // JSON string
-  createdAt     DateTime          @default(now())
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId      String?           @unique
+  eventId          String            @db.ObjectId
+  userId           String            @db.ObjectId
+  attendanceStatus String?           @default("Registered")
+  formData         String?           // JSON string
+  isSynthetic      Boolean           @default(false)
+  createdAt        DateTime          @default(now())
   
   // Relations
-  event         Event             @relation("EventRegistrations", fields: [eventId], references: [id], onDelete: Cascade)
-  user          User              @relation("UserEventRegistrations", fields: [userId], references: [id])
+  event            Event             @relation("EventRegistrations", fields: [eventId], references: [id], onDelete: Cascade)
+  user             User              @relation("UserEventRegistrations", fields: [userId], references: [id])
 }
 
 model Donation {
@@ -173,10 +207,90 @@ model Donation {
   requesterId String?        @db.ObjectId
   contactInfo String?
   notes       String?
+  isSynthetic Boolean        @default(false)
   createdAt   DateTime       @default(now())
   
   // Relations
   owner       User           @relation("UserDonations", fields: [ownerId], references: [id])
+}
+
+model EcoProduct {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId    String?     @unique
+  title          String
+  description    String      @default("")
+  price          Float
+  category       String
+  sellerName     String      @default("GreenBridge Artisan")
+  sellerLocality String?
+  city           String      @default("Dehradun")
+  stockQuantity  Int         @default(10)
+  inStock        Boolean     @default(true)
+  images         String[]    @default([])
+  material       String?
+  ecoClaim       String?
+  whatsapp       String?
+  isSynthetic    Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+
+  // Relations
+  orderItems     OrderItem[] @relation("ProductOrderItems")
+}
+
+model Order {
+  id               String      @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId      String?     @unique
+  userId           String      @db.ObjectId
+  orderStatus      String      @default("Pending")
+  subtotal         Float
+  deliveryFee      Float       @default(0)
+  total            Float
+  paymentStatus    String      @default("Pending")
+  paymentMode      String?     @default("UPI")
+  deliveryCity     String      @default("Dehradun")
+  deliveryLocality String?
+  isSynthetic      Boolean     @default(false)
+  createdAt        DateTime    @default(now())
+
+  // Relations
+  user             User        @relation("UserOrders", fields: [userId], references: [id])
+  items            OrderItem[] @relation("OrderOrderItems")
+}
+
+model OrderItem {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId String?    @unique
+  orderId     String     @db.ObjectId
+  productId   String     @db.ObjectId
+  quantity    Int        @default(1)
+  unitPrice   Float
+  lineTotal   Float
+  isSynthetic Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+
+  // Relations
+  order       Order      @relation("OrderOrderItems", fields: [orderId], references: [id], onDelete: Cascade)
+  product     EcoProduct @relation("ProductOrderItems", fields: [productId], references: [id])
+}
+
+model MonetaryDonation {
+  id                   String        @id @default(auto()) @map("_id") @db.ObjectId
+  syntheticId          String?       @unique
+  donorUserId          String        @db.ObjectId
+  organizationId       String        @db.ObjectId
+  campaignName         String
+  amount               Float
+  donationDate         String
+  paymentStatus        String        @default("Completed")
+  paymentMode          String        @default("UPI")
+  transactionReference String?
+  isRecurring          Boolean       @default(false)
+  isSynthetic          Boolean       @default(false)
+  createdAt            DateTime      @default(now())
+
+  // Relations
+  donor                User          @relation("UserMonetaryDonations", fields: [donorUserId], references: [id])
+  organization         Organization  @relation("OrgMonetaryDonations", fields: [organizationId], references: [id])
 }
 
 model Certificate {

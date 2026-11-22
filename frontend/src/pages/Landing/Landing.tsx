@@ -640,9 +640,9 @@ export const Landing: React.FC = () => {
       {/* 9. NEWSLETTER - MIDNIGHT SURFACE */}
       <Surface tone="midnight" className="py-16 px-6 text-center border-y border-[#F7F4D5]/15">
         <div className="max-w-2xl mx-auto space-y-6">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-[#F7F4D5] bg-[#F7F4D5]/15 px-3.5 py-1.5 rounded-full">Stay Connected</span>
-          <h2 className="text-2xl md:text-4xl font-serif text-[#F7F4D5] font-bold mt-2">Subscribe to Weekly Impact Digests</h2>
-          <p className="text-sm text-[#F7F4D5]/85 leading-relaxed max-w-md mx-auto">
+          <span className="text-xs font-extrabold uppercase tracking-widest text-[#F7F4D5] bg-[#062015]/15 px-3.5 py-1.5 rounded-full">Stay Connected</span>
+          <h2 className="text-2xl md:text-4xl font-serif text-[#062015] font-bold mt-2">Subscribe to Weekly Impact Digests</h2>
+          <p className="text-sm text-[#062015]/85 leading-relaxed max-w-md mx-auto">
             Get instant mail notifications when new volunteering campaigns, local events, or donation requests are posted in Dehradun.
           </p>
           <form 
@@ -671,8 +671,8 @@ export const Landing: React.FC = () => {
       {/* 10. FINAL CTA - DEEP GREEN SURFACE */}
       <Surface tone="deep" className="py-24 px-6 text-center relative overflow-hidden">
         <div className="max-w-3xl mx-auto space-y-8 z-10 relative">
-          <h2 className="text-4xl md:text-6xl font-serif text-[#F7F4D5] font-extrabold tracking-tight">Ready to Build a Better Tomorrow?</h2>
-          <p className="text-lg text-[#F7F4D5]/85 max-w-xl mx-auto leading-relaxed">
+          <h2 className="text-4xl md:text-6xl font-serif text-[#062015] font-extrabold tracking-tight">Ready to Build a Better Tomorrow?</h2>
+          <p className="text-lg text-[#062015]/85 max-w-xl mx-auto leading-relaxed">
             Volunteering doesn't mean changing the whole world. Just start by lending a helping hand in your local neighborhood.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -684,7 +684,7 @@ export const Landing: React.FC = () => {
             </Link>
             <Link 
               to="/login" 
-              className="border-2 border-[#F7F4D5]/40 hover:border-[#F7F4D5] text-[#F7F4D5] px-8 py-4 rounded-full font-bold text-base hover:bg-white/10 transition-all hover:-translate-y-0.5"
+              className="bg-[#D3968C] hover:bg-white text-[#0A3323] px-8 py-4 rounded-full font-bold text-base transition-all shadow-lg hover:-translate-y-0.5"
             >
               Sign In to Your Workspace
             </Link>

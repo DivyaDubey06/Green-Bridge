@@ -56,6 +56,23 @@
 }
 
 :root {
+  /* Brand Core Tokens */
+  --gb-brand-deep: #0A3323;
+  --gb-brand-moss: #839958;
+  --gb-brand-beige: #F7F4D5;
+  --gb-brand-rose: #D3968C;
+  --gb-brand-midnight: #105666;
+
+  /* Semantic Foundation Tokens (Light Mode: Warm, airy, mature, organic) */
+  --gb-bg-page: #F7F8F4;
+  --gb-bg-card: #FFFFFF;
+  --gb-bg-card-hover: #F0F3EE;
+  --gb-bg-elevated: #FFFFFF;
+  --gb-text-primary: #0A3323;
+  --gb-text-secondary: #4A584E;
+  --gb-text-muted: #738075;
+  --gb-border-subtle: rgba(10, 51, 35, 0.1);
+
   /* Light Mode Surface Tints */
   --gb-surface-deep: #DEE2DD;
   --gb-surface-deep-text: #0A3323;
@@ -74,6 +91,16 @@
 }
 
 html.dark {
+  /* Semantic Foundation Tokens (Dark Mode: Deep organic forest slate, high readability) */
+  --gb-bg-page: #121713;
+  --gb-bg-card: #1A211C;
+  --gb-bg-card-hover: #222B24;
+  --gb-bg-elevated: #24342B;
+  --gb-text-primary: #F3F1E7;
+  --gb-text-secondary: #C0C5BB;
+  --gb-text-muted: #8F9E91;
+  --gb-border-subtle: rgba(243, 241, 231, 0.12);
+
   /* Dark Mode Surface Tints */
   --gb-surface-deep: #101B17;
   --gb-surface-deep-text: #F3F1E7;
@@ -93,7 +120,9 @@ html.dark {
 
 @layer base {
   body {
-    @apply bg-soft-mint-bg text-slate-text font-sans antialiased overflow-x-hidden transition-colors duration-300;
+    background-color: var(--gb-bg-page);
+    color: var(--gb-text-primary);
+    @apply font-sans antialiased overflow-x-hidden transition-colors duration-300;
   }
 
   h1, h2, h3, h4, h5, h6 {

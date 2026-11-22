@@ -18,7 +18,7 @@ interface VendorGroup {
 }
 
 export const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
-  const { cart, removeFromCart, updateCartQuantity, clearCart } = useAuthStore();
+  const { cart, removeFromCart, updateCartQuantity, clearCart, createOrder } = useAuthStore();
 
   if (!isOpen) return null;
 
@@ -45,7 +45,7 @@ export const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const vendorGroups = Object.values(vendorGroupsMap);
 
   // Send order to a single specific vendor via their own WhatsApp number
-  const handleVendorCheckout = (group: VendorGroup) => {
+  const handleVendorCheckout = async (group: VendorGroup) => {
     const itemsList = group.items
       .map(i => `• ${i.product.title} (x${i.quantity}) - ₹${i.product.price * i.quantity}`)
       .join('\n');
@@ -53,6 +53,26 @@ export const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
     const message = `Hello ${group.businessName || group.vendorName}! 🌿\nI would like to place an order from GreenCart for the following items:\n\n${itemsList}\n\nVendor Subtotal: ₹${group.subtotal}\nPlease share payment and delivery details!`;
     const cleanPhone = group.whatsapp.replace(/[^0-9]/g, '');
     const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+
+    try {
+      if (createOrder) {
+        await createOrder({
+          items: group.items.map(i => ({
+            productId: i.product.id,
+            quantity: i.quantity,
+            price: i.product.price,
+            title: i.product.title
+          })),
+          sellerName: group.businessName || group.vendorName,
+          paymentMode: 'WhatsApp Direct / UPI',
+          deliveryCity: 'Dehradun',
+          subtotal: group.subtotal,
+          total: group.subtotal
+        });
+      }
+    } catch (e) {
+      console.warn('Could not record order on server', e);
+    }
 
     window.open(waUrl, '_blank');
   };

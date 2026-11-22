@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaModule } from './prisma/prisma.module';
 import { DatabaseModule } from './common/database/database.module';
@@ -10,10 +10,14 @@ import { AppController } from './app.controller';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    JwtModule.register({
+    JwtModule.registerAsync({
       global: true,
-      secret: 'greenbridge-super-secret-key-12345', // Simple secure-ready token signature secret
-      signOptions: { expiresIn: '7d' },
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET') || 'greenbridge-super-secret-key-12345',
+        signOptions: { expiresIn: '7d' },
+      }),
     }),
     PrismaModule,
     DatabaseModule,

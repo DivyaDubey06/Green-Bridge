@@ -1,0 +1,151 @@
+﻿event_id,ngo_id,event_name,theme,description,city,venue_locality,event_date,start_time,end_time,capacity,registrations,status,is_synthetic
+EVT00001,NGO0039,Plastic-free Bazaar Day,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Sahastradhara Road,2026-08-01,09:30,19:00,226,9,Cancelled,True
+EVT00002,NGO0053,Doon Animal Care Camp,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Sahastradhara Road,2026-05-21,11:00,11:00,213,144,Completed,True
+EVT00003,NGO0074,Youth Volunteer Summit,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Majra,2026-05-18,09:30,12:30,210,80,Completed,True
+EVT00004,NGO0046,Community Learning Mela,Education,A Dehradun community event focused on education.,Dehradun,Doiwala,2026-06-18,09:30,12:30,220,170,Cancelled,True
+EVT00005,NGO0056,Doon Green Weekend,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Dalanwala,2026-07-10,11:00,19:00,55,48,Upcoming,True
+EVT00006,NGO0004,Eco-friendly Fest,Health,A Dehradun community event focused on health.,Dehradun,Dalanwala,2026-01-20,15:00,19:00,41,57,Upcoming,True
+EVT00007,NGO0078,Eco-friendly Fest,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Sahastradhara Road,2026-02-12,09:30,19:00,148,142,Upcoming,True
+EVT00008,NGO0039,Doon Animal Care Camp,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Clement Town,2026-06-09,15:00,19:00,92,178,Upcoming,True
+EVT00009,NGO0040,Sustainable Living Workshop,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Ladpur,2026-01-08,16:30,12:30,217,1,Completed,True
+EVT00010,NGO0063,Community Learning Mela,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Malsi,2026-04-25,08:00,18:00,239,175,Cancelled,True
+EVT00011,NGO0018,Doon Animal Care Camp,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Patel Nagar,2026-08-06,11:00,11:00,149,154,Completed,True
+EVT00012,NGO0049,Neighbourhood Clean-up Carnival,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Raipur,2026-02-12,15:00,19:00,176,147,Completed,True
+EVT00013,NGO0068,Sahastradhara River Awareness Walk,Environment,A Dehradun community event focused on environment.,Dehradun,Race Course,2026-05-08,15:00,18:00,231,10,Cancelled,True
+EVT00014,NGO0076,Plastic-free Bazaar Day,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Dalanwala,2026-11-17,15:00,18:00,96,89,Upcoming,True
+EVT00015,NGO0037,Plastic-free Bazaar Day,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Rajpur Road,2026-10-17,11:00,11:00,215,105,Completed,True
+EVT00016,NGO0052,Doon Green Weekend,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Clock Tower,2026-06-05,11:00,11:00,111,108,Upcoming,True
+EVT00017,NGO0012,Youth Volunteer Summit,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Nehru Colony,2026-06-28,16:30,18:00,130,45,Upcoming,True
+EVT00018,NGO0069,Youth Volunteer Summit,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Bindal,2026-10-12,08:00,14:00,186,97,Completed,True
+EVT00019,NGO0075,Doon Green Weekend,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Majra,2026-03-21,15:00,14:00,244,155,Upcoming,True
+EVT00020,NGO0043,Sustainable Living Workshop,Environment,A Dehradun community event focused on environment.,Dehradun,Ballupur,2026-01-29,09:30,12:30,204,55,Completed,True
+EVT00021,NGO0071,Sahastradhara River Awareness Walk,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Paltan Bazaar,2026-01-29,11:00,19:00,235,127,Upcoming,True
+EVT00022,NGO0050,Eco-friendly Fest,Environment,A Dehradun community event focused on environment.,Dehradun,Sahastradhara Road,2026-04-18,16:30,12:30,34,93,Completed,True
+EVT00023,NGO0071,Plastic-free Bazaar Day,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Prem Nagar,2026-09-12,15:00,18:00,97,6,Upcoming,True
+EVT00024,NGO0070,Sahastradhara River Awareness Walk,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Sahastradhara Road,2026-02-19,11:00,18:00,142,54,Completed,True
+EVT00025,NGO0059,Doon Green Weekend,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Clock Tower,2026-11-13,16:30,19:00,38,177,Cancelled,True
+EVT00026,NGO0072,Youth Volunteer Summit,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Malsi,2026-01-31,16:30,12:30,139,163,Cancelled,True
+EVT00027,NGO0058,Plastic-free Bazaar Day,Education,A Dehradun community event focused on education.,Dehradun,Survey Chowk,2026-06-02,16:30,12:30,63,78,Completed,True
+EVT00028,NGO0004,Neighbourhood Clean-up Carnival,Environment,A Dehradun community event focused on environment.,Dehradun,Rajpur Road,2026-04-25,15:00,14:00,191,44,Completed,True
+EVT00029,NGO0001,Community Learning Mela,Education,A Dehradun community event focused on education.,Dehradun,Karanpur,2026-10-17,16:30,11:00,226,10,Cancelled,True
+EVT00030,NGO0029,Youth Volunteer Summit,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Vasant Vihar,2026-11-08,16:30,14:00,85,123,Upcoming,True
+EVT00031,NGO0023,Eco-friendly Fest,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Nehru Colony,2026-06-16,16:30,18:00,65,68,Completed,True
+EVT00032,NGO0039,Tree Guardians Meetup,Health,A Dehradun community event focused on health.,Dehradun,Jakhan,2026-02-17,08:00,14:00,70,24,Completed,True
+EVT00033,NGO0046,Youth Volunteer Summit,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Majra,2026-01-08,16:30,11:00,202,65,Upcoming,True
+EVT00034,NGO0007,Neighbourhood Clean-up Carnival,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Clock Tower,2026-04-13,15:00,18:00,43,51,Cancelled,True
+EVT00035,NGO0046,Sustainable Living Workshop,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Malsi,2026-10-18,11:00,19:00,173,131,Upcoming,True
+EVT00036,NGO0069,Tree Guardians Meetup,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Sahastradhara Road,2026-03-15,08:00,11:00,249,118,Upcoming,True
+EVT00037,NGO0045,Doon Animal Care Camp,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Nehru Colony,2026-10-08,16:30,14:00,101,174,Upcoming,True
+EVT00038,NGO0013,Youth Volunteer Summit,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Paltan Bazaar,2026-07-29,11:00,18:00,33,138,Upcoming,True
+EVT00039,NGO0048,Sustainable Living Workshop,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,GMS Road,2026-05-16,16:30,18:00,74,57,Upcoming,True
+EVT00040,NGO0042,Tree Guardians Meetup,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Race Course,2026-09-27,15:00,18:00,227,65,Cancelled,True
+EVT00041,NGO0064,Doon Green Weekend,Environment,A Dehradun community event focused on environment.,Dehradun,Sahastradhara Road,2026-11-17,08:00,19:00,138,100,Completed,True
+EVT00042,NGO0041,Doon Animal Care Camp,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Karanpur,2026-10-31,11:00,19:00,134,170,Upcoming,True
+EVT00043,NGO0050,Eco-friendly Fest,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Clock Tower,2026-09-17,15:00,11:00,232,16,Completed,True
+EVT00044,NGO0076,Youth Volunteer Summit,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Clock Tower,2026-02-01,09:30,14:00,173,14,Completed,True
+EVT00045,NGO0010,Plastic-free Bazaar Day,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Jakhan,2026-01-27,15:00,18:00,80,96,Upcoming,True
+EVT00046,NGO0075,Sahastradhara River Awareness Walk,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Rajpur Road,2026-10-26,08:00,11:00,152,129,Completed,True
+EVT00047,NGO0057,Sustainable Living Workshop,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Patel Nagar,2026-10-05,16:30,14:00,175,95,Upcoming,True
+EVT00048,NGO0006,Sustainable Living Workshop,Education,A Dehradun community event focused on education.,Dehradun,Raipur,2026-02-17,15:00,14:00,243,172,Upcoming,True
+EVT00049,NGO0002,Sahastradhara River Awareness Walk,Health,A Dehradun community event focused on health.,Dehradun,Raipur,2026-07-14,08:00,14:00,190,56,Cancelled,True
+EVT00050,NGO0050,Sustainable Living Workshop,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Rajpur Road,2026-08-27,09:30,19:00,217,77,Cancelled,True
+EVT00051,NGO0004,Doon Animal Care Camp,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Clock Tower,2026-02-01,08:00,18:00,106,92,Cancelled,True
+EVT00052,NGO0074,Plastic-free Bazaar Day,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Subhash Nagar,2026-07-03,11:00,19:00,238,113,Upcoming,True
+EVT00053,NGO0030,Doon Animal Care Camp,Environment,A Dehradun community event focused on environment.,Dehradun,Malsi,2026-11-03,09:30,14:00,228,65,Cancelled,True
+EVT00054,NGO0028,Doon Animal Care Camp,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Paltan Bazaar,2026-06-11,08:00,12:30,52,46,Cancelled,True
+EVT00055,NGO0054,Sustainable Living Workshop,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Nehru Colony,2026-04-19,08:00,11:00,163,6,Upcoming,True
+EVT00056,NGO0068,Sahastradhara River Awareness Walk,Education,A Dehradun community event focused on education.,Dehradun,Race Course,2026-08-27,08:00,18:00,181,62,Cancelled,True
+EVT00057,NGO0048,Youth Volunteer Summit,Environment,A Dehradun community event focused on environment.,Dehradun,Rajpur Road,2026-06-08,08:00,19:00,212,152,Upcoming,True
+EVT00058,NGO0074,Doon Animal Care Camp,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Jakhan,2026-06-11,15:00,11:00,25,7,Upcoming,True
+EVT00059,NGO0075,Community Learning Mela,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Raipur,2026-02-23,16:30,18:00,196,115,Cancelled,True
+EVT00060,NGO0073,Sahastradhara River Awareness Walk,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Bindal,2026-01-29,16:30,14:00,164,50,Completed,True
+EVT00061,NGO0030,Doon Green Weekend,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Vasant Vihar,2026-05-01,09:30,12:30,194,162,Completed,True
+EVT00062,NGO0026,Community Learning Mela,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Prem Nagar,2026-10-28,09:30,14:00,61,170,Upcoming,True
+EVT00063,NGO0078,Youth Volunteer Summit,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Survey Chowk,2026-02-13,08:00,12:30,66,94,Completed,True
+EVT00064,NGO0002,Neighbourhood Clean-up Carnival,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Survey Chowk,2026-05-14,09:30,19:00,62,59,Completed,True
+EVT00065,NGO0074,Doon Green Weekend,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Race Course,2026-01-13,11:00,12:30,83,95,Upcoming,True
+EVT00066,NGO0074,Sustainable Living Workshop,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Bindal,2026-05-21,11:00,19:00,103,45,Upcoming,True
+EVT00067,NGO0013,Plastic-free Bazaar Day,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,GMS Road,2026-10-07,15:00,11:00,236,50,Upcoming,True
+EVT00068,NGO0070,Doon Animal Care Camp,Health,A Dehradun community event focused on health.,Dehradun,Jakhan,2026-10-14,09:30,12:30,114,81,Cancelled,True
+EVT00069,NGO0036,Neighbourhood Clean-up Carnival,Health,A Dehradun community event focused on health.,Dehradun,Ladpur,2026-07-08,16:30,18:00,169,37,Upcoming,True
+EVT00070,NGO0073,Sahastradhara River Awareness Walk,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Survey Chowk,2026-04-24,16:30,14:00,167,14,Upcoming,True
+EVT00071,NGO0006,Eco-friendly Fest,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Rajpur Road,2026-03-26,08:00,11:00,164,95,Upcoming,True
+EVT00072,NGO0028,Doon Animal Care Camp,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Sahastradhara Road,2026-07-22,09:30,11:00,178,18,Cancelled,True
+EVT00073,NGO0030,Doon Animal Care Camp,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Dalanwala,2026-11-16,08:00,19:00,149,178,Upcoming,True
+EVT00074,NGO0060,Community Learning Mela,Health,A Dehradun community event focused on health.,Dehradun,Raipur,2026-10-05,11:00,11:00,91,120,Cancelled,True
+EVT00075,NGO0008,Sahastradhara River Awareness Walk,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Ladpur,2026-04-28,08:00,12:30,198,36,Upcoming,True
+EVT00076,NGO0035,Tree Guardians Meetup,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Patel Nagar,2026-10-23,16:30,19:00,28,125,Upcoming,True
+EVT00077,NGO0065,Sahastradhara River Awareness Walk,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Bindal,2026-05-01,08:00,14:00,181,158,Upcoming,True
+EVT00078,NGO0033,Doon Animal Care Camp,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Clock Tower,2026-01-10,16:30,12:30,201,10,Cancelled,True
+EVT00079,NGO0063,Neighbourhood Clean-up Carnival,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Patel Nagar,2026-09-12,08:00,18:00,25,134,Completed,True
+EVT00080,NGO0073,Community Learning Mela,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Race Course,2026-06-24,09:30,18:00,194,15,Completed,True
+EVT00081,NGO0002,Doon Animal Care Camp,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Survey Chowk,2026-09-11,08:00,12:30,226,19,Upcoming,True
+EVT00082,NGO0016,Neighbourhood Clean-up Carnival,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Raipur,2026-11-09,09:30,18:00,161,34,Upcoming,True
+EVT00083,NGO0052,Tree Guardians Meetup,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Bindal,2026-03-13,16:30,14:00,61,105,Cancelled,True
+EVT00084,NGO0013,Community Learning Mela,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Bindal,2026-08-24,09:30,11:00,169,79,Cancelled,True
+EVT00085,NGO0074,Sustainable Living Workshop,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Doiwala,2026-03-10,11:00,11:00,207,134,Upcoming,True
+EVT00086,NGO0012,Plastic-free Bazaar Day,Health,A Dehradun community event focused on health.,Dehradun,Paltan Bazaar,2026-04-12,15:00,11:00,28,112,Completed,True
+EVT00087,NGO0073,Doon Green Weekend,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,GMS Road,2026-08-14,11:00,14:00,152,50,Upcoming,True
+EVT00088,NGO0060,Plastic-free Bazaar Day,Health,A Dehradun community event focused on health.,Dehradun,Sahastradhara Road,2026-01-11,15:00,12:30,115,86,Upcoming,True
+EVT00089,NGO0051,Doon Animal Care Camp,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Dalanwala,2026-04-27,09:30,18:00,223,62,Upcoming,True
+EVT00090,NGO0050,Eco-friendly Fest,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Doiwala,2026-04-14,11:00,14:00,214,130,Upcoming,True
+EVT00091,NGO0066,Youth Volunteer Summit,Environment,A Dehradun community event focused on environment.,Dehradun,Prem Nagar,2026-03-29,08:00,11:00,164,96,Completed,True
+EVT00092,NGO0022,Youth Volunteer Summit,Health,A Dehradun community event focused on health.,Dehradun,Patel Nagar,2026-05-24,09:30,11:00,219,143,Cancelled,True
+EVT00093,NGO0044,Sustainable Living Workshop,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Majra,2026-02-04,15:00,18:00,73,143,Upcoming,True
+EVT00094,NGO0034,Eco-friendly Fest,Health,A Dehradun community event focused on health.,Dehradun,Dalanwala,2026-01-01,09:30,18:00,216,115,Upcoming,True
+EVT00095,NGO0039,Eco-friendly Fest,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Malsi,2026-08-12,15:00,11:00,103,92,Upcoming,True
+EVT00096,NGO0033,Neighbourhood Clean-up Carnival,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Clock Tower,2026-06-25,08:00,12:30,67,160,Cancelled,True
+EVT00097,NGO0050,Plastic-free Bazaar Day,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Dalanwala,2026-10-24,15:00,14:00,92,177,Cancelled,True
+EVT00098,NGO0037,Tree Guardians Meetup,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Race Course,2026-03-21,15:00,14:00,240,153,Completed,True
+EVT00099,NGO0028,Plastic-free Bazaar Day,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Clement Town,2026-08-01,11:00,19:00,249,92,Cancelled,True
+EVT00100,NGO0072,Doon Green Weekend,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Bindal,2026-09-07,11:00,18:00,64,161,Cancelled,True
+EVT00101,NGO0069,Doon Animal Care Camp,Health,A Dehradun community event focused on health.,Dehradun,Malsi,2026-03-20,16:30,18:00,148,44,Cancelled,True
+EVT00102,NGO0047,Doon Animal Care Camp,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Clement Town,2026-06-04,11:00,12:30,118,51,Upcoming,True
+EVT00103,NGO0030,Neighbourhood Clean-up Carnival,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,GMS Road,2026-08-11,11:00,14:00,97,19,Upcoming,True
+EVT00104,NGO0067,Sustainable Living Workshop,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Vasant Vihar,2026-09-11,16:30,12:30,166,142,Upcoming,True
+EVT00105,NGO0012,Sahastradhara River Awareness Walk,Environment,A Dehradun community event focused on environment.,Dehradun,Subhash Nagar,2026-03-08,11:00,19:00,94,10,Upcoming,True
+EVT00106,NGO0023,Youth Volunteer Summit,Environment,A Dehradun community event focused on environment.,Dehradun,Nehru Colony,2026-08-08,15:00,18:00,230,157,Cancelled,True
+EVT00107,NGO0069,Youth Volunteer Summit,Health,A Dehradun community event focused on health.,Dehradun,Chakrata Road,2026-07-20,11:00,12:30,25,146,Upcoming,True
+EVT00108,NGO0052,Doon Animal Care Camp,Education,A Dehradun community event focused on education.,Dehradun,Survey Chowk,2026-01-25,16:30,11:00,243,63,Cancelled,True
+EVT00109,NGO0077,Sahastradhara River Awareness Walk,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Ladpur,2026-10-01,16:30,14:00,34,33,Cancelled,True
+EVT00110,NGO0033,Neighbourhood Clean-up Carnival,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Prem Nagar,2026-11-12,11:00,12:30,57,30,Upcoming,True
+EVT00111,NGO0021,Doon Green Weekend,Environment,A Dehradun community event focused on environment.,Dehradun,Doiwala,2026-02-21,11:00,19:00,94,125,Upcoming,True
+EVT00112,NGO0029,Doon Green Weekend,Health,A Dehradun community event focused on health.,Dehradun,Clock Tower,2026-06-05,15:00,18:00,138,167,Upcoming,True
+EVT00113,NGO0026,Plastic-free Bazaar Day,Environment,A Dehradun community event focused on environment.,Dehradun,Vasant Vihar,2026-10-26,09:30,11:00,84,152,Completed,True
+EVT00114,NGO0030,Sahastradhara River Awareness Walk,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Karanpur,2026-11-11,15:00,11:00,211,29,Upcoming,True
+EVT00115,NGO0029,Community Learning Mela,Environment,A Dehradun community event focused on environment.,Dehradun,Raipur,2026-05-04,08:00,19:00,221,11,Completed,True
+EVT00116,NGO0007,Eco-friendly Fest,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Karanpur,2026-04-23,09:30,18:00,133,29,Completed,True
+EVT00117,NGO0044,Sustainable Living Workshop,Education,A Dehradun community event focused on education.,Dehradun,Subhash Nagar,2026-06-05,09:30,18:00,54,178,Upcoming,True
+EVT00118,NGO0025,Youth Volunteer Summit,Disaster Relief,A Dehradun community event focused on disaster relief.,Dehradun,Bindal,2026-03-17,11:00,14:00,247,108,Completed,True
+EVT00119,NGO0053,Plastic-free Bazaar Day,Health,A Dehradun community event focused on health.,Dehradun,Dalanwala,2026-04-23,08:00,14:00,174,111,Cancelled,True
+EVT00120,NGO0077,Doon Animal Care Camp,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Karanpur,2026-02-24,16:30,19:00,141,90,Upcoming,True
+EVT00121,NGO0053,Sustainable Living Workshop,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Prem Nagar,2026-08-31,11:00,14:00,96,81,Upcoming,True
+EVT00122,NGO0044,Plastic-free Bazaar Day,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Vasant Vihar,2026-10-03,09:30,11:00,69,108,Cancelled,True
+EVT00123,NGO0026,Doon Green Weekend,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Nehru Colony,2026-11-03,16:30,12:30,140,26,Completed,True
+EVT00124,NGO0012,Sahastradhara River Awareness Walk,Environment,A Dehradun community event focused on environment.,Dehradun,Malsi,2026-02-26,15:00,11:00,78,74,Completed,True
+EVT00125,NGO0009,Community Learning Mela,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Clement Town,2026-04-18,11:00,19:00,138,135,Upcoming,True
+EVT00126,NGO0024,Doon Green Weekend,Education,A Dehradun community event focused on education.,Dehradun,Survey Chowk,2026-05-05,11:00,19:00,103,174,Cancelled,True
+EVT00127,NGO0063,Eco-friendly Fest,Environment,A Dehradun community event focused on environment.,Dehradun,Raipur,2026-06-13,16:30,14:00,74,45,Upcoming,True
+EVT00128,NGO0031,Neighbourhood Clean-up Carnival,Environment,A Dehradun community event focused on environment.,Dehradun,Rajpur Road,2026-05-16,15:00,14:00,216,164,Cancelled,True
+EVT00129,NGO0038,Doon Green Weekend,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Dalanwala,2026-06-29,15:00,19:00,233,66,Upcoming,True
+EVT00130,NGO0039,Doon Green Weekend,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Malsi,2026-09-24,09:30,18:00,118,133,Cancelled,True
+EVT00131,NGO0058,Eco-friendly Fest,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Karanpur,2026-05-24,15:00,14:00,216,105,Upcoming,True
+EVT00132,NGO0066,Youth Volunteer Summit,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Prem Nagar,2026-01-09,11:00,12:30,110,66,Completed,True
+EVT00133,NGO0049,Sahastradhara River Awareness Walk,Education,A Dehradun community event focused on education.,Dehradun,Ballupur,2026-11-05,08:00,19:00,54,140,Completed,True
+EVT00134,NGO0017,Youth Volunteer Summit,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Vasant Vihar,2026-10-19,09:30,18:00,45,88,Completed,True
+EVT00135,NGO0071,Plastic-free Bazaar Day,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Survey Chowk,2026-09-21,16:30,14:00,90,177,Completed,True
+EVT00136,NGO0011,Plastic-free Bazaar Day,Waste Management,A Dehradun community event focused on waste management.,Dehradun,Patel Nagar,2026-02-07,09:30,19:00,78,92,Upcoming,True
+EVT00137,NGO0030,Doon Green Weekend,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Race Course,2026-04-05,09:30,19:00,61,67,Cancelled,True
+EVT00138,NGO0044,Plastic-free Bazaar Day,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Patel Nagar,2026-06-09,15:00,11:00,132,21,Completed,True
+EVT00139,NGO0038,Youth Volunteer Summit,Environment,A Dehradun community event focused on environment.,Dehradun,Sahastradhara Road,2026-10-25,09:30,11:00,105,104,Upcoming,True
+EVT00140,NGO0038,Community Learning Mela,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Sahastradhara Road,2026-09-27,16:30,11:00,115,115,Cancelled,True
+EVT00141,NGO0042,Sustainable Living Workshop,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Paltan Bazaar,2026-03-26,08:00,12:30,26,123,Completed,True
+EVT00142,NGO0050,Doon Animal Care Camp,Community Welfare,A Dehradun community event focused on community welfare.,Dehradun,Ballupur,2026-10-23,11:00,19:00,75,15,Cancelled,True
+EVT00143,NGO0014,Sahastradhara River Awareness Walk,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Clock Tower,2026-05-22,15:00,14:00,61,122,Completed,True
+EVT00144,NGO0060,Tree Guardians Meetup,Environment,A Dehradun community event focused on environment.,Dehradun,Bindal,2026-10-27,15:00,18:00,188,65,Completed,True
+EVT00145,NGO0029,Doon Animal Care Camp,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,Raipur,2026-01-29,15:00,12:30,107,78,Cancelled,True
+EVT00146,NGO0058,Sahastradhara River Awareness Walk,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,GMS Road,2026-08-21,08:00,18:00,225,57,Cancelled,True
+EVT00147,NGO0026,Plastic-free Bazaar Day,Rural Development,A Dehradun community event focused on rural development.,Dehradun,Ladpur,2026-08-24,11:00,14:00,225,95,Upcoming,True
+EVT00148,NGO0044,Doon Green Weekend,Women Empowerment,A Dehradun community event focused on women empowerment.,Dehradun,GMS Road,2026-10-23,08:00,14:00,244,122,Completed,True
+EVT00149,NGO0072,Plastic-free Bazaar Day,Animal Welfare,A Dehradun community event focused on animal welfare.,Dehradun,Chakrata Road,2026-06-03,11:00,12:30,98,159,Completed,True
+EVT00150,NGO0059,Sustainable Living Workshop,Health,A Dehradun community event focused on health.,Dehradun,Ballupur,2026-09-05,09:30,14:00,222,171,Cancelled,True

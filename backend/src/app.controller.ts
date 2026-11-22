@@ -1,5 +1,5 @@
 import { 
-  Controller, Post, Get, Patch, Delete, Body, Param, UseGuards, Req, 
+  Controller, Post, Get, Patch, Delete, Body, Param, Query, UseGuards, Req, 
   UnauthorizedException, ForbiddenException, BadRequestException, HttpCode, HttpStatus, Injectable, CanActivate, ExecutionContext, SetMetadata
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -53,9 +53,13 @@ export class RolesGuard implements CanActivate {
       throw new ForbiddenException('Access denied. Insufficient role permissions.');
     }
 
-    // Admins bypass role checks
+    // Admins bypass role checks, but verify live user in DB has active ADMIN role
     if (user.role === 'ADMIN') {
-      return true;
+      const dbUser = await this.db.findUserById(user.sub);
+      if (dbUser && dbUser.role === 'ADMIN') {
+        return true;
+      }
+      throw new ForbiddenException('Access denied. Administrator privileges revoked or invalid.');
     }
 
     // Fetch latest user details and organization from database to get live status
@@ -170,8 +174,10 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Patch('users/me')
   async updateProfile(@Req() req: any, @Body() body: any) {
-    const user = await this.db.updateUser(req.user.sub, body);
-    const { password, ...result } = user;
+    // Prevent privilege escalation: protect immutable security fields
+    const { role, password, id, ...safeUpdates } = body;
+    const user = await this.db.updateUser(req.user.sub, safeUpdates);
+    const { password: pw, ...result } = user;
     return result;
   }
 
@@ -370,4 +376,105 @@ export class AppController {
   async readNotifications(@Req() req: any) {
     return this.db.markAllNotificationsRead(req.user.sub);
   }
+
+  // --- ADMIN USER MANAGEMENT ---
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @Get('users')
+  async getAllUsers() {
+    const users = await this.db.findAllUsers();
+    // Strip sensitive passwords
+    return users.map((u: any) => {
+      const { password, ...safeUser } = u;
+      return safeUser;
+    });
+  }
+
+  // --- RECOMMENDATION ENGINE ENDPOINT ---
+  @UseGuards(JwtAuthGuard)
+  @Get('recommendations')
+  async getRecommendations(@Req() req: any) {
+    return this.db.getRecommendations(req.user.sub);
+  }
+
+  // --- IMPACT ANALYTICS ENDPOINTS ---
+  @UseGuards(JwtAuthGuard)
+  @Get('analytics/volunteer')
+  async getVolunteerAnalytics(@Req() req: any) {
+    return this.db.getVolunteerAnalytics(req.user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ORGANIZATION', 'ADMIN')
+  @Get('analytics/organization')
+  async getOrgAnalytics(@Req() req: any) {
+    return this.db.getOrgAnalytics(req.user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @Get('analytics/admin')
+  async getAdminAnalytics() {
+    return this.db.getAdminAnalytics();
+  }
+
+  // --- ECOCART SUSTAINABLE PRODUCTS ---
+  @Get('products')
+  async getProducts(@Query('category') category?: string, @Query('search') search?: string) {
+    return this.db.findAllProducts(category, search);
+  }
+
+  @Get('products/:id')
+  async getProductById(@Param('id') id: string) {
+    const product = await this.db.findProductById(id);
+    if (!product) {
+      throw new BadRequestException('Product not found.');
+    }
+    return product;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('products')
+  async createProduct(@Body() body: any) {
+    if (!body.title || !body.price) {
+      throw new BadRequestException('Product title and price are required.');
+    }
+    return this.db.createProduct(body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('products/:id')
+  async updateProduct(@Param('id') id: string, @Body() body: any) {
+    return this.db.updateProduct(id, body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('products/:id')
+  async deleteProduct(@Param('id') id: string) {
+    return this.db.deleteProduct(id);
+  }
+
+  // --- ECOCART ORDERS ---
+  @UseGuards(JwtAuthGuard)
+  @Post('orders')
+  async createOrder(@Req() req: any, @Body() body: any) {
+    if (!body.items || !Array.isArray(body.items) || body.items.length === 0) {
+      throw new BadRequestException('Order items are required.');
+    }
+    return this.db.createOrder(req.user.sub, body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('orders/my')
+  async getMyOrders(@Req() req: any) {
+    return this.db.findOrdersByUser(req.user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @Get('orders')
+  async getAllOrders() {
+    return this.db.findAllOrders();
+  }
 }
+

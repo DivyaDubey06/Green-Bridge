@@ -1,0 +1,19 @@
+{
+  "dataset_name": "GreenBridge Dehradun Synthetic Demo Dataset",
+  "generated_on": "2026-11-21",
+  "geographic_scope": "Dehradun, Uttarakhand, India",
+  "total_records": 2683,
+  "collections": {
+    "ngos": 80,
+    "users": 400,
+    "opportunities": 240,
+    "applications": 500,
+    "events": 150,
+    "event_registrations": 250,
+    "donations": 400,
+    "eco_products": 120,
+    "orders": 180,
+    "order_items": 363
+  },
+  "notice": "All organisations, people, contact details, registration numbers, events, donations, products and transactions are fictional synthetic demo data. They are not real NGOs, verified registrations or real payments."
+}

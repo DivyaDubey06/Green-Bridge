@@ -11,4 +11,6 @@ services:
       - key: USE_MOCK_DATABASE
         value: "false"
       - key: DATABASE_URL
-        value: mongodb+srv://meetdivya2006_db_user:euCZBJI2k1kvo4o@greenbridgecluster.ohwscj9.mongodb.net/greenbridge?appName=GreenBridgeCluster
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true

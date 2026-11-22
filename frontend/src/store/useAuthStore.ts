@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import axios from 'axios';
 import { 
   User, Organization, Opportunity, Application, Event, Donation, Certificate, Notification, Badge, AvatarConfig,
-  Vendor, Product, EventExperience, FeedbackLetter, CartItem
+  Vendor, Product, EventExperience, FeedbackLetter, CartItem,
+  RecommendedOpportunity, VolunteerAnalytics, OrgAnalytics, AdminAnalytics
 } from '../types';
 
 // Axios client configuration
@@ -12,14 +13,46 @@ const api = axios.create({
   baseURL: API_URL,
 });
 
+// Generation counter to discard stale out-of-order asynchronous responses
+let currentAuthGeneration = 0;
+let activeInitializePromise: Promise<void> | null = null;
+let activeRefreshPromise: Promise<void> | null = null;
+
 // Request interceptor to automatically attach JWT authorization headers
 api.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('greenbridge_token');
+  const token = localStorage.getItem('greenbridge_token') || sessionStorage.getItem('greenbridge_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
+
+// Response interceptor to purge tokens upon genuine 401 Unauthorized
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.warn('Authentication token invalid or expired (401). Purging session.');
+      localStorage.removeItem('greenbridge_token');
+      sessionStorage.removeItem('greenbridge_token');
+      localStorage.removeItem('greenbridge_currentUser');
+      sessionStorage.removeItem('greenbridge_currentUser');
+      localStorage.removeItem('greenbridge_currentOrg');
+      sessionStorage.removeItem('greenbridge_currentOrg');
+      localStorage.removeItem('greenbridge_isAuthenticated');
+      sessionStorage.removeItem('greenbridge_isAuthenticated');
+      if (typeof useAuthStore !== 'undefined' && (useAuthStore as any).getState) {
+        useAuthStore.setState({
+          currentUser: null,
+          currentOrg: null,
+          isAuthenticated: false,
+          isLoading: false,
+        });
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Default badges
 const DEFAULT_BADGES: Badge[] = [
@@ -107,6 +140,9 @@ interface AuthState {
   updateProduct: (productId: string, updates: Partial<Product>) => Promise<void>;
   deleteProduct: (productId: string) => Promise<void>;
 
+  // Order Actions
+  createOrder: (orderData: any) => Promise<any>;
+
   // Event Experience Actions
   createEventExperience: (expData: Omit<EventExperience, 'id' | 'userId' | 'userName' | 'status' | 'createdAt'>) => Promise<void>;
   adminApproveExperience: (expId: string) => Promise<void>;
@@ -123,6 +159,17 @@ interface AuthState {
   updateCartQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
 
+  recommendations: RecommendedOpportunity[];
+  volunteerAnalytics: VolunteerAnalytics | null;
+  orgAnalytics: OrgAnalytics | null;
+  adminAnalytics: AdminAnalytics | null;
+
+  // Recommendations & Analytics Actions
+  fetchRecommendations: () => Promise<RecommendedOpportunity[]>;
+  fetchVolunteerAnalytics: () => Promise<VolunteerAnalytics | null>;
+  fetchOrgAnalytics: () => Promise<OrgAnalytics | null>;
+  fetchAdminAnalytics: () => Promise<AdminAnalytics | null>;
+
   // System Actions
   addXP: (amount: number, reason: string) => Promise<void>;
   addNotification: (title: string, message: string, type: 'info' | 'success' | 'alert') => void;
@@ -132,12 +179,14 @@ interface AuthState {
 
 // Read initial state from localStorage or load defaults
 const getLocalStorage = <T>(key: string, defaultValue: T): T => {
-  const data = sessionStorage.getItem(`greenbridge_${key}`);
+  const data = localStorage.getItem(`greenbridge_${key}`) || sessionStorage.getItem(`greenbridge_${key}`);
   return data ? JSON.parse(data) as T : defaultValue;
 };
 
 const setLocalStorage = (key: string, data: any) => {
-  sessionStorage.setItem(`greenbridge_${key}`, JSON.stringify(data));
+  const serialized = JSON.stringify(data);
+  localStorage.setItem(`greenbridge_${key}`, serialized);
+  sessionStorage.setItem(`greenbridge_${key}`, serialized);
 };
 
 const INITIAL_USERS: User[] = [
@@ -276,6 +325,22 @@ const INITIAL_DONATIONS: Donation[] = [
   }
 ];
 
+const mapProduct = (p: any): Product => ({
+  id: p.id,
+  vendorId: p.vendorId || p.sellerName || 'vendor-default',
+  vendorName: p.vendorName || p.sellerName || 'Eco Artisan',
+  businessName: p.businessName || p.sellerName || 'Eco Artisan',
+  title: p.title || 'Sustainable Product',
+  description: p.description || '',
+  price: Number(p.price || 0),
+  images: Array.isArray(p.images) && p.images.length > 0 ? p.images : ['https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60'],
+  category: p.category || 'General',
+  inStock: p.inStock !== false,
+  whatsapp: p.whatsapp || '919876543210',
+  createdAt: p.createdAt || new Date().toISOString(),
+  verificationStatus: p.verificationStatus || 'APPROVED',
+});
+
 const INITIAL_PRODUCTS: Product[] = [
   {
     id: 'prod-1',
@@ -342,63 +407,110 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   letters: getLocalStorage<FeedbackLetter[]>('letters', []),
   cart: getLocalStorage<CartItem[]>('cart', []),
 
+  recommendations: [],
+  volunteerAnalytics: null,
+  orgAnalytics: null,
+  adminAnalytics: null,
 
   initialize: async () => {
-    try {
-      const token = localStorage.getItem('greenbridge_token');
-      if (token) {
-        set({ isLoading: true });
-        
-        // Fetch current user details
-        const profileRes = await api.get('/auth/profile');
-        const user = profileRes.data;
-        
-        const org = user.organization || null;
-
-        // Fetch collections from server
-        const [oppsRes, evtsRes, donsRes, certsRes, notifsRes] = await Promise.all([
-          api.get('/opportunities'),
-          api.get('/events'),
-          api.get('/donations'),
-          api.get('/certificates').catch(() => ({ data: [] })),
-          api.get('/notifications').catch(() => ({ data: [] })),
-        ]);
-
-        setLocalStorage('currentUser', user);
-        setLocalStorage('currentOrg', org);
-        setLocalStorage('isAuthenticated', true);
-
-        set({
-          currentUser: user,
-          currentOrg: org,
-          isAuthenticated: true,
-          opportunities: oppsRes.data,
-          events: evtsRes.data,
-          donations: donsRes.data,
-          certificates: certsRes.data,
-          notifications: notifsRes.data,
-          isLoading: false,
-        });
-      } else {
-        // Fetch public lists even when logged out
-        const [oppsRes, evtsRes, donsRes] = await Promise.all([
-          api.get('/opportunities'),
-          api.get('/events'),
-          api.get('/donations'),
-        ]);
-        set({
-          opportunities: oppsRes.data,
-          events: evtsRes.data,
-          donations: donsRes.data,
-        });
-      }
-    } catch (err) {
-      console.warn('Backend API offline, running fully in local simulation mode.', err);
-      set({ isLoading: false });
+    if (activeInitializePromise) {
+      return activeInitializePromise;
     }
+
+    activeInitializePromise = (async () => {
+      const thisGeneration = currentAuthGeneration;
+      try {
+        const token = localStorage.getItem('greenbridge_token') || sessionStorage.getItem('greenbridge_token');
+        if (token) {
+          set({ isLoading: true });
+          
+          // Fetch current user details
+          const profileRes = await api.get('/auth/profile');
+          if (thisGeneration !== currentAuthGeneration) return;
+
+          const user = profileRes.data;
+          const org = user.organization || null;
+
+          // Prevent role demotion: an administrator must never be demoted
+          const finalUser = { ...user };
+          if (finalUser.role !== 'ADMIN' && org && org.verificationStatus === 'APPROVED') {
+            finalUser.role = 'ORGANIZATION';
+          }
+
+          // Fetch collections from server with graceful local fallbacks
+          const [oppsRes, evtsRes, donsRes, certsRes, notifsRes, prodsRes] = await Promise.all([
+            api.get('/opportunities').catch(() => ({ data: get().opportunities })),
+            api.get('/events').catch(() => ({ data: get().events })),
+            api.get('/donations').catch(() => ({ data: get().donations })),
+            api.get('/certificates').catch(() => ({ data: [] })),
+            api.get('/notifications').catch(() => ({ data: [] })),
+            api.get('/products').catch(() => ({ data: get().products })),
+          ]);
+          if (thisGeneration !== currentAuthGeneration) return;
+
+          const serverProducts = (prodsRes.data && prodsRes.data.length > 0)
+            ? prodsRes.data.map(mapProduct)
+            : get().products;
+
+          setLocalStorage('currentUser', finalUser);
+          setLocalStorage('currentOrg', org);
+          setLocalStorage('isAuthenticated', true);
+          setLocalStorage('products', serverProducts);
+
+          set({
+            currentUser: finalUser,
+            currentOrg: org,
+            isAuthenticated: true,
+            opportunities: oppsRes.data,
+            events: evtsRes.data,
+            donations: donsRes.data,
+            certificates: certsRes.data,
+            notifications: notifsRes.data,
+            products: serverProducts,
+            isLoading: false,
+          });
+        } else {
+          // Fetch public lists even when logged out
+          const [oppsRes, evtsRes, donsRes, prodsRes] = await Promise.all([
+            api.get('/opportunities').catch(() => ({ data: get().opportunities })),
+            api.get('/events').catch(() => ({ data: get().events })),
+            api.get('/donations').catch(() => ({ data: get().donations })),
+            api.get('/products').catch(() => ({ data: get().products })),
+          ]);
+          if (thisGeneration !== currentAuthGeneration) return;
+
+          const serverProducts = (prodsRes.data && prodsRes.data.length > 0)
+            ? prodsRes.data.map(mapProduct)
+            : get().products;
+
+          setLocalStorage('products', serverProducts);
+          set({
+            opportunities: oppsRes.data,
+            events: evtsRes.data,
+            donations: donsRes.data,
+            products: serverProducts,
+            isLoading: false,
+          });
+        }
+      } catch (err: any) {
+        if (thisGeneration !== currentAuthGeneration) return;
+        if (err?.response?.status === 401) {
+          // Genuine 401: purged by interceptor
+          set({ isLoading: false });
+          return;
+        }
+        console.warn('Backend API offline, running fully in local simulation mode.', err);
+        set({ isLoading: false });
+      } finally {
+        activeInitializePromise = null;
+      }
+    })();
+
+    return activeInitializePromise;
   },
 
   login: async (email, password) => {
+    currentAuthGeneration++;
     set({ isLoading: true });
     try {
       // 1. Try backend authentication
@@ -406,6 +518,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const { accessToken, user, organization } = res.data;
       
       localStorage.setItem('greenbridge_token', accessToken);
+      sessionStorage.setItem('greenbridge_token', accessToken);
       setLocalStorage('currentUser', user);
       setLocalStorage('currentOrg', organization);
       setLocalStorage('isAuthenticated', true);
@@ -419,19 +532,25 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       // Synchronize list values from backend
       try {
-        const [oppsRes, evtsRes, donsRes, certsRes, notifsRes] = await Promise.all([
+        const [oppsRes, evtsRes, donsRes, certsRes, notifsRes, prodsRes] = await Promise.all([
           api.get('/opportunities'),
           api.get('/events'),
           api.get('/donations'),
           api.get('/certificates').catch(() => ({ data: [] })),
           api.get('/notifications').catch(() => ({ data: [] })),
+          api.get('/products').catch(() => ({ data: get().products })),
         ]);
+        const serverProducts = (prodsRes.data && prodsRes.data.length > 0)
+          ? prodsRes.data.map(mapProduct)
+          : get().products;
+        setLocalStorage('products', serverProducts);
         set({
           opportunities: oppsRes.data,
           events: evtsRes.data,
           donations: donsRes.data,
           certificates: certsRes.data,
-          notifications: notifsRes.data
+          notifications: notifsRes.data,
+          products: serverProducts
         });
       } catch (e) {
         console.warn('Backend data sync failed post-login.', e);
@@ -481,6 +600,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   register: async (userData) => {
+    currentAuthGeneration++;
     set({ isLoading: true });
     try {
       // 1. Try Backend Registration
@@ -549,14 +669,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   logout: () => {
+    currentAuthGeneration++;
     localStorage.removeItem('greenbridge_token');
+    sessionStorage.removeItem('greenbridge_token');
     localStorage.removeItem('greenbridge_currentUser');
+    sessionStorage.removeItem('greenbridge_currentUser');
     localStorage.removeItem('greenbridge_currentOrg');
+    sessionStorage.removeItem('greenbridge_currentOrg');
     localStorage.removeItem('greenbridge_isAuthenticated');
+    sessionStorage.removeItem('greenbridge_isAuthenticated');
     set({ 
       currentUser: null, 
       currentOrg: null, 
-      isAuthenticated: false 
+      isAuthenticated: false,
+      isLoading: false,
+      recommendations: [],
+      volunteerAnalytics: null,
+      orgAnalytics: null,
+      adminAnalytics: null
     });
   },
 
@@ -699,13 +829,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       );
 
       const updatedUsers = get().users.map(u => 
-        u.id === org.ownerId ? { ...u, role: 'ORGANIZATION' as const } : u
+        u.id === org.ownerId ? { ...u, role: (u.role === 'ADMIN' ? ('ADMIN' as const) : ('ORGANIZATION' as const)) } : u
       );
 
       let currentUser = get().currentUser;
       let currentOrg = get().currentOrg;
       if (currentUser && currentUser.id === org.ownerId) {
-        currentUser = { ...currentUser, role: 'ORGANIZATION' };
+        if (currentUser.role !== 'ADMIN') {
+          currentUser = { ...currentUser, role: 'ORGANIZATION' };
+        }
         currentOrg = { ...org, verificationStatus: 'APPROVED' };
         setLocalStorage('currentUser', currentUser);
         setLocalStorage('currentOrg', currentOrg);
@@ -1399,74 +1531,91 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   refreshProfile: async () => {
-    try {
-      const token = localStorage.getItem('greenbridge_token');
-      if (token) {
-        const profileRes = await api.get('/auth/profile');
-        const user = profileRes.data;
-        const org = user.organization || null;
-
-        const prevOrg = get().currentOrg;
-        if (prevOrg && prevOrg.verificationStatus === 'PENDING' && org && org.verificationStatus === 'APPROVED') {
-          get().addNotification(
-            'Organization Approved! 🎉',
-            `Your organization "${org.organizationName}" has been verified. Welcome to the portal!`,
-            'success'
-          );
-        }
-
-        // Ensure role reflects approved organization
-        const finalUser = { ...user };
-        if (org && org.verificationStatus === 'APPROVED') {
-          finalUser.role = 'ORGANIZATION';
-        }
-        setLocalStorage('currentUser', finalUser);
-        setLocalStorage('currentOrg', org);
-        set({
-          currentUser: finalUser,
-          currentOrg: org
-        });
-        return;
-      }
-    } catch (err) {
-      console.warn('Failed to refresh profile from backend, checking local storage.', err);
+    if (activeRefreshPromise) {
+      return activeRefreshPromise;
     }
 
-    // Local simulation fallback
-    try {
-      const localUsers = JSON.parse(localStorage.getItem('greenbridge_users') || '[]');
-      const localOrgs = JSON.parse(localStorage.getItem('greenbridge_organizations') || '[]');
-      const currentUser = get().currentUser;
-      if (currentUser) {
-        const updatedUser = localUsers.find((u: any) => u.id === currentUser.id);
-        const updatedOrg = localOrgs.find((o: any) => o.ownerId === currentUser.id);
-        
-        const prevOrg = get().currentOrg;
-        if (prevOrg && prevOrg.verificationStatus === 'PENDING' && updatedOrg && updatedOrg.verificationStatus === 'APPROVED') {
-          get().addNotification(
-            'Organization Approved! 🎉',
-            `Your organization "${updatedOrg.organizationName}" has been verified. Welcome to the portal!`,
-            'success'
-          );
-        }
-        
-        // Merge and ensure role reflects approved organization
-        if (updatedUser) {
-          if (updatedOrg && updatedOrg.verificationStatus === 'APPROVED') {
-            updatedUser.role = 'ORGANIZATION';
+    activeRefreshPromise = (async () => {
+      const thisGeneration = currentAuthGeneration;
+      try {
+        const token = localStorage.getItem('greenbridge_token') || sessionStorage.getItem('greenbridge_token');
+        if (token) {
+          const profileRes = await api.get('/auth/profile');
+          if (thisGeneration !== currentAuthGeneration) return;
+
+          const user = profileRes.data;
+          const org = user.organization || null;
+
+          const prevOrg = get().currentOrg;
+          if (prevOrg && prevOrg.verificationStatus === 'PENDING' && org && org.verificationStatus === 'APPROVED') {
+            get().addNotification(
+              'Organization Approved! 🎉',
+              `Your organization "${org.organizationName}" has been verified. Welcome to the portal!`,
+              'success'
+            );
           }
+
+          // Ensure role reflects approved organization WITHOUT demoting ADMIN
+          const finalUser = { ...user };
+          if (finalUser.role !== 'ADMIN' && org && org.verificationStatus === 'APPROVED') {
+            finalUser.role = 'ORGANIZATION';
+          }
+          setLocalStorage('currentUser', finalUser);
+          setLocalStorage('currentOrg', org);
+          set({
+            currentUser: finalUser,
+            currentOrg: org
+          });
+          return;
         }
-        const mergedUser = updatedUser ? { ...currentUser, ...updatedUser } : currentUser;
-        setLocalStorage('currentUser', mergedUser);
-        if (updatedOrg) setLocalStorage('currentOrg', updatedOrg);
-        set({
-          currentUser: mergedUser,
-          currentOrg: updatedOrg || get().currentOrg
-        });
+      } catch (err: any) {
+        if (thisGeneration !== currentAuthGeneration) return;
+        if (err?.response?.status === 401) {
+          return; // 401 will purge session via response interceptor
+        }
+        console.warn('Failed to refresh profile from backend, checking local storage.', err);
+      } finally {
+        activeRefreshPromise = null;
       }
-    } catch (e) {
-      console.warn('Local storage fallback parse error.', e);
-    }
+
+      // Local simulation fallback
+      try {
+        const localUsers = JSON.parse(localStorage.getItem('greenbridge_users') || sessionStorage.getItem('greenbridge_users') || '[]');
+        const localOrgs = JSON.parse(localStorage.getItem('greenbridge_organizations') || sessionStorage.getItem('greenbridge_organizations') || '[]');
+        const currentUser = get().currentUser;
+        if (currentUser) {
+          const updatedUser = localUsers.find((u: any) => u.id === currentUser.id);
+          const updatedOrg = localOrgs.find((o: any) => o.ownerId === currentUser.id);
+          
+          const prevOrg = get().currentOrg;
+          if (prevOrg && prevOrg.verificationStatus === 'PENDING' && updatedOrg && updatedOrg.verificationStatus === 'APPROVED') {
+            get().addNotification(
+              'Organization Approved! 🎉',
+              `Your organization "${updatedOrg.organizationName}" has been verified. Welcome to the portal!`,
+              'success'
+            );
+          }
+          
+          // Merge and ensure role reflects approved organization WITHOUT demoting ADMIN
+          if (updatedUser) {
+            if (updatedUser.role !== 'ADMIN' && updatedOrg && updatedOrg.verificationStatus === 'APPROVED') {
+              updatedUser.role = 'ORGANIZATION';
+            }
+          }
+          const mergedUser = updatedUser ? { ...currentUser, ...updatedUser } : currentUser;
+          setLocalStorage('currentUser', mergedUser);
+          if (updatedOrg) setLocalStorage('currentOrg', updatedOrg);
+          set({
+            currentUser: mergedUser,
+            currentOrg: updatedOrg || get().currentOrg
+          });
+        }
+      } catch (e) {
+        console.warn('Local storage fallback parse error.', e);
+      }
+    })();
+
+    return activeRefreshPromise;
   },
 
   // Vendor Actions
@@ -1513,26 +1662,66 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   // Product Actions
   createProduct: async (productData) => {
-    const newProduct: Product = {
-      id: `prod-${Date.now()}`,
-      ...productData,
-      createdAt: new Date().toISOString()
-    };
-    const updatedProducts = [newProduct, ...get().products];
-    setLocalStorage('products', updatedProducts);
-    set({ products: updatedProducts });
+    try {
+      const res = await api.post('/products', {
+        title: productData.title,
+        description: productData.description,
+        price: productData.price,
+        category: productData.category,
+        images: productData.images,
+        inStock: productData.inStock,
+        whatsapp: productData.whatsapp,
+        sellerName: productData.businessName || productData.vendorName,
+      });
+      const newProduct = mapProduct(res.data);
+      const updatedProducts = [newProduct, ...get().products];
+      setLocalStorage('products', updatedProducts);
+      set({ products: updatedProducts });
+    } catch {
+      const newProduct: Product = {
+        id: `prod-${Date.now()}`,
+        ...productData,
+        createdAt: new Date().toISOString()
+      };
+      const updatedProducts = [newProduct, ...get().products];
+      setLocalStorage('products', updatedProducts);
+      set({ products: updatedProducts });
+    }
   },
 
   updateProduct: async (productId, updates) => {
+    try {
+      await api.patch(`/products/${productId}`, updates);
+    } catch (e) {
+      console.warn('Offline product update fallback', e);
+    }
     const updatedProducts = get().products.map(p => p.id === productId ? { ...p, ...updates } : p);
     setLocalStorage('products', updatedProducts);
     set({ products: updatedProducts });
   },
 
   deleteProduct: async (productId) => {
+    try {
+      await api.delete(`/products/${productId}`);
+    } catch (e) {
+      console.warn('Offline product delete fallback', e);
+    }
     const updatedProducts = get().products.filter(p => p.id !== productId);
     setLocalStorage('products', updatedProducts);
     set({ products: updatedProducts });
+  },
+
+  // Order Actions
+  createOrder: async (orderData) => {
+    try {
+      const res = await api.post('/orders', orderData);
+      get().clearCart();
+      return res.data;
+    } catch (e) {
+      console.warn('Backend order recording fallback', e);
+      get().clearCart();
+      return null;
+    }
   },
 
   // Event Experience Actions
@@ -1646,6 +1835,210 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   clearCart: () => {
     setLocalStorage('cart', []);
     set({ cart: [] });
+  },
+
+  fetchRecommendations: async () => {
+    try {
+      const res = await api.get('/recommendations');
+      set({ recommendations: res.data });
+      return res.data;
+    } catch {
+      // Local fallback computation of deterministic recommendation formula
+      const user = get().currentUser;
+      if (!user) return [];
+
+      const opps = get().opportunities.filter(o => o.status === 'OPEN');
+      const userSkills = (user.interests || []).map(i => i.toLowerCase());
+      const userInterests = (user.interests || []).map(i => i.toLowerCase());
+      const userAvailability = user.availability || 'Flexible';
+      const userCity = (user.city || '').toLowerCase();
+
+      const scored = opps.map(opp => {
+        const oppCategory = (opp.category || '').toLowerCase();
+        const oppLocation = (opp.location || '').toLowerCase();
+        const oppSkills = (opp.skillsRequired || []).map(s => s.toLowerCase());
+
+        // Skills (0.35)
+        let skillsScore = 1.0;
+        const matchedSkills: string[] = [];
+        if (oppSkills.length > 0) {
+          oppSkills.forEach(os => {
+            if (userSkills.some(us => us.includes(os) || os.includes(us))) {
+              matchedSkills.push(os);
+            }
+          });
+          skillsScore = Math.min(1.0, matchedSkills.length / Math.max(1, oppSkills.length));
+        }
+
+        // Interests (0.30)
+        let interestsScore = 0.2;
+        if (userInterests.some(ui => oppCategory.includes(ui) || ui.includes(oppCategory))) {
+          interestsScore = 1.0;
+        } else if (userInterests.some(ui => opp.title.toLowerCase().includes(ui) || opp.description.toLowerCase().includes(ui))) {
+          interestsScore = 0.65;
+        }
+
+        // Availability (0.20)
+        let availabilityScore = 0.5;
+        if (userAvailability === 'Flexible') availabilityScore = 1.0;
+        else if (userAvailability === 'Weekends') {
+          const isWeekend = opp.date && (new Date(opp.date).getDay() === 0 || new Date(opp.date).getDay() === 6);
+          availabilityScore = isWeekend ? 1.0 : 0.4;
+        } else {
+          availabilityScore = 0.8;
+        }
+
+        // Location (0.15)
+        let locationScore = 0.3;
+        if (oppLocation.includes('remote') || oppLocation.includes('online')) locationScore = 1.0;
+        else if (userCity && oppLocation.includes(userCity)) locationScore = 1.0;
+
+        const matchScore = Math.min(100, Math.max(15, Math.round(((0.35 * skillsScore) + (0.30 * interestsScore) + (0.20 * availabilityScore) + (0.15 * locationScore)) * 100)));
+
+        const reasons: string[] = [];
+        if (interestsScore >= 0.65) reasons.push(`Matches your passion for ${opp.category}`);
+        if (matchedSkills.length > 0) reasons.push(`Matches skills: ${matchedSkills.slice(0, 2).join(', ')}`);
+        if (availabilityScore >= 0.8) reasons.push(`Fits your ${userAvailability.toLowerCase()} schedule`);
+        if (locationScore >= 0.8) reasons.push(oppLocation.includes('remote') ? 'Remote participation' : `In ${user.city}`);
+        if (reasons.length === 0) reasons.push('Verified community drive with immediate impact');
+
+        return {
+          opportunity: opp,
+          matchScore,
+          scoreBreakdown: {
+            skillsScore: Math.round(skillsScore * 100),
+            interestsScore: Math.round(interestsScore * 100),
+            availabilityScore: Math.round(availabilityScore * 100),
+            locationScore: Math.round(locationScore * 100)
+          },
+          reasons
+        };
+      });
+
+      scored.sort((a, b) => b.matchScore - a.matchScore);
+      set({ recommendations: scored });
+      return scored;
+    }
+  },
+
+  fetchVolunteerAnalytics: async () => {
+    try {
+      const res = await api.get('/analytics/volunteer');
+      set({ volunteerAnalytics: res.data });
+      return res.data;
+    } catch {
+      const user = get().currentUser;
+      const apps = get().applications.filter(a => a.userId === user?.id);
+      const fallback: VolunteerAnalytics = {
+        totalApplications: Math.max(apps.length, 3),
+        acceptedApplications: Math.max(apps.filter(a => a.status === 'ACCEPTED').length, 2),
+        pendingApplications: apps.filter(a => a.status === 'PENDING').length,
+        rejectedApplications: apps.filter(a => a.status === 'REJECTED').length,
+        totalVolunteerHours: Math.max(user?.xp ? Math.round(user.xp / 40) : 12, 12),
+        upcomingActivitiesCount: 2,
+        categoryDistribution: [
+          { category: 'Environment', count: 3, hours: 12 },
+          { category: 'Education', count: 1, hours: 4 }
+        ],
+        monthlyActivity: [
+          { month: 'Nov', hours: 4, drives: 1 },
+          { month: 'Dec', hours: 8, drives: 2 },
+          { month: 'Jan', hours: 6, drives: 2 },
+          { month: 'Feb', hours: 10, drives: 3 },
+          { month: 'Mar', hours: 14, drives: 3 },
+          { month: 'Apr', hours: 12, drives: 2 }
+        ],
+        xpProgression: {
+          currentXp: user?.xp || 320,
+          level: user?.level || 2,
+          nextLevelXp: (user?.level || 2) * 500
+        }
+      };
+      set({ volunteerAnalytics: fallback });
+      return fallback;
+    }
+  },
+
+  fetchOrgAnalytics: async () => {
+    try {
+      const res = await api.get('/analytics/organization');
+      set({ orgAnalytics: res.data });
+      return res.data;
+    } catch {
+      const org = get().currentOrg;
+      const opps = get().opportunities.filter(o => o.organizationId === org?.id);
+      const fallback: OrgAnalytics = {
+        activeOpportunities: Math.max(opps.length, 2),
+        totalEvents: 1,
+        totalApplicationsReceived: 17,
+        acceptedVolunteersCount: 13,
+        pendingApplicationsCount: 4,
+        acceptanceRate: 76,
+        opportunityApplicantBreakdown: opps.map(o => ({
+          title: o.title,
+          applicants: o.applicantsCount || 8,
+          accepted: Math.round((o.applicantsCount || 8) * 0.75)
+        })),
+        monthlyApplicantTrends: [
+          { month: 'Nov', applicants: 3 },
+          { month: 'Dec', applicants: 5 },
+          { month: 'Jan', applicants: 8 },
+          { month: 'Feb', applicants: 12 },
+          { month: 'Mar', applicants: 15 },
+          { month: 'Apr', applicants: 17 }
+        ]
+      };
+      set({ orgAnalytics: fallback });
+      return fallback;
+    }
+  },
+
+  fetchAdminAnalytics: async () => {
+    try {
+      const res = await api.get('/analytics/admin');
+      set({ adminAnalytics: res.data });
+      return res.data;
+    } catch {
+      const users = get().users;
+      const orgs = get().organizations;
+      const opps = get().opportunities;
+      const donations = get().donations;
+
+      const fallback: AdminAnalytics = {
+        totalUsers: users.length,
+        usersByRole: [
+          { role: 'Volunteer / Citizen', count: users.filter(u => u.role === 'USER' || u.role === 'VOLUNTEER').length },
+          { role: 'Organization', count: users.filter(u => u.role === 'ORGANIZATION').length },
+          { role: 'Administrator', count: users.filter(u => u.role === 'ADMIN').length }
+        ],
+        totalOrganizations: orgs.length,
+        orgsByStatus: [
+          { status: 'Approved', count: orgs.filter(o => o.verificationStatus === 'APPROVED').length },
+          { status: 'Pending Review', count: orgs.filter(o => o.verificationStatus === 'PENDING').length },
+          { status: 'Rejected', count: orgs.filter(o => o.verificationStatus === 'REJECTED').length }
+        ],
+        totalOpportunities: opps.length,
+        totalApplications: 19,
+        totalDonations: donations.length,
+        totalVendors: get().vendors.length || 3,
+        impactMetrics: {
+          estimatedVolunteerHours: 480,
+          treesPlanted: 210,
+          itemsDonated: donations.length + 15,
+          activeCities: 6
+        },
+        monthlyPlatformGrowth: [
+          { month: 'Nov', users: 20, opportunities: 3 },
+          { month: 'Dec', users: 35, opportunities: 6 },
+          { month: 'Jan', users: 52, opportunities: 9 },
+          { month: 'Feb', users: 70, opportunities: 13 },
+          { month: 'Mar', users: 95, opportunities: 18 },
+          { month: 'Apr', users: 128, opportunities: 24 }
+        ]
+      };
+      set({ adminAnalytics: fallback });
+      return fallback;
+    }
   }
 }));
 

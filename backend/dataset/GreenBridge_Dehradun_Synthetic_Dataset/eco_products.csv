@@ -1,0 +1,121 @@
+﻿product_id,product_name,category,price_inr,seller_name,seller_locality,city,stock_quantity,material,eco_claim,product_status,is_synthetic
+ECO0001,Recycled Paper Gift Wrap,Home and Gifting,119,PaperSprout Studio,Majra,Dehradun,16,Bamboo,Recycled material,Out of Stock,True
+ECO0002,Solar Study Lamp,Energy Saving,919,Himalayan Light Co-op,Clement Town,Dehradun,47,Recycled paper,Locally crafted,Active,True
+ECO0003,Solar Study Lamp,Energy Saving,899,Himalayan Light Co-op,Bindal,Dehradun,120,Reused fabric,Recycled material,Active,True
+ECO0004,Natural Cleaning Refill,Home Care,159,Doon Refill Corner,Clock Tower,Dehradun,16,Recycled paper,Reusable,Active,True
+ECO0005,Seed Ball Pack,Gardening,89,Mountain Roots Workshop,Ballupur,Dehradun,60,Steel,Plastic-free packaging,Out of Stock,True
+ECO0006,Seed Ball Pack,Gardening,109,Mountain Roots Workshop,Survey Chowk,Dehradun,21,Reused fabric,Reusable,Active,True
+ECO0007,Seed Ball Pack,Gardening,89,Mountain Roots Workshop,Paltan Bazaar,Dehradun,34,Terracotta,Recycled material,Active,True
+ECO0008,Cloth Grocery Bag Set,Reusable Products,249,Sakhi Stitch Collective,Malsi,Dehradun,94,Organic cotton,Recycled material,Active,True
+ECO0009,Cloth Grocery Bag Set,Reusable Products,179,Sakhi Stitch Collective,Patel Nagar,Dehradun,92,Steel,Plastic-free packaging,Active,True
+ECO0010,Recycled Glass Vase,Home and Gifting,399,ReCraft Doon,Sahastradhara Road,Dehradun,77,Reused fabric,Locally crafted,Out of Stock,True
+ECO0011,Terracotta Planter,Gardening,229,Mitti Makers,Ladpur,Dehradun,51,Steel,Low-waste,Active,True
+ECO0012,Seed Ball Pack,Gardening,139,Mountain Roots Workshop,Patel Nagar,Dehradun,108,Organic cotton,Locally crafted,Out of Stock,True
+ECO0013,Steel Lunch Box,Reusable Products,479,Doon Eco Supplies,Rajpur Road,Dehradun,64,Steel,Locally crafted,Active,True
+ECO0014,Seed Ball Pack,Gardening,89,Mountain Roots Workshop,Subhash Nagar,Dehradun,114,Organic cotton,Reusable,Active,True
+ECO0015,Seed Ball Pack,Gardening,139,Mountain Roots Workshop,Majra,Dehradun,5,Recycled paper,Recycled material,Active,True
+ECO0016,Seed Paper Notebook,Stationery,129,PaperSprout Studio,Chakrata Road,Dehradun,60,Organic cotton,Locally crafted,Active,True
+ECO0017,Recycled Paper Gift Wrap,Home and Gifting,99,PaperSprout Studio,Race Course,Dehradun,120,Recycled paper,Recycled material,Active,True
+ECO0018,Recycled Glass Vase,Home and Gifting,369,ReCraft Doon,Race Course,Dehradun,26,Natural fibre,Plastic-free packaging,Out of Stock,True
+ECO0019,Recycled Glass Vase,Home and Gifting,329,ReCraft Doon,GMS Road,Dehradun,63,Reused fabric,Reusable,Out of Stock,True
+ECO0020,Recycled Glass Vase,Home and Gifting,349,ReCraft Doon,Dalanwala,Dehradun,92,Bamboo,Reusable,Active,True
+ECO0021,Recycled Glass Vase,Home and Gifting,399,ReCraft Doon,Nehru Colony,Dehradun,75,Bamboo,Recycled material,Active,True
+ECO0022,Steel Lunch Box,Reusable Products,499,Doon Eco Supplies,Nehru Colony,Dehradun,10,Reused fabric,Reusable,Active,True
+ECO0023,Natural Cleaning Refill,Home Care,179,Doon Refill Corner,Dalanwala,Dehradun,108,Bamboo,Low-waste,Active,True
+ECO0024,Bamboo Desk Organiser,Home and Gifting,329,ReCraft Doon,Sahastradhara Road,Dehradun,85,Terracotta,Low-waste,Out of Stock,True
+ECO0025,Steel Lunch Box,Reusable Products,549,Doon Eco Supplies,Raipur,Dehradun,17,Steel,Locally crafted,Active,True
+ECO0026,Bamboo Desk Organiser,Home and Gifting,329,ReCraft Doon,Rajpur Road,Dehradun,90,Terracotta,Plastic-free packaging,Active,True
+ECO0027,Reusable Steel Bottle,Reusable Products,419,Doon Eco Supplies,Ladpur,Dehradun,69,Steel,Plastic-free packaging,Active,True
+ECO0028,Bamboo Toothbrush Pack,Personal Care,129,Doon Eco Supplies,Sahastradhara Road,Dehradun,60,Reused fabric,Plastic-free packaging,Active,True
+ECO0029,Recycled Paper Gift Wrap,Home and Gifting,149,PaperSprout Studio,Vasant Vihar,Dehradun,16,Natural fibre,Recycled material,Active,True
+ECO0030,Cocopeat Grow Bag,Gardening,169,Green Balcony Works,Vasant Vihar,Dehradun,44,Recycled paper,Reusable,Active,True
+ECO0031,Upcycled Fabric Tote,Accessories,279,Sakhi Stitch Collective,Ballupur,Dehradun,55,Terracotta,Low-waste,Active,True
+ECO0032,Recycled Paper Gift Wrap,Home and Gifting,99,PaperSprout Studio,Vasant Vihar,Dehradun,1,Recycled paper,Recycled material,Active,True
+ECO0033,Cocopeat Grow Bag,Gardening,169,Green Balcony Works,Ladpur,Dehradun,74,Steel,Low-waste,Active,True
+ECO0034,Bamboo Desk Organiser,Home and Gifting,299,ReCraft Doon,Nehru Colony,Dehradun,83,Recycled paper,Reusable,Active,True
+ECO0035,Natural Cleaning Refill,Home Care,229,Doon Refill Corner,Doiwala,Dehradun,25,Terracotta,Low-waste,Active,True
+ECO0036,Terracotta Planter,Gardening,249,Mitti Makers,Bindal,Dehradun,83,Terracotta,Locally crafted,Active,True
+ECO0037,Recycled Glass Vase,Home and Gifting,369,ReCraft Doon,Rajpur Road,Dehradun,80,Terracotta,Reusable,Active,True
+ECO0038,Upcycled Fabric Tote,Accessories,349,Sakhi Stitch Collective,Race Course,Dehradun,75,Recycled paper,Locally crafted,Active,True
+ECO0039,Recycled Glass Vase,Home and Gifting,369,ReCraft Doon,Clement Town,Dehradun,83,Recycled paper,Recycled material,Out of Stock,True
+ECO0040,Bamboo Desk Organiser,Home and Gifting,279,ReCraft Doon,Paltan Bazaar,Dehradun,49,Natural fibre,Low-waste,Active,True
+ECO0041,Solar Study Lamp,Energy Saving,899,Himalayan Light Co-op,Nehru Colony,Dehradun,52,Organic cotton,Plastic-free packaging,Active,True
+ECO0042,Recycled Paper Gift Wrap,Home and Gifting,79,PaperSprout Studio,Prem Nagar,Dehradun,119,Recycled paper,Reusable,Active,True
+ECO0043,Recycled Paper Gift Wrap,Home and Gifting,119,PaperSprout Studio,Sahastradhara Road,Dehradun,112,Steel,Plastic-free packaging,Active,True
+ECO0044,Cloth Grocery Bag Set,Reusable Products,199,Sakhi Stitch Collective,Bindal,Dehradun,44,Recycled paper,Reusable,Out of Stock,True
+ECO0045,Recycled Paper Gift Wrap,Home and Gifting,119,PaperSprout Studio,Prem Nagar,Dehradun,116,Recycled paper,Locally crafted,Active,True
+ECO0046,Reusable Steel Bottle,Reusable Products,379,Doon Eco Supplies,Ladpur,Dehradun,19,Steel,Low-waste,Active,True
+ECO0047,Seed Ball Pack,Gardening,89,Mountain Roots Workshop,Doiwala,Dehradun,96,Organic cotton,Recycled material,Out of Stock,True
+ECO0048,Natural Cleaning Refill,Home Care,179,Doon Refill Corner,Clock Tower,Dehradun,35,Recycled paper,Plastic-free packaging,Active,True
+ECO0049,Recycled Paper Gift Wrap,Home and Gifting,99,PaperSprout Studio,GMS Road,Dehradun,52,Organic cotton,Low-waste,Active,True
+ECO0050,Bamboo Toothbrush Pack,Personal Care,149,Doon Eco Supplies,Chakrata Road,Dehradun,85,Recycled paper,Locally crafted,Active,True
+ECO0051,Seed Paper Notebook,Stationery,109,PaperSprout Studio,Paltan Bazaar,Dehradun,115,Reused fabric,Locally crafted,Active,True
+ECO0052,Steel Lunch Box,Reusable Products,549,Doon Eco Supplies,Majra,Dehradun,78,Organic cotton,Plastic-free packaging,Active,True
+ECO0053,Bamboo Desk Organiser,Home and Gifting,299,ReCraft Doon,Clement Town,Dehradun,38,Recycled paper,Locally crafted,Out of Stock,True
+ECO0054,Seed Paper Notebook,Stationery,149,PaperSprout Studio,Sahastradhara Road,Dehradun,87,Organic cotton,Low-waste,Out of Stock,True
+ECO0055,Natural Cleaning Refill,Home Care,159,Doon Refill Corner,Vasant Vihar,Dehradun,92,Steel,Plastic-free packaging,Active,True
+ECO0056,Cocopeat Grow Bag,Gardening,139,Green Balcony Works,Race Course,Dehradun,87,Organic cotton,Low-waste,Active,True
+ECO0057,Steel Lunch Box,Reusable Products,499,Doon Eco Supplies,Majra,Dehradun,101,Organic cotton,Plastic-free packaging,Active,True
+ECO0058,Bamboo Toothbrush Pack,Personal Care,149,Doon Eco Supplies,Prem Nagar,Dehradun,51,Steel,Locally crafted,Active,True
+ECO0059,Upcycled Fabric Tote,Accessories,349,Sakhi Stitch Collective,Clement Town,Dehradun,23,Steel,Locally crafted,Out of Stock,True
+ECO0060,Recycled Paper Gift Wrap,Home and Gifting,119,PaperSprout Studio,Subhash Nagar,Dehradun,20,Steel,Recycled material,Active,True
+ECO0061,Upcycled Fabric Tote,Accessories,349,Sakhi Stitch Collective,Sahastradhara Road,Dehradun,41,Bamboo,Reusable,Active,True
+ECO0062,Recycled Glass Vase,Home and Gifting,329,ReCraft Doon,Ballupur,Dehradun,113,Reused fabric,Locally crafted,Active,True
+ECO0063,Natural Cleaning Refill,Home Care,159,Doon Refill Corner,Prem Nagar,Dehradun,89,Terracotta,Reusable,Out of Stock,True
+ECO0064,Steel Lunch Box,Reusable Products,549,Doon Eco Supplies,Paltan Bazaar,Dehradun,77,Steel,Plastic-free packaging,Out of Stock,True
+ECO0065,Recycled Glass Vase,Home and Gifting,369,ReCraft Doon,Majra,Dehradun,87,Natural fibre,Recycled material,Out of Stock,True
+ECO0066,Solar Study Lamp,Energy Saving,949,Himalayan Light Co-op,Dalanwala,Dehradun,105,Organic cotton,Recycled material,Active,True
+ECO0067,Solar Study Lamp,Energy Saving,879,Himalayan Light Co-op,Bindal,Dehradun,114,Organic cotton,Low-waste,Active,True
+ECO0068,Steel Lunch Box,Reusable Products,519,Doon Eco Supplies,Majra,Dehradun,105,Bamboo,Recycled material,Active,True
+ECO0069,Reusable Steel Bottle,Reusable Products,449,Doon Eco Supplies,Bindal,Dehradun,17,Bamboo,Locally crafted,Active,True
+ECO0070,Bamboo Desk Organiser,Home and Gifting,299,ReCraft Doon,Prem Nagar,Dehradun,13,Bamboo,Locally crafted,Active,True
+ECO0071,Terracotta Planter,Gardening,249,Mitti Makers,Survey Chowk,Dehradun,47,Terracotta,Reusable,Out of Stock,True
+ECO0072,Cloth Grocery Bag Set,Reusable Products,199,Sakhi Stitch Collective,Raipur,Dehradun,37,Bamboo,Plastic-free packaging,Active,True
+ECO0073,Compost Starter Kit,Gardening,549,Green Balcony Works,Ballupur,Dehradun,86,Organic cotton,Plastic-free packaging,Out of Stock,True
+ECO0074,Solar Study Lamp,Energy Saving,949,Himalayan Light Co-op,Chakrata Road,Dehradun,47,Recycled paper,Recycled material,Out of Stock,True
+ECO0075,Reusable Steel Bottle,Reusable Products,399,Doon Eco Supplies,Karanpur,Dehradun,115,Recycled paper,Recycled material,Active,True
+ECO0076,Seed Paper Notebook,Stationery,129,PaperSprout Studio,Prem Nagar,Dehradun,27,Organic cotton,Recycled material,Active,True
+ECO0077,Seed Ball Pack,Gardening,69,Mountain Roots Workshop,Paltan Bazaar,Dehradun,105,Bamboo,Low-waste,Out of Stock,True
+ECO0078,Cocopeat Grow Bag,Gardening,99,Green Balcony Works,Paltan Bazaar,Dehradun,101,Steel,Low-waste,Out of Stock,True
+ECO0079,Cocopeat Grow Bag,Gardening,139,Green Balcony Works,Ladpur,Dehradun,33,Natural fibre,Reusable,Active,True
+ECO0080,Steel Lunch Box,Reusable Products,479,Doon Eco Supplies,Doiwala,Dehradun,117,Natural fibre,Recycled material,Out of Stock,True
+ECO0081,Bamboo Toothbrush Pack,Personal Care,169,Doon Eco Supplies,Bindal,Dehradun,27,Organic cotton,Reusable,Active,True
+ECO0082,Bamboo Desk Organiser,Home and Gifting,329,ReCraft Doon,Karanpur,Dehradun,28,Bamboo,Reusable,Active,True
+ECO0083,Recycled Paper Gift Wrap,Home and Gifting,119,PaperSprout Studio,Patel Nagar,Dehradun,7,Steel,Reusable,Active,True
+ECO0084,Seed Ball Pack,Gardening,89,Mountain Roots Workshop,Nehru Colony,Dehradun,106,Terracotta,Low-waste,Active,True
+ECO0085,Natural Cleaning Refill,Home Care,179,Doon Refill Corner,Malsi,Dehradun,114,Steel,Locally crafted,Active,True
+ECO0086,Natural Cleaning Refill,Home Care,199,Doon Refill Corner,Doiwala,Dehradun,58,Bamboo,Reusable,Active,True
+ECO0087,Recycled Glass Vase,Home and Gifting,329,ReCraft Doon,Bindal,Dehradun,22,Bamboo,Plastic-free packaging,Out of Stock,True
+ECO0088,Bamboo Toothbrush Pack,Personal Care,149,Doon Eco Supplies,Prem Nagar,Dehradun,51,Natural fibre,Reusable,Active,True
+ECO0089,Compost Starter Kit,Gardening,569,Green Balcony Works,Survey Chowk,Dehradun,87,Terracotta,Low-waste,Active,True
+ECO0090,Seed Paper Notebook,Stationery,149,PaperSprout Studio,Prem Nagar,Dehradun,40,Organic cotton,Recycled material,Active,True
+ECO0091,Steel Lunch Box,Reusable Products,519,Doon Eco Supplies,Nehru Colony,Dehradun,40,Reused fabric,Locally crafted,Active,True
+ECO0092,Recycled Glass Vase,Home and Gifting,349,ReCraft Doon,Patel Nagar,Dehradun,30,Bamboo,Reusable,Active,True
+ECO0093,Terracotta Planter,Gardening,249,Mitti Makers,Ladpur,Dehradun,60,Reused fabric,Locally crafted,Active,True
+ECO0094,Recycled Glass Vase,Home and Gifting,399,ReCraft Doon,Nehru Colony,Dehradun,10,Terracotta,Locally crafted,Active,True
+ECO0095,Steel Lunch Box,Reusable Products,499,Doon Eco Supplies,Survey Chowk,Dehradun,101,Natural fibre,Plastic-free packaging,Active,True
+ECO0096,Seed Paper Notebook,Stationery,149,PaperSprout Studio,Prem Nagar,Dehradun,117,Recycled paper,Low-waste,Out of Stock,True
+ECO0097,Recycled Glass Vase,Home and Gifting,369,ReCraft Doon,Ballupur,Dehradun,36,Organic cotton,Reusable,Active,True
+ECO0098,Bamboo Toothbrush Pack,Personal Care,169,Doon Eco Supplies,Dalanwala,Dehradun,23,Organic cotton,Low-waste,Active,True
+ECO0099,Natural Cleaning Refill,Home Care,159,Doon Refill Corner,Karanpur,Dehradun,71,Steel,Plastic-free packaging,Out of Stock,True
+ECO0100,Solar Study Lamp,Energy Saving,899,Himalayan Light Co-op,Doiwala,Dehradun,98,Reused fabric,Recycled material,Active,True
+ECO0101,Bamboo Desk Organiser,Home and Gifting,279,ReCraft Doon,Clock Tower,Dehradun,50,Bamboo,Reusable,Active,True
+ECO0102,Compost Starter Kit,Gardening,549,Green Balcony Works,Ladpur,Dehradun,29,Reused fabric,Recycled material,Active,True
+ECO0103,Seed Paper Notebook,Stationery,129,PaperSprout Studio,Ballupur,Dehradun,39,Reused fabric,Locally crafted,Active,True
+ECO0104,Seed Paper Notebook,Stationery,149,PaperSprout Studio,GMS Road,Dehradun,52,Natural fibre,Reusable,Active,True
+ECO0105,Cocopeat Grow Bag,Gardening,139,Green Balcony Works,Doiwala,Dehradun,53,Recycled paper,Low-waste,Active,True
+ECO0106,Cocopeat Grow Bag,Gardening,119,Green Balcony Works,Malsi,Dehradun,16,Organic cotton,Recycled material,Active,True
+ECO0107,Bamboo Desk Organiser,Home and Gifting,299,ReCraft Doon,GMS Road,Dehradun,110,Recycled paper,Recycled material,Out of Stock,True
+ECO0108,Bamboo Toothbrush Pack,Personal Care,169,Doon Eco Supplies,Chakrata Road,Dehradun,64,Steel,Locally crafted,Active,True
+ECO0109,Natural Cleaning Refill,Home Care,179,Doon Refill Corner,Race Course,Dehradun,97,Reused fabric,Reusable,Active,True
+ECO0110,Steel Lunch Box,Reusable Products,499,Doon Eco Supplies,Clock Tower,Dehradun,75,Recycled paper,Recycled material,Active,True
+ECO0111,Recycled Paper Gift Wrap,Home and Gifting,79,PaperSprout Studio,Bindal,Dehradun,114,Bamboo,Locally crafted,Active,True
+ECO0112,Reusable Steel Bottle,Reusable Products,419,Doon Eco Supplies,Paltan Bazaar,Dehradun,66,Reused fabric,Reusable,Active,True
+ECO0113,Solar Study Lamp,Energy Saving,899,Himalayan Light Co-op,Ballupur,Dehradun,92,Bamboo,Reusable,Active,True
+ECO0114,Seed Paper Notebook,Stationery,129,PaperSprout Studio,Vasant Vihar,Dehradun,52,Organic cotton,Recycled material,Out of Stock,True
+ECO0115,Natural Cleaning Refill,Home Care,159,Doon Refill Corner,Race Course,Dehradun,32,Recycled paper,Plastic-free packaging,Active,True
+ECO0116,Recycled Glass Vase,Home and Gifting,399,ReCraft Doon,Rajpur Road,Dehradun,45,Steel,Reusable,Active,True
+ECO0117,Reusable Steel Bottle,Reusable Products,399,Doon Eco Supplies,Raipur,Dehradun,116,Bamboo,Reusable,Out of Stock,True
+ECO0118,Upcycled Fabric Tote,Accessories,299,Sakhi Stitch Collective,Patel Nagar,Dehradun,104,Reused fabric,Low-waste,Active,True
+ECO0119,Recycled Paper Gift Wrap,Home and Gifting,99,PaperSprout Studio,Bindal,Dehradun,39,Recycled paper,Plastic-free packaging,Out of Stock,True
+ECO0120,Recycled Paper Gift Wrap,Home and Gifting,149,PaperSprout Studio,Dalanwala,Dehradun,70,Bamboo,Reusable,Active,True

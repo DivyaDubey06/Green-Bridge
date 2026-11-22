@@ -27,9 +27,9 @@ export const Sidebar: React.FC = () => {
   if (!currentUser) return null;
 
   return (
-    <aside className="w-64 bg-white border-r border-[#CD9777]/20 flex flex-col h-screen sticky top-0 z-20">
+    <aside className="w-64 bg-white dark:bg-[#1A211C] border-r border-[#CD9777]/20 dark:border-white/10 flex flex-col h-screen sticky top-0 z-20 transition-colors duration-300">
       {/* Sidebar Logo */}
-      <div className="p-6 border-b border-[#CD9777]/10 flex items-center justify-center">
+      <div className="p-6 border-b border-[#CD9777]/10 dark:border-white/10 flex items-center justify-center">
         <NavLink to="/">
           <Logo size={36} showText={true} />
         </NavLink>
@@ -44,8 +44,8 @@ export const Sidebar: React.FC = () => {
             className={({ isActive }) =>
               `flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-200 group ${
                 isActive 
-                  ? 'bg-soft-mint text-primary-green shadow-sm shadow-primary-green/5' 
-                  : 'text-slate-text hover:bg-warm-cream hover:text-primary-green'
+                  ? 'bg-soft-mint dark:bg-[#839958]/25 text-primary-green dark:text-[#F7F4D5] shadow-sm' 
+                  : 'text-slate-text dark:text-[#F3F1E7]/80 hover:bg-warm-cream dark:hover:bg-[#222B24] hover:text-primary-green dark:hover:text-[#F7F4D5]'
               }`
             }
           >
@@ -54,7 +54,7 @@ export const Sidebar: React.FC = () => {
                 <item.icon 
                   size={18} 
                   className={`transition-transform duration-200 group-hover:scale-110 ${
-                    isActive ? 'text-primary-green' : 'text-slate-text/70 group-hover:text-primary-green'
+                    isActive ? 'text-primary-green dark:text-[#F7F4D5]' : 'text-slate-text/70 dark:text-[#F3F1E7]/60 group-hover:text-primary-green dark:group-hover:text-[#F7F4D5]'
                   }`} 
                 />
                 <span>{item.name}</span>
@@ -68,10 +68,10 @@ export const Sidebar: React.FC = () => {
           <NavLink
             to="/admin"
             className={({ isActive }) =>
-              `flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-bold border border-red-200/50 mt-4 transition-all duration-200 group ${
+              `flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-bold border border-red-200/50 dark:border-red-900/40 mt-4 transition-all duration-200 group ${
                 isActive 
-                  ? 'bg-red-50 text-red-700 shadow-sm' 
-                  : 'text-red-600 hover:bg-red-50/50'
+                  ? 'bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-[#D3968C] shadow-sm' 
+                  : 'text-red-600 dark:text-[#D3968C]/80 hover:bg-red-50/50 dark:hover:bg-red-950/20'
               }`
             }
           >
@@ -84,10 +84,10 @@ export const Sidebar: React.FC = () => {
           <NavLink
             to="/org-dashboard"
             className={({ isActive }) =>
-              `flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-bold border border-primary-green/20 mt-4 transition-all duration-200 group ${
+              `flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-bold border border-primary-green/20 dark:border-[#839958]/30 mt-4 transition-all duration-200 group ${
                 isActive 
-                  ? 'bg-soft-mint text-primary-green shadow-sm' 
-                  : 'text-primary-green hover:bg-soft-mint/30'
+                  ? 'bg-soft-mint dark:bg-[#839958]/25 text-primary-green dark:text-[#F7F4D5] shadow-sm' 
+                  : 'text-primary-green dark:text-[#839958] hover:bg-soft-mint/30 dark:hover:bg-[#222B24]'
               }`
             }
           >
@@ -98,18 +98,18 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       {/* Sidebar Footer Operations */}
-      <div className="p-4 border-t border-[#CD9777]/10 space-y-1">
+      <div className="p-4 border-t border-[#CD9777]/10 dark:border-white/10 space-y-1">
         <NavLink
           to="/settings"
           className={({ isActive }) =>
             `flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-sm font-semibold transition-all duration-200 group ${
               isActive 
-                ? 'bg-warm-cream text-primary-green' 
-                : 'text-slate-text/70 hover:bg-warm-cream/55 hover:text-primary-green'
+                ? 'bg-warm-cream dark:bg-[#222B24] text-primary-green dark:text-[#F7F4D5]' 
+                : 'text-slate-text/70 dark:text-[#F3F1E7]/70 hover:bg-warm-cream/55 dark:hover:bg-[#222B24] hover:text-primary-green dark:hover:text-[#F7F4D5]'
             }`
           }
         >
-          <Settings size={18} className="text-slate-text/50 group-hover:text-primary-green" />
+          <Settings size={18} className="text-slate-text/50 dark:text-[#F3F1E7]/50 group-hover:text-primary-green dark:group-hover:text-[#F7F4D5]" />
           <span>Settings</span>
         </NavLink>
 
@@ -118,20 +118,20 @@ export const Sidebar: React.FC = () => {
           className={({ isActive }) =>
             `flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-sm font-semibold transition-all duration-200 group ${
               isActive 
-                ? 'bg-warm-cream text-primary-green' 
-                : 'text-slate-text/70 hover:bg-warm-cream/55 hover:text-primary-green'
+                ? 'bg-warm-cream dark:bg-[#222B24] text-primary-green dark:text-[#F7F4D5]' 
+                : 'text-slate-text/70 dark:text-[#F3F1E7]/70 hover:bg-warm-cream/55 dark:hover:bg-[#222B24] hover:text-primary-green dark:hover:text-[#F7F4D5]'
             }`
           }
         >
-          <HelpCircle size={18} className="text-slate-text/50 group-hover:text-primary-green" />
+          <HelpCircle size={18} className="text-slate-text/50 dark:text-[#F3F1E7]/50 group-hover:text-primary-green dark:group-hover:text-[#F7F4D5]" />
           <span>Help</span>
         </NavLink>
 
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3.5 px-4 py-2.5 rounded-2xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-all duration-200 group"
+          className="flex w-full items-center gap-3.5 px-4 py-2.5 rounded-2xl text-sm font-semibold text-red-600 dark:text-[#D3968C] hover:bg-red-50 dark:hover:bg-red-950/20 transition-all duration-200 group"
         >
-          <LogOut size={18} className="text-red-400 group-hover:text-red-600" />
+          <LogOut size={18} className="text-red-400 group-hover:text-red-600 dark:group-hover:text-[#D3968C]" />
           <span>Logout</span>
         </button>
       </div>

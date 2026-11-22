@@ -42,7 +42,7 @@ const PublicLayout: React.FC = () => {
 
 // Logged-in Dashboard Layout wrapper (Sidebar + Topbar)
 const DashboardLayout: React.FC = () => {
-  const { isAuthenticated, currentUser } = useAuthStore();
+  const { isAuthenticated, currentUser, isLoading } = useAuthStore();
   const [pageTitle, setPageTitle] = useState('My Workspace');
 
   // Simple location-to-title mapping
@@ -55,12 +55,26 @@ const DashboardLayout: React.FC = () => {
     else setPageTitle('Dashboard');
   }, [window.location.pathname]);
 
+  const token = localStorage.getItem('greenbridge_token') || sessionStorage.getItem('greenbridge_token');
+
+  // If session verification is actively in progress and a token exists, display a graceful loading state
+  if (isLoading && token && !currentUser) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[var(--gb-bg-page)] text-[var(--gb-text-primary)]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-primary-green border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm font-semibold opacity-75">Verifying authentication session...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated || !currentUser) {
     return <Navigate to="/login" replace />;
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-warm-cream/30">
+    <div className="flex h-screen overflow-hidden bg-[var(--gb-bg-page)] text-[var(--gb-text-primary)] transition-colors duration-300">
       {/* Sidebar navigation */}
       <Sidebar />
 
@@ -83,6 +97,12 @@ export const App: React.FC = () => {
   const currentOrg = useAuthStore(state => state.currentOrg);
 
   React.useEffect(() => {
+    const savedTheme = localStorage.getItem('greenbridge_theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
     initialize();
   }, [initialize]);
 
